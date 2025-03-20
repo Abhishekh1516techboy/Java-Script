@@ -1,0 +1,157 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.stories-container {
+  display: flex;
+  background: #fff;
+  box-shadow: 0 3px 24px -8px rgb(24, 23, 23);
+  width: 640px;
+  margin: 0 auto;
+  padding: 20px 36px;
+  border-radius: 8px;
+  gap: 40px;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.stories-container::-webkit-scrollbar {
+  display: none;
+}
+
+.container img {
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  position: relative;
+  z-index: 300;
+  vertical-align: middle;
+}
+
+.stories-container .container {
+  position: relative;
+  cursor: pointer;
+}
+
+.stories-container .container::before {
+  content: " ";
+  height: 98px;
+  width: 98px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+}
+
+.stories-container .container::after {
+  content: "";
+  height: 106px;
+  width: 106px;
+  background: linear-gradient(#dd2a7b, #f58529);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
+
+.story-fullview {
+  background-color: #1d1a1a;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 100ms ease;
+}
+
+.story-fullview.active {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+.story-fullview .content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.story-fullview .content .close-btn {
+  position: fixed;
+  right: 32px;
+  top: 32px;
+  width: 32px;
+  cursor: pointer;
+}
+
+.story-fullview .content .left-arrow,
+.story-fullview .content .right-arrow {
+  width: 60px;
+  cursor: pointer;
+}
+
+.story-fullview .content img {
+  height:720px;
+  width: 600px;
+  border-radius: 15px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.story-fullview .content .title {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 25px;
+  line-height: 2;
+  padding: 2px 32px;
+}
+
+@media and screen(max-width:700px) {
+    .stories-container{
+        width: 90%;
+
+    }
+
+    .stories-container .container img{
+        width: 60px;
+        height: 60px;
+    }
+
+    .stories-container .container::before{
+        height: 70px;
+        width: 70px;
+    }
+
+    .stories-container .container::after{
+        height: 80px;
+        width: 80px;
+    }
+
+    .story-fullview .content img{
+        height: 60%;
+    }
+}

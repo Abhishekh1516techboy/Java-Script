@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch36_DOM</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                background-color: rgb(14, 14, 14);
+                color: aliceblue;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h2>Amazing Image</h2>
+        <div>
+            <ul id="images">
+                <li><img width="200px" id="photoshop" src="assets/cac1.png" alt="photoshop"></li>
+                <li><img width="200px" id="japan" src="assets/cac2.jpg" alt=""></li>
+                <li><img width="200px" id="river" src="assets/cac3.webp" alt=""></li>
+                <li><img width="200px" id="owl" src="assets/cac4.jpg" alt=""></li>
+                <li><img width="200px" id="player" src="assets/cac5.webp" alt=""></li>
+                <li><a style="color: aliceblue;" href="https://google.com" id="google">Google</a></li>
+            </ul>
+        </div>
+    </body>
+    <script>
+        // document.getElementById('owl').onclick = (e) => { // dont use Onclick Now...
+        //   alert('owl id clicked');
+        // }; 
+
+        /*
+        type, timestamp , defaultPrevented, 
+        target, toElement , srcElement, currenttarget,
+        clintX, clintY, screenX, screenY, offset,
+        altKey, ctrlKey, shiftKey, keyCode
+       */
+
+        // document.getElementById('images').addEventListener('click', (e) => {
+        //     console.log('click inside the ul');
+
+        // });
+
+        // document.getElementById('owl').addEventListener('click', (e) => {
+        //     console.log('owl id clicked');
+        //     e.stopPropagation();
+        // });
+
+        // document.getElementById('google').addEventListener('click', (e) => {
+        //     console.log('google clicked');
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        // });
+
+        //Remove element...
+        document.querySelector('#images').addEventListener('click', (e) => {
+            console.log(e.target.parentNode);
+            console.log('id: ', e.target.id);
+
+            if (e.target.tagName === 'IMG') {
+                let removeIt = e.target.parentNode;
+                removeIt.remove();
+                // removeIt.parentNode.removeChild(removeIt);
+            }
+        });
+
+    </script>
+
+</html>

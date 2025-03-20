@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch39_API_request</title>
+    </head>
+
+    <body style="background-color: #151212;">
+
+    </body>
+    <script>
+        const requestUrl = 'https://api.github.com/users/hiteshchoudhary';
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', requestUrl); // request for API...
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {  // track states 1, 2, 3, 4...
+                const data = JSON.parse(this.responseText); // parse in json formate.
+                console.log("user_Name:",data.name);
+                console.log("user_followrs:",data.followers);
+            }
+        };
+        xhr.send(); //send request...
+
+    </script>
+
+</html>

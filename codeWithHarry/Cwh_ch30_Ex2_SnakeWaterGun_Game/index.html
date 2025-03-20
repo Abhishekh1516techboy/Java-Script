@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cwh_ch30_Ex2_SnakeWaterGun_Game</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                background: #266acb;
+                color: white;
+            }
+
+            h1 {
+                background-color: red;
+                text-align: center;
+                font-size: 35px;
+            }
+
+            h2 {
+                background-color: black;
+                font-size: 30px;
+                font-weight: 800;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                line-height: 50px;
+                padding: 25px;
+                margin-top: 20px;
+            }
+
+            button {
+                color: blue;
+                font-size: 20px;
+                font-weight: 600;
+                padding: 12px;
+                background-color: #3de930;
+                border: transparent;
+                border-radius: 6px;
+                margin: 15px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #2bff1c;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>"Snake Water Gun"</h1>
+        <h2 id="userPoints">Player Points: 0</h2>
+        <h2 id="cpuPoints">Computer Points: 0</h2>
+        <h2 id="matchDraw">Match draw: 0 times</h2>
+        <button id="start-btn">Start Game</button>
+    </body>
+    <script src="script.js"></script>
+
+</html>

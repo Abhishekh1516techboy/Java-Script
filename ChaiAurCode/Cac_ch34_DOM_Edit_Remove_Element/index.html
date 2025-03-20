@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch34_DOM</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                background-color: #000000;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+
+    <body>
+        <ul class="language">
+            <li>JavaScript</li>
+        </ul>
+    </body>
+
+      <script>
+        window.onload = function () {
+            const element = document.createElement("script");
+            element.src = "script.js";
+            document.body.appendChild(element);
+        };
+    </script>
+
+</html>

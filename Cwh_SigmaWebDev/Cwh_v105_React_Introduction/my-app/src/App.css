@@ -1,0 +1,32 @@
+.App{
+    background-color: chocolate;
+    height: 100vh;
+    text-align: center;
+}
+
+.My-App{
+    font-size: 40px;    
+    font-weight: 800;
+    color: white;
+}
+
+.value{
+    font-size: 20px;
+    font-weight: 600;
+    color: yellow;
+}
+
+.btn{
+    background-color: blue;
+    padding: 8px;
+    font-size: 15px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+.btn:hover{
+    background-color: brown;
+}

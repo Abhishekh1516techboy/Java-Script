@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch38_Async_Project</title>
+    </head>
+
+    <body>
+        <h2></h2>
+        <h1>Chai aur code</h1>
+        <button id="stop-btn">Stop</button>
+    </body>
+    <script>
+
+        const sayAbhi = () => {
+            console.log("Hello Abhishekh")
+        };
+        setTimeout(sayAbhi, 3000); // setTimtOut by reference...
+
+        const stop = setTimeout(() => {
+            document.querySelector("h1").innerText = "This is Chai Aur code Series";
+        }, 3000)
+
+        document.querySelector("#stop-btn").addEventListener('click',() => {
+            clearTimeout(stop);
+            console.log("Btn click")
+        });
+    </script>
+
+</html>

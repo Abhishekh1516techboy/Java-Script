@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch38_Async_Project</title>
+    </head>
+
+    <body>
+        <h2></h2>
+        <h1>Chai aur JavaScript</h1>
+        <button id="start-btn">start</button>
+        <button id="stop-btn">Stop</button>
+    </body>
+    <script>
+        setInterval(() => {
+            // console.log("Hello");
+        }, 2000);
+
+        const sayTime = (str) => {
+            const time = new Date().toLocaleTimeString();
+            console.log(str, time);
+        };
+
+        // start interval on click events...
+        document.querySelector("#start-btn").addEventListener('click', () => {
+            setId = setInterval(sayTime, 1000, "Time is:");
+            console.log("start")
+        });
+
+        // stop interval on click events...
+        document.querySelector("#stop-btn").addEventListener('click', () => {
+            clearInterval(setId);
+            console.log("stop");
+        });
+
+    </script>
+
+</html>
