@@ -13,25 +13,25 @@ const EmployeeSchema = new Schema({
     },
     phone: {
         type: String,
-        required: true
+        require: true
     },
     email: {
         type: String,
-        required: true,
+        require: true,
         unique: true
     },
     address: {
         type: String,
-        required: true
+        require: true
     },
     role: {
         type: String,
         enum: ['chef', 'waiter', 'manager', 'cleaner', 'receptionist'],
-        required: true
+        require: true
     },
     salary: {
         type: Number,
-        required: true
+        require: true
     }
 
 }, { timestamps: true }); // Enable timestamps (createdAt, updatedAt)
