@@ -45,7 +45,7 @@ Make sure you have the following installed:
 ## How to Use
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Abhishekh1516techboy/JavaScript.git
+   git clone https://github.com/Abhishekh1516techboy/Java-Script.git
    cd JavaScript
    ```
 2. Navigate to the respective folder (`ChaiAurCode`, `Hello_World_NodeJs`, etc.).
