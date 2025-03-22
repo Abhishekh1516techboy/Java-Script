@@ -1,1 +1,1 @@
-console.log("this is JWT Tokens");
+console.log("This is JWT Web Tokens");
