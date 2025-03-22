@@ -46,7 +46,7 @@ Make sure you have the following installed:
 1. Clone the repository:
    ```sh
    git clone https://github.com/Abhishekh1516techboy/Java-Script.git
-   cd JavaScript
+   cd Java-Script
    ```
 2. Navigate to the respective folder (`ChaiAurCode`, `Hello_World_NodeJs`, etc.).
 3. Follow the instructions in the respective README files to run examples.
