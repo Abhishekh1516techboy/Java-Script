@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.rapper {
+  background-color: #2fa7a7;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background-color: #60d3f6;
+  box-shadow: 0px 5px 12px 4px rgba(29, 28, 28, 0.5);
+  height: 600px;
+  width: auto;
+  min-width: 360px;
+  padding: 7px;
+  border-radius: 15px;
+  border: 2px solid #0400ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.img {
+  height: 170px;
+  width: 160px;
+  border-radius: 10px;
+  border: 2px solid #6398dd;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
+  background-color: #191919;
+  filter: brightness(108%);
+}
+
+#user-avatar {
+  height: 100%;
+}
+
+.user-details {
+  background-color: #6a70e1;
+  border: 2px solid #1c19fe;
+  height: calc(100% - 160px);
+  width: 100%;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 6px;
+  gap: 7px;
+}
+
+.user-details > h3 {
+  background-color: #e4f5f3;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+.user-details > h3 > span {
+  font-size: 14px;
+  color: #4000ff;
+  font-weight: 600;
+}
+
+#blog,
+#bio {
+  font-size: 12px;
+}
+
+button {
+  padding: 8px;
+  border-color: #0331ff;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2546d5;
+  transition: ease;
+}
+
+button:hover {
+  font-size: 15px;
+  color: #0331ff;
+}
+
+
+.github-page {
+  background-color: #ffcf56;
+}
+
+.github-page:hover {
+  background-color: #1cff68;
+}
+
+a {
+  text-decoration: none;
+}
+
+form {
+  height: 95px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-top: 25px;
+}
+
+label {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#user-input {
+  padding: 5px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #5d65fd;
+}
+
+#submit-btn {
+  background-color: #42ff8d;
+  cursor: pointer;
+}
