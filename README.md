@@ -1,6 +1,6 @@
 # JavaScript Learning Repository 2024-2025
 
-This repository contains JavaScript code and learning resources, covering both frontend and backend JavaScript. The code is based on tutorials from **Chai aur Code, CodeWithHarry, Apna College, and CodeHelp**.
+This repository contains JavaScript code and learning resources, covering both frontend and backend JavaScript. The code is based on tutorials from **Chai aur Code, CodeWithHarry, Apna College, and Hello World**.
 
 ## Folder Structure
 
