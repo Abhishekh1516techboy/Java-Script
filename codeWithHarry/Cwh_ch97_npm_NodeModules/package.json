@@ -1,0 +1,16 @@
+{
+  "name": "cwh_ch97_npm_nodemodules",
+  "version": "1.0.0",
+  "main": "Cwh_ch97_npm_NodeModules.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "pdf-node": "^1.0.1"
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Programming Meme's</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <!-- Main content -->
+        <main>
+            <header>
+                <!-- Fixed navbar -->
+                <nav>
+                    <div>
+                        <a id="fixed-nav" href="#">Meme's</a>
+                        <div id="links-item">
+                            <ul>
+                                <li>
+                                    <a href="#">Home</a>
+                                </li>
+                                <li>
+                                    <a href="#">About</a>
+                                </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                            <form role="search" aria-label="Search form">
+                                <input type="search" placeholder="Search" aria-label="Search">
+                                <button type="submit">Search</button>
+                            </form>
+                        </div>
+                        <button type="button" class="menu-button">
+                            <svg  class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path></svg>
+                        </button>
+                    </div>
+                </nav>
+            </header>
+
+            <!-- left slider hamburgurContent-->
+            <div class="ham-slider">
+                <div class="cancel-btn">
+                    <svg class="cancel" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#blog">Blog</a>
+                <a href="#about">About</a>
+            </div>
+
+            <!-- Scrollable Card Container -->
+            <div id="card-container">
+                <!-- Repeat card component for multiple cards -->
+                <!-- <div class="fancy-card">
+                    <img src="https://images.unsplash.com/photo-1719945421298-f03d3d80c3e1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fHw%3D" alt="Card Image">
+                    <div class="card-content">
+                        <h3 class="card-title">Fancy Card Title</h3>
+                        <p class="card-description">This is a fancy card with an image overlay, gradient background, and
+                            hover effects.</p>
+                        <button class="card-button">Learn More</button>
+                    </div>
+                </div> -->
+            </div>
+        </main>
+
+    </body>
+    <script src="script.js"></script>
+
+</html>

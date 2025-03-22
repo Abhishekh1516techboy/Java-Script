@@ -1,0 +1,103 @@
+let starter = true; // Lopp controller...
+let cpuPoints = 0;
+let userPoints = 0;
+let matchDraw = 0;
+let userName = "";
+
+// Snake, Water, Gun Game...
+function game () {
+
+    let random = Math.floor(Math.random() * 3);
+    let userInput;
+
+    do {
+        userInput = prompt("Enter any one: s, w, g\ns = snake\nw = water\ng = gun\nYou want to exit click cancel button!");
+
+        if (userInput == null) { // click cancel btn loop exit...
+            starter = false; // change satrter value for stopping Loop...
+            setTimeout(() => {
+                starter = true; // set starter value "true" for starting Game...
+            }, 100)
+            // reset vaues for starting new game...
+            cpuPoints = 0;
+            userPoints = 0;
+            matchDraw = 0;
+            return;
+        }
+
+        if (userInput !== "s" && userInput !== "w" && userInput !== "g") { // check input value is correct or Not...
+            alert("Enter valid character\n" + userInput + " is not valid!");
+        }
+    } while (userInput !== "s" && userInput !== "w" && userInput !== "g");
+
+    let cpu = ["s", "w", "g"][random]; // computer choose random characters...
+
+    if (userInput === cpu) {
+        alert("case matched match draw...");
+        matchDraw++;
+    } else if (userInput === "s") { //Snake...
+        if (cpu === "w") { // Water...
+            alert("You Won.");
+            userPoints++;
+        } else {  // Gun...
+            alert("Computer Won.");
+            cpuPoints++;
+        }
+    } else if (userInput === "w") { // Water...
+        if (cpu === "s") { // Snake...
+            alert("Computer Won.");
+            cpuPoints++;
+        } else { // Gun...
+            alert("You Won.");
+            userPoints++;
+        }
+    } else if (userInput === "g") { // Gun...
+        if (cpu === "s") { // Snake...
+            alert("You Won.");
+            userPoints++;
+        } else { // Water...
+            alert("Computer Won.");
+            cpuPoints++;
+        }
+    }
+
+    // Store Game data in LocalStorage...
+    localStorage.setItem("User Name:", `${userName}`);
+    localStorage.setItem("User Points:", `${userPoints * 10}`);
+    localStorage.setItem("Computer Points:", `${cpuPoints * 10}`);
+    localStorage.setItem("Match draw:", `${matchDraw} times`);
+
+    // // Show results in HTML body...
+    document.getElementById("userPoints").innerText = `${userName} Points: ${userPoints * 10}`; // user Points...
+    document.getElementById("cpuPoints").innerText = `Computer Points: ${cpuPoints * 10}`; // computer Points
+    document.getElementById("matchDraw").innerText = `Match draw: ${matchDraw} times`; // match Draw...
+}
+
+// game start Button...
+document.getElementById("start-btn").addEventListener("click", () => {
+    userName = prompt("Enter Your Name:", "Player"); // take input userName of Player...
+    if (userName === null) { // check userName is Null Or Not...
+        userName = "Player"; // user name is null set Default value Player...
+    }
+    alert(`Your Game is ready Click Ok and Play Game dear ${userName}`);
+
+    while (starter) { // Game run in loop...
+        game();
+    }
+});
+
+// Fetch data from LocalStorage, and set HTML body...
+(() => {
+    if (localStorage.getItem("User Name:") !== null) { // if LocalStorage is Empty data Don't Set in HTML Body...
+        userName = localStorage.getItem("User Name:");
+    }
+    if (localStorage.getItem("User Points:") !== null) {
+        document.getElementById("userPoints").innerText = `${userName} Points: ${localStorage.getItem("User Points:")}`; // user Points...
+    }
+    if (localStorage.getItem("Computer Points:") !== null) {
+        document.getElementById("cpuPoints").innerText = `Computer Points: ${localStorage.getItem("Computer Points:")}`; // computer Points
+    }
+    if (localStorage.getItem("Match draw:") !== null) {
+        document.getElementById("matchDraw").innerText = `Match draw: ${localStorage.getItem("Match draw:")}`; // match Draw...
+    }
+})() // IIFE function...

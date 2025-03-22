@@ -1,0 +1,856 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+/* --------------yt-container-------------- */
+.yt-container {
+  background-color: #0f0f0f;
+  height: 100%;
+  width: 100%;
+}
+
+header {
+  height: 50px;
+  width: 100%;
+}
+
+nav {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* -------------nav start section------------- */
+.nav-start {
+  height: 100%;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+  padding-right: 20px;
+}
+
+#yt-menu {
+  border-radius: 50%;
+  height: 38px;
+  width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all ease 0.2s;
+}
+
+#yt-menu:hover {
+  background-color: #494848;
+  cursor: pointer;
+}
+
+#yt-logo {
+  cursor: pointer;
+}
+
+#country-code {
+  color: #b5b0b0;
+  font-size: 9.5px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  top: 10px;
+  right: 22px;
+  cursor: pointer;
+}
+
+/* -------------nav center section------------- */
+.nav-center {
+  height: 100%;
+  width: calc(100% - 400px);
+}
+
+#yt-input-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#yt-inner-search-icon {
+  height: 80%;
+  width: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.01px solid #4ba3e2;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-right: none;
+  position: absolute;
+  top: 5px;
+  left: 19%;
+  visibility: hidden;
+}
+
+.nav-center input[type="text"] {
+  border: none;
+  outline: none;
+  color: #ddd2d2;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  transition: width 0.3s ease, border-color 0.3s ease;
+  padding-left: 20px;
+  height: 80%;
+  width: 48%;
+  font-size: 15px;
+  font-weight: 500;
+  background-color: transparent;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 0.01px solid #353a3e;
+}
+
+#yt-search-icon {
+  background-color: #201f1f;
+  height: 80%;
+  width: 5%;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  overflow: hidden;
+}
+
+#yt-search-icon > button {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#yt-voice-search {
+  background-color: #353333;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+#yt-voice-search:hover {
+  background-color: #676464;
+}
+
+/* -------------nav end section------------- */
+.nav-end {
+  height: 100%;
+  width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-left: 5px;
+}
+
+#yt-create {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#yt-create:hover {
+  background-color: #494848;
+  cursor: pointer;
+}
+
+#yt-notification {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#yt-notification:hover {
+  background-color: #494848;
+  cursor: pointer;
+}
+
+#yt-notification-count {
+  background-color: red;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  border-radius: 40%;
+  height: 16px;
+  width: 22px;
+  text-align: center;
+  align-content: center;
+  position: absolute;
+  top: 4px;
+  left: 20px;
+}
+
+#yt-user-profile {
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 3px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+#yt-user-profile > img {
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* -------------main section------------ */
+main {
+  height: calc(100% - 50px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ------------yt-left-side-nav section------------ */
+.yt-left-nav-slide {
+  height: 100%;
+  width: 5%;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 2px;
+}
+
+/* toggle classList using by js */
+.yt-l-n-s-toggle{
+  display: none;
+}
+
+#yt-home-btn {
+  height: 75px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all ease 0.1s;
+}
+
+#yt-home-btn:hover {
+  background-color: #414040;
+  cursor: pointer;
+}
+
+#yt-home-btn-title {
+  color: #f1e9e9;
+  font-size: 10px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#yt-shorts-btn {
+  height: 75px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all ease 0.1s;
+}
+
+#yt-shorts-btn:hover {
+  background-color: #414040;
+  cursor: pointer;
+}
+
+#yt-shorts-btn-title {
+  color: #f1e9e9;
+  font-size: 10px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#yt-subscription-btn {
+  height: 75px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all ease 0.1s;
+}
+
+#yt-subscription-btn:hover {
+  background-color: #414040;
+  cursor: pointer;
+}
+
+#yt-subscription-btn-title {
+  color: #f1e9e9;
+  font-size: 10px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#yt-history-btn {
+  height: 75px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  transition: all ease 0.1s;
+}
+
+#yt-history-btn:hover {
+  background-color: #414040;
+  cursor: pointer;
+}
+
+#yt-history-btn-title {
+  color: #f1e9e9;
+  font-size: 10px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* -----------yt-playlist-fullnav-section----------- */
+.yt-playlist-fullNav-slider {
+  height: 100%;
+  width: 18%;
+  overflow: hidden;
+  overflow-y: scroll;
+  display: none;
+}
+
+/* toggle classList using by js */
+.yt-p-f-s-toggle{
+  display: block;
+}
+
+.yt-playlist-fullNav-slider::-webkit-scrollbar {
+  width: 8px;
+}
+
+.yt-playlist-fullNav-slider::-webkit-scrollbar-thumb {
+  visibility: hidden;
+}
+
+.yt-playlist-fullNav-slider:hover.yt-playlist-fullNav-slider::-webkit-scrollbar-thumb {
+  background-color: #707070;
+  visibility: visible;
+}
+
+#yt-left-slide-topNav {
+  height: 150px;
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 5px;
+}
+
+.yt-left-slide-items {
+  height: 40px;
+  width: 90%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #efeaea;
+  padding: 10px;
+  transition: all ease 0.2s;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.yt-left-slide-items > span {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yt-left-slide-items:hover {
+  background-color: rgba(116, 114, 115, 0.3);
+  cursor: pointer;
+}
+
+#yt-left-slide-you {
+  height: 350px;
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 5px;
+}
+
+#yt-left-slide-y {
+  gap: 4px;
+  font-weight: 700;
+}
+
+#yt-left-slide-Subscriptions {
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 5px;
+  max-height: 370px;
+  overflow: hidden;
+  transition: all ease 0.3s;
+}
+
+.hidden-item {
+  display: none;
+}
+
+#yt-left-slide-Subscriptions.expand {
+  max-height: unset; /* Or set a height to fit all items */
+}
+
+#yt-left-slide-subs {
+  background-color: transparent;
+  cursor: unset;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.yt-left-slide-subs-chnl-dp {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.yt-left-slide-subs-chnl-dp > img {
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+#yt-left-slide-Explore {
+  height: 500px;
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 5px;
+}
+
+#yt-left-slide-moreFromYt {
+  height: 220px;
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 5px;
+}
+
+#yt-left-slide-settings {
+  height: 180px;
+  border-bottom: 0.2px solid #454444;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 5px;
+}
+
+#yt-left-slide-about {
+  height: 185px;
+  padding:16px 22px;
+}
+
+.yt-left-slide-abouts{
+  height: 40%;
+  margin-top: 5px;
+}
+
+.yt-left-slide-abouts > a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #cbc6c6;
+}
+
+#copyright{
+  height: 30%;
+  text-align: start;
+  align-content: center;
+  color: #8d8a8a;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ------------yt-playlist-main-card-section------------ */
+.yt-playlist-main-card {
+  height: 100%;
+  width: 25%;
+  /* width: 30%; */
+  display: flex;
+  align-items: end;
+  justify-content: end;
+}
+
+#yt-playlist-main-card-box {
+  height: 96%;
+  width: 95%;
+  /* width: 92%; */
+  background: linear-gradient(
+    to bottom,
+    rgba(27, 130, 164, 0.8) 0%,
+    rgba(25, 155, 198, 0.298) 33%,
+    rgba(15, 15, 15, 1) 100%
+  );
+  border-radius: 16px;
+  filter: brightness(120%);
+  padding: 22px;
+  padding-bottom: 45px;
+}
+
+#yt-playlist-main-card-content {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+#yt-playlist-main-card-content::-webkit-scrollbar {
+  width: 14px;
+}
+
+#yt-playlist-main-card-content::-webkit-scrollbar-thumb {
+  background-color: #9a9797d5;
+}
+
+#yt-playlist-main-card-top {
+  width: 100%;
+  padding: 2px;
+}
+
+#yt-playlist-main-poster {
+  height: 170px;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+#yt-playlist-poster {
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(85%);
+}
+
+#yt-main-poster-shades {
+  background-color: black;
+  height: 100%;
+  width: 100%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  transition: all ease 0.3s;
+}
+
+#yt-main-poster-shades:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+#yt-playlist-main-card-title {
+  margin-top: 22px;
+  color: azure;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 26px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#yt-playlist-channelName {
+  margin-top: 20px;
+}
+
+#yt-playlist-channelName > a {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#yt-playlist-video-info {
+  color: #c4bebe;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+  word-spacing: 0.4px;
+  margin-top: 6px;
+}
+
+#yt-playlist-main-group-btn-container {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 6px;
+}
+
+.yt-playlist-main-group-btn {
+  background-color: rgba(117, 128, 131, 0.3);
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.yt-playlist-main-group-btn:hover {
+  background-color: #7f7c7caa;
+  cursor: pointer;
+}
+
+#yt-playlist-main-play-btn-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 12px;
+}
+
+.yt-playlist-twins-btn {
+  background-color: aliceblue;
+  border-radius: 22px;
+  width: 48%;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+#yt-playlist-playAll-btn:hover {
+  background-color: rgba(237, 216, 224, 0.8);
+}
+
+#yt-playlist-shuffle-btn {
+  background-color: rgba(207, 226, 231, 0.2);
+  color: white;
+  transition: all ease 0.1s;
+}
+
+#yt-playlist-shuffle-btn:hover {
+  background-color: #504f4f;
+}
+
+#yt-playlist-main-card-bottom {
+  height: auto;
+  width: 100%;
+}
+
+#yt-playlist-main-bottom-details {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #d7d3d3;
+  white-space: pre-wrap;
+}
+
+/* ------------yt-playlist-section------------ */
+.yt-playlist-container {
+  height: 100%;
+  width: 70%;
+  display: flex;
+  align-content: start;
+  flex-wrap: wrap;
+  padding: 36px 5px;
+  padding-right: 25px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.yt-playlist-container::-webkit-scrollbar {
+  width: 15px;
+}
+
+.yt-playlist-container::-webkit-scrollbar-thumb {
+  background-color: #8f8c8c;
+}
+
+.yt-card {
+  background-color: transparent;
+  height: 110px;
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 10px 0px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.yt-card:hover {
+  background-color: #2c2b2b;
+}
+
+.video-number {
+  height: 25px;
+  width: 35px;
+  text-align: center;
+  align-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #b8b0b0;
+}
+
+.video-container {
+  height: 100%;
+  width: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-thumbnail {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.duration {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: aliceblue;
+  font-size: 16px;
+  font-weight: 600;
+  height: 20px;
+  padding: 0px 6px;
+  border-radius: 5px;
+  text-align: center;
+  align-content: center;
+  position: absolute;
+  right: 5px;
+  bottom: 3px;
+  z-index: 9;
+}
+
+.video-details-container {
+  height: 100%;
+  width: calc(100% - 195px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-details {
+  height: 100%;
+  width: calc(100% - 20px);
+}
+
+.video-title-container {
+  width: 100%;
+  padding: 5px 0px;
+  padding-right: 5px;
+}
+
+.video-title {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  line-height: 1.4rem;
+  font-weight: 600;
+  color: #e6e2e2;
+  font-family: "Roboto", "Arial", sans-serif;
+}
+
+.video-info {
+  width: 100%;
+  padding: 6px 0px;
+  color: #c3bebe;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: "Roboto", "Arial", sans-serif;
+}
+
+.views {
+  letter-spacing: 0.5px;
+}
+
+.menu-icon {
+  height: 100%;
+  width: 30px;
+  text-align: start;
+  align-content: center;
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

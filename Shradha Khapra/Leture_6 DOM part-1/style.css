@@ -1,0 +1,28 @@
+
+body{
+    background-color: pink;
+}
+
+#heading{
+    color: blue;
+    background-color: yellow;
+}
+
+.heading{
+    background-color: lightblue;
+    color: brown;
+}
+
+button{
+    background-color: yellow;
+}
+
+.box{
+    height: 100px;
+    width: 100px;
+    background-color: violet;
+    margin: 10px;
+    border: 2px solid black;
+    text-align: center;
+}
+

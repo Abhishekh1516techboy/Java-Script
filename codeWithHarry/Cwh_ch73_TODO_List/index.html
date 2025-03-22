@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>To-Do-APP</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="responsive.css">
+    </head>
+
+    <body>
+
+        <!-- Conformation box AddToDO Delete -->
+        <div id="conformationBox">
+            <div id="topPart">
+                <h3>All ToDo delete permanently-are you sure?</h3>
+            </div>
+            <div id="bottomPart">
+                <button type="button" id="delCancel">cancel</button>
+                <button type="button" id="delConfirm">confirm deletion</button>
+            </div>
+        </div>
+
+        <!-- Conformation box DeletedToDo hostory Delete -->
+        <div id="clearConformationBox">
+            <div id="clearTopPart">
+                <h3>All ToDo delete permanently-are you sure?</h3>
+            </div>
+            <div id="clearBottomPart">
+                <button type="button" id="clearDelCancel">cancel</button>
+                <button type="button" id="clearDelConfirm">confirm deletion</button>
+            </div>
+        </div>
+
+        <!-- main container -->
+        <div id="container">
+            <header>
+                <h2 id="todo-App">ToDo-APP</h2>
+                <nav>
+                    <ul>
+                        <li>
+                            <a id="home">
+                                <svg xmlns="http:www.w3.org/2000/svg" width="24" height="24" fill="white"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a id="del-History">
+                                <svg xmlns="http:www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"
+                                    fill="white">
+                                    <path
+                                        d="M7 6V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7ZM13.4142 13.9997L15.182 12.232L13.7678 10.8178L12 12.5855L10.2322 10.8178L8.81802 12.232L10.5858 13.9997L8.81802 15.7675L10.2322 17.1817L12 15.4139L13.7678 17.1817L15.182 15.7675L13.4142 13.9997ZM9 4V6H15V4H9Z">
+                                    </path>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+
+            <main>
+                <!-- Notification slider -->
+                <div id="notify-slider"></div>
+
+                <!-- First ToDo List Add Pop-Up -->
+                <div id="first-todo" class="first-todo-slider">
+                    <h2>You have No ToDo, Add your First ToDo</h2>
+                    <button type="button" id="first-todo-add">Add ToDo</button>
+                </div>
+
+                <!-- ToDO List user input section -->
+                <div id="toDo" class="toDoAdd-slider">
+                    <!-- Add todo title -->
+                    <div id="add-todo-title">
+                        <h2>Add ToDo</h2>
+                        <h2>ToDo List's</h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="toDoMenu" height="28" width="28" viewBox="0 0 24 24"
+                            fill="white">
+                            <path
+                                d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z">
+                            </path>
+                        </svg>
+                        <div id="deleeAllToDo">
+                            <h3>Delete All</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" id="toDoAllDeleteBtn" height="24" width="24"
+                                viewBox="0 0 24 24" fill="white">
+                                <path
+                                    d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM13.4142 13.9997L15.182 15.7675L13.7678 17.1817L12 15.4139L10.2322 17.1817L8.81802 15.7675L10.5858 13.9997L8.81802 12.232L10.2322 10.8178L12 12.5855L13.7678 10.8178L15.182 12.232L13.4142 13.9997ZM9 4V6H15V4H9Z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- partion section totoForm And toDo card-->
+                    <div id="partion">
+                        <!-- Add todo section -->
+                        <div id="add-toDo">
+                            <div id="todo-form-container">
+                                <form id="input-form">
+                                    <div class="user-input">
+                                        <label for="title-input">Title</label>
+                                        <input type="text" name="todo-title" placeholder="Enter Title" id="title-input"
+                                            required>
+                                    </div>
+
+                                    <div class="user-input">
+                                        <label for="desc-input">Description</label>
+                                        <input type="text" name="todo-desc" placeholder="Enter Description"
+                                            id="desc-input" required>
+                                    </div>
+
+                                    <div class="user-input">
+                                        <button type="submit" value="sumbit" id="submit-btn">Add ToDo</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- toDo-List section -->
+                        <div id="toDo-List">
+                            <h3 id="toDoEmptyTitle">Empty Box</h3>
+                            <!-- Todo List card Add Dynamically using js -->
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ----------edit toDo Form section------------ -->
+                <div id="edit-TodoContainer">
+                    <form id="edit-input-form">
+                        <div class="edit-user-input">
+                            <label for="title-input">Title</label>
+                            <input type="text" name="todo-title" placeholder="Enter Title" id="edit-title-input"
+                                required>
+                        </div>
+
+                        <div class="edit-user-input">
+                            <label for="edit-desc-input">Description</label>
+                            <input type="text" name="todo-desc" placeholder="Enter Description" id="edit-desc-input"
+                                required>
+                        </div>
+
+                        <div class="edit-user-input">
+                            <button type="submit" value="sumbit" id="edit-submit-btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- -----------Deleted card History section---------------- -->
+                <div id="deletedCardContainer" class="deletedCardContainer-Slide">
+                    <!-- Deleted list card header -->
+                    <div id="deleted-card-header">
+                        <h3>Deleted-ToDo</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="clearToDoMenu" height="28" width="28"
+                            viewBox="0 0 24 24" fill="white">
+                            <path
+                                d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z">
+                            </path>
+                        </svg>
+                        <div id="clearAllTodo">
+                            <h3>Delete All</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" id="clearAllToDoBtn" height="24" width="24"
+                                viewBox="0 0 24 24" fill="white">
+                                <path
+                                    d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM13.4142 13.9997L15.182 15.7675L13.7678 17.1817L12 15.4139L10.2322 17.1817L8.81802 15.7675L10.5858 13.9997L8.81802 12.232L10.2322 10.8178L12 12.5855L13.7678 10.8178L15.182 12.232L13.4142 13.9997ZM9 4V6H15V4H9Z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- deleted-card-section... -->
+                    <div id="deletedCard-box">
+                        <h3 id="ClearEmptyTitle">Empty Box</h3>
+                        <!-- deleted cards here -->
+
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </body>
+    <script src="script.js"></script>
+<!-- created Date: 22/8/2024 to 31/8/2024 saturday by @Abhishekh1516techboy -->
+</html>

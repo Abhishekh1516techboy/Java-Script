@@ -1,0 +1,43 @@
+<html>
+<head>
+<script>
+//WAP to add two nos input from user
+function add()
+{
+//window.alert("Hiii");
+var n1=document.getElementById("tb1").value;
+//window.alert(n1);
+var n2=document.getElementById("tb2").value;
+//alert(n2);
+var sum=parseInt(n1)+parseInt(n2);
+//alert(sum);
+//document.write(sum);
+document.getElementById("res").value=sum;
+document.getElementById("h").innerHTML=sum;
+}
+</script>
+</head>
+<body>
+    <form>
+Enter First no
+<input type="text" id="tb1"/>
+<br/>
+Enter Second no
+<input type="text" id="tb2"/>
+<br/>
+<input type="button" value="ADD" onclick="add()"/>
+<input type="reset"/>
+<br/>
+Result 
+<input type="text" id="res" readonly="true"/>
+<h1 id="h"></h1>
+</form>
+</body>
+</html>
+
+
+
+
+
+
+

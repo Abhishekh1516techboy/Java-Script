@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>cac_ch33_DOM</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+                background-color: #000000;
+                color: #ffffff;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    </body>
+    <script>
+        const divElem = document.createElement('div');
+        console.log(divElem)
+        divElem.className = 'main';
+        divElem.id = Math.round(Math.random() + 10 + 1);
+        // divElem.setAttribute('id', 1);
+        divElem.style.backgroundColor = 'green';
+        divElem.style.padding = '12px';
+        // divElem.innerText = 'chai aur code';
+        const addText = document.createTextNode('chai aur code JavaScript.');
+        divElem.append(addText);
+        document.body.append(divElem);
+    </script>
+
+</html>

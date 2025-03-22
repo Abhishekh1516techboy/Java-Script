@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cac_ch35_DOM_Project</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                height: 100%;
+                width: 100%;
+            }
+            .container{
+                background-color: #77cad3;
+                height: 100vh;
+                width: auto;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #clock{
+                background-color: #e5fe00;
+                height: 60px;
+                width: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 25px;
+                font-weight: 600;
+                margin-left: 8px;
+                border: 3.5px solid #364ec9;
+                border-radius: 12px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Local Time:</h1>
+            <div id="clock"></div>
+        </div>
+    </body>
+    <script src="script.js"></script>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "cwh_ch96_npm_nodepackages",
+  "version": "1.0.0",
+  "main": "Cwh_ch96_npm_NodePackage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "pdf-node": "^1.0.1"
+  }
+}

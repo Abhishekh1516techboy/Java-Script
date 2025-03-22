@@ -1,0 +1,16 @@
+div{
+    height: 100px;
+    width: 100px;
+    background-color: skyblue;
+    border: 1px solid red;
+}
+
+.Dark-Mode{
+    background-color: black;
+    color: white;
+}
+
+.Light-Mode{
+    background-color: white;
+    color: black;
+}

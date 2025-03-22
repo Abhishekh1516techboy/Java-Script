@@ -1,0 +1,927 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #000000;
+  overflow: hidden;
+  position: relative;
+}
+
+#container {
+  height: 100%;
+  width: 100vw;
+  background-color: #000;
+  position: relative;
+}
+
+header {
+  background-image: linear-gradient(
+    89.4deg,
+    rgb(157, 22, 49) 30.8%,
+    rgb(13, 35, 92) 78.4%
+  );
+  height: 42px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#todo-App {
+  height: 100%;
+  width: 55%;
+  font-size: 30px;
+  font-weight: 600;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: end;
+  align-content: center;
+  color: azure;
+  position: relative;
+  user-select: none;
+}
+
+#todo-App::before {
+  content: "";
+  width: 0px;
+  height: 2.5px;
+  background-color: white;
+  position: absolute;
+  bottom: 0px;
+  transition: all ease 0.3s;
+}
+
+#todo-App:hover#todo-App::before {
+  width: 170px;
+}
+
+nav {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  position: relative;
+  padding: 0px 20px;
+}
+
+nav > ul {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  list-style: none;
+  position: relative;
+}
+
+nav > ul > li > a {
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+#home::after {
+  content: "Home";
+  color: azure;
+  font-weight: 600;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  position: absolute;
+  top: 100%;
+  left: 65px;
+  transition: all ease-in-out 0.3s;
+}
+
+#home:hover#home::after {
+  transform: translateY(-30px);
+  font-size: 16px;
+}
+
+#home > svg {
+  transition: all ease-in-out 0.3s;
+}
+
+#home:hover#home > svg {
+  transform: translateY(-30px);
+  visibility: hidden;
+}
+
+#del-History::after {
+  content: "Deleted-ToDo";
+  color: azure;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  position: absolute;
+  top: 100%;
+  left: 200px;
+  transition: all ease-in-out 0.3s;
+}
+
+#del-History:hover#del-History::after {
+  transform: translateY(-30px);
+  font-size: 16px;
+}
+
+#del-History > svg {
+  transition: all ease-in-out 0.3s;
+}
+
+#del-History:hover#del-History > svg {
+  transform: translateY(-30px);
+  visibility: hidden;
+}
+
+/* Main container section */
+main {
+  background-image: radial-gradient(
+    circle 815px at 23.4% -21.8%,
+    rgb(12, 33, 88) 0.2%,
+    rgb(20, 18, 18) 100.2%
+  );
+  width: 100%;
+  height: calc(100% - 42px);
+  position: absolute;
+  top: 42px;
+  left: 0px;
+  z-index: 99;
+  overflow: hidden;
+}
+
+/* Notification slider line */
+#notify-slider {
+  background-image: linear-gradient(
+    226.4deg,
+    rgba(255, 26, 1, 1) 28.9%,
+    rgba(254, 155, 1, 1) 33%,
+    rgba(255, 241, 0, 1) 48.6%,
+    rgba(34, 218, 1, 1) 65.3%,
+    rgba(0, 141, 254, 1) 80.6%,
+    rgba(113, 63, 254, 1) 100.1%
+  );
+  height: 4px;
+  width: 0px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transition: all cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.8s;
+}
+
+/* ***********************Main section start*********************** */
+/* -----------------First ToDo-List PopUp-----------------*/
+#first-todo {
+  height: 150px;
+  width: 500px;
+  border-radius: 15px;
+  margin: auto;
+  margin-top: 50px;
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  background-image: linear-gradient(
+    126.3deg,
+    rgb(45, 7, 116) 32.2%,
+    rgba(196, 39, 154, 0.46) 109.2%
+  );
+  border: 0.1px solid azure;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* using remove classList by js */
+.first-todo-slider {
+  transform: translateY(-135%);
+  opacity: 0;
+}
+
+#first-todo > h2 {
+  background-image: radial-gradient(
+    circle 610px at 5.2% 51.6%,
+    rgb(15, 20, 174) 0%,
+    rgb(20, 9, 143) 97.5%
+  );
+  color: azure;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: cursive;
+  height: 35px;
+  width: auto;
+  text-align: center;
+  align-content: center;
+  transition: all ease 1s;
+}
+
+#first-todo-add {
+  background-image: radial-gradient(
+    circle 988px at -6.3% 51.9%,
+    rgb(22, 19, 190) 0%,
+    rgb(203, 25, 51) 90%
+  );
+  color: azure;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding: 8px 190px;
+  border-radius: 10px;
+  margin-top: 60px;
+  border: 2px solid #36c1eb;
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+#first-todo-add:hover {
+  transform: scale(1.03);
+  background-image: linear-gradient(
+    110.1deg,
+    rgb(76, 24, 175) 44.2%,
+    rgb(106, 14, 118) 138.2%
+  );
+}
+
+/* *********************Add toDo Section***************** */
+/* conformation Box when All toDO Delete btn clicked Show for conformation */
+#conformationBox {
+  background-color: #252424;
+  border-radius: 15px;
+  position: fixed;
+  height: 160px;
+  width: 500px;
+  z-index: 9999;
+  padding: 0px 25px;
+  overflow: hidden;
+  display: none;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease;
+  top: 32%;
+  left: 32%;
+}
+
+#topPart {
+  height: 50%;
+  text-align: center;
+  align-content: center;
+}
+
+#topPart > h3 {
+  color: azure;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#bottomPart {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 12px;
+  padding: 0px 15px;
+}
+
+#bottomPart > button {
+  color: azure;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#delCancel {
+  background-color: #3fa4bd;
+}
+
+#delCancel:hover {
+  background-color: #29bce1;
+  transform: scale(1.03);
+}
+
+#delConfirm {
+  background-color: #cc6b37;
+}
+
+#delConfirm:hover {
+  background-color: #ff5a01;
+  transform: scale(1.03);
+}
+
+/* ---------todo card container-----------*/
+#toDo {
+  height: 95%;
+  width: 65%;
+  margin: auto;
+  margin-top: 18px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-image: radial-gradient(
+    circle farthest-corner at -4.5% 34.3%,
+    rgb(10, 16, 121) 5%,
+    rgb(213, 105, 69) 90%
+  );
+  border: 1px solid aqua;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* using remove classList by js */
+.toDoAdd-slider {
+  transform: translateY(110%);
+  scale: 0;
+  opacity: 0;
+}
+
+#add-todo-title {
+  background-image: radial-gradient(
+    circle 422px at 40% 50.2%,
+    rgb(49, 51, 177) 0.1%,
+    rgba(3, 1, 50, 1) 100.2%
+  );
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+}
+
+#add-todo-title > h2 {
+  height: 100%;
+  padding: 5px 0px;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: cursive;
+  color: azure;
+}
+
+#toDoMenu {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  cursor: pointer;
+}
+
+#deleeAllToDo {
+  background-color: #f25a08;
+  position: absolute;
+  top: 0px;
+  right: 40px;
+  height: 80%;
+  width: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 3px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transform: translateY(-35px);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#deleeAllToDo > h3 {
+  color: azure;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+#toDoAllDeleteBtn {
+  cursor: pointer;
+}
+
+#partion {
+  height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#add-toDo {
+  height: 100%;
+  width: 45%;
+  border-right: 4px solid #e4dada;
+}
+
+#todo-form-container {
+  height: 100%;
+  width: 100%;
+}
+
+#input-form {
+  height: 100%;
+  width: 100%;
+}
+
+.user-input {
+  height: 25%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px 20px;
+}
+
+.user-input > label {
+  font-size: 25px;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  color: azure;
+}
+
+.user-input input[type="text"] {
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  transition: width 0.3s ease, border-color 0.3s ease;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: cursive;
+  transition: all ease-in 0.5s;
+}
+
+.user-input input[type="text"]:focus {
+  color: azure;
+  background-color: #1e1d1d;
+  border: 1px solid #eae4e4;
+}
+
+#submit-btn {
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(61, 245, 167, 1) 11.2%,
+    rgba(9, 111, 224, 1) 91.1%
+  );
+  font-size: 25px;
+  font-weight: 800;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 6px 0px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: #ffffff;
+}
+
+#submit-btn:hover {
+  background-image: linear-gradient(
+    180.7deg,
+    rgb(52, 221, 255) 2.5%,
+    rgb(44, 206, 206) 97.7%
+  );
+}
+
+/* ******************Toto List Section****************** */
+#toDo-List {
+  height: 100%;
+  width: 55%;
+  display: flex;
+  align-content: start;
+  justify-content: center;
+  gap: 8px;
+  padding: 5px 3px;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+}
+
+/* toDo Empty title */
+#toDoEmptyTitle {
+  color: aqua;
+  height: 50px;
+  width: 50%;
+  font-size: 40px;
+  font-weight: 700;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  text-align: center;
+  align-content: center;
+  text-transform: uppercase;
+  position: absolute;
+  top: 200px;
+  display: none;
+}
+
+#toDo-List::-webkit-scrollbar {
+  width: 4px;
+}
+
+#toDo-List::-webkit-scrollbar-thumb {
+  background-color: #1bc0e9;
+}
+
+#toDo-List::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+.lists-card {
+  height: 150px;
+  width: 98%;
+  border-radius: 15px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateX(-540px);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.listCard-show {
+  opacity: 1;
+  transform: unset;
+}
+
+/* dynamically using in js add clistList */
+.lists-card-slide {
+  transform: translateX(-540px);
+}
+
+/* dynamically using in js add clistList */
+.lists-card-none {
+  display: none;
+}
+
+.list-title-container {
+  background-image: linear-gradient(
+    85.2deg,
+    rgb(63, 11, 74) 7.5%,
+    rgba(65, 5, 72, 1) 88.7%
+  );
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+.list-title-container > li {
+  list-style: none;
+}
+
+.list-title {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: azure;
+}
+
+/* list delete edit btn container */
+.list-del-edit-container {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+/* card delete btn */
+.list-delite-btn:hover {
+  cursor: pointer;
+  fill: red;
+}
+
+/* card edit btn */
+.list-edit-btn:hover {
+  cursor: pointer;
+}
+
+.list-desc-container {
+  background-image: linear-gradient(
+    110.1deg,
+    rgb(38, 19, 72) 44.2%,
+    rgb(147, 31, 116) 138.2%
+  );
+  height: calc(100% - 40px);
+  padding: 5px;
+  position: relative;
+}
+
+.list-desc {
+  height: 100%;
+  color: azure;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: cursive;
+  text-transform: capitalize;
+  overflow-x: hidden;
+  overflow: auto;
+}
+
+.list-desc::-webkit-scrollbar {
+  display: none;
+}
+
+.list-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: #bbb7b7;
+  position: absolute;
+  bottom: 2px;
+  right: 10px;
+}
+
+/* -----------ToDO edit form section---------------- */
+#edit-TodoContainer {
+  height: 60vh;
+  width: 25vw;
+  margin: auto;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-image: radial-gradient(
+    circle farthest-corner at -4.5% 34.3%,
+    rgb(10, 16, 121) 5%,
+    rgb(213, 105, 69) 90%
+  );
+  border: 1px solid aqua;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#edit-input-form {
+  height: 100%;
+  width: 100%;
+}
+
+.edit-user-input {
+  height: 25%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px 20px;
+}
+
+.edit-user-input > label {
+  font-size: 25px;
+  font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  color: azure;
+}
+
+.edit-user-input input[type="text"] {
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  transition: width 0.3s ease, border-color 0.3s ease;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: cursive;
+  transition: all ease-in 0.5s;
+}
+
+.edit-user-input input[type="text"]:focus {
+  color: azure;
+  background-color: #1e1d1d;
+  border: 1px solid #eae4e4;
+}
+
+#edit-submit-btn {
+  background-image: linear-gradient(
+    109.6deg,
+    rgba(61, 245, 167, 1) 11.2%,
+    rgba(9, 111, 224, 1) 91.1%
+  );
+  font-size: 25px;
+  font-weight: 800;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  padding: 6px 0px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  color: #ffffff;
+}
+
+#edit-submit-btn:hover {
+  background-image: linear-gradient(
+    180.7deg,
+    rgb(52, 221, 255) 2.5%,
+    rgb(44, 206, 206) 97.7%
+  );
+}
+
+/* --------------Deleted card history section------------- */
+/* conformation Box when All toDO Delete btn clicked Show for conformation */
+#clearConformationBox {
+  background-color: #252424;
+  border-radius: 15px;
+  position: fixed;
+  height: 160px;
+  width: 500px;
+  z-index: 9999;
+  padding: 0px 25px;
+  overflow: hidden;
+  display: none;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease;
+  top: 32%;
+  left: 32%;
+}
+
+#clearTopPart {
+  height: 50%;
+  text-align: center;
+  align-content: center;
+}
+
+#clearTopPart > h3 {
+  color: azure;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#clearBottomPart {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 12px;
+  padding: 0px 15px;
+}
+
+#clearBottomPart > button {
+  color: azure;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+#clearDelCancel {
+  background-color: #3fa4bd;
+}
+
+#clearDelCancel:hover {
+  background-color: #29bce1;
+  transform: scale(1.03);
+}
+
+#clearDelConfirm {
+  background-color: #cc6b37;
+}
+
+#clearDelConfirm:hover {
+  background-color: #ff5a01;
+  transform: scale(1.03);
+}
+
+/* deleted card history container */
+#deletedCardContainer {
+  height: 95%;
+  width: 80%;
+  margin: auto;
+  margin-top: 18px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-image: radial-gradient(
+    circle farthest-corner at -4.5% 34.3%,
+    rgb(10, 16, 121) 5%,
+    rgb(213, 105, 69) 90%
+  );
+  border: 1px solid aqua;
+  transition: transform 0.8s ease, opacity 0.5s ease;
+  position: relative;
+}
+
+/* toDo Empty title */
+#ClearEmptyTitle {
+  color: aqua;
+  height: 50px;
+  width: 50%;
+  font-size: 40px;
+  font-weight: 700;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  text-align: center;
+  align-content: center;
+  text-transform: uppercase;
+  position: absolute;
+  top: 280px;
+  left: 310px;
+  display: none;
+}
+
+/* using remove cliassList by js */
+.deletedCardContainer-Slide {
+  opacity: 0;
+  transform: scale(0);
+}
+
+#deleted-card-header {
+  background-image: linear-gradient(
+    111.4deg,
+    rgb(25, 25, 35) 6.5%,
+    rgb(22, 20, 84) 93.2%
+  );
+  height: 40px;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  position: relative;
+}
+
+#deleted-card-header > h3 {
+  color: azure;
+  font-size: 25px;
+  font-weight: 600;
+  font-family: cursive;
+}
+
+/* clear all historyToDO permanently.... */
+#clearToDoMenu {
+  position: absolute;
+  top: 6px;
+  right: 15px;
+  cursor: pointer;
+}
+
+#clearAllTodo {
+  background-color: #f25a08;
+  position: absolute;
+  top: 0px;
+  right: 40px;
+  height: 80%;
+  width: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 3px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transform: translateY(-35px);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#clearAllTodo > h3 {
+  color: azure;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+#clearAllToDoBtn {
+  cursor: pointer;
+}
+
+#deletedCard-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: calc(100% - 40px);
+  width: 100%;
+  align-content: start;
+}
+
+#deletedCard-box::-webkit-scrollbar {
+  width: 4px;
+}
+
+#deletedCard-box::-webkit-scrollbar-thumb {
+  background-color: #1bc0e9;
+}
+
+#deletedCard-box::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+/* using dynamically add ClassList by js */
+.deletedCard-del-btn:hover {
+  cursor: pointer;
+  fill: red;
+}
+
+.deleted-lists-card {
+  height: 150px;
+  width: 48%;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid aqua;
+  transition: transform 0.8s ease, opacity 0.5s ease;
+}
+
+/* add classList dynamically */
+.deletede-card-slide {
+  transform: scale(0);
+  opacity: 0;
+}
+/* created Date: 22/8/2024 to 31/8/2024 saturday by @Abhishekh1516techboy */
