@@ -1,0 +1,102 @@
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(197, 197, 43);
+    text-align: center;
+}
+
+
+h1{
+    background-color: black;
+    color: white;
+    height: 2.9rem;
+    font-style: italic;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.container{
+    height:70vh ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game{
+    height: 60vmin;
+    width: 60vmin;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vmin;
+}
+
+.box{
+    height: 18vmin;
+    width: 18vmin;
+    border-radius: 1.2rem;
+    border: none;
+    box-shadow:0 0 1rem rgba(0,0,0,1.8);
+    font-size: 8vmin;
+    background-color:  rgb(102, 195, 118);
+    cursor: pointer;
+}
+
+#reset-btn{
+    height: 8vmin;
+    width: 20vmin;
+    border-radius: 1.2rem;
+    font-size: 3vmin;
+    font-weight: 600;
+    background-color: rgb(176, 122, 251);
+    border-radius: 1rem;
+    border: none;
+    color: rgb(246, 255, 0);
+    cursor: pointer;
+}
+
+#new-btn{
+    height: 8vmin;
+    width: 20vmin;
+    border-radius: 1.2rem;
+    font-size: 3vmin;
+    font-weight: 600;
+    background-color: rgb(122, 176, 251);
+    border-radius: 1rem;
+    border: none;
+    color: blue;
+    cursor: pointer;
+}
+
+.msg-container{
+    margin: 6vmin;
+}
+#msg{
+    color: blue;
+    font-size: 6vmin;
+}
+
+.hide{
+ display: none;   
+}
+
+
+@media screen and (max-width:768px){
+
+    .game{
+        margin-bottom: 5rem;
+    }
+
+   #reset-btn{
+    position: relative;
+    bottom:60px;
+   }
+
+   #new-btn{
+    margin-top: 1.2rem;
+   }
+}

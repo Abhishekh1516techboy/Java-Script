@@ -1,0 +1,489 @@
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 320px) and (max-width: 540px) {
+  #container {
+    width: 100%;
+  }
+
+  #todo-App {
+    font-size: 20px;
+    text-align: start;
+    padding-left: 18px;
+  }
+
+  #todo-App::before {
+    display: none;
+  }
+
+  nav {
+    padding: 0px 20px;
+  }
+
+  nav > ul {
+    width: 70%;
+    justify-content: space-between;
+  }
+
+  #home::after {
+    font-weight: 400;
+    font-size: 11px;
+    left: -2px;
+  }
+
+  #home:hover#home::after {
+    font-size: 12.5px;
+  }
+
+  #del-History::after {
+    content: "Deleted";
+    font-size: 10px;
+    font-weight: 400;
+    left: 41px;
+  }
+
+  #del-History:hover#del-History::after {
+    font-size: 12px;
+  }
+
+  /* Notification slider line */
+  #notify-slider {
+    height: 3px;
+  }
+
+  /* ***********************Main section start*********************** */
+  /* -----------------First ToDo-List PopUp-----------------*/
+  #first-todo {
+    height: 120px;
+    width: 90%;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+
+  #first-todo > h2 {
+    font-size: 14px;
+  }
+
+  #first-todo-add {
+    font-size: 15px;
+    padding: 6px 90px;
+    margin-top: 40px;
+  }
+
+  /* *********************Add toDo Section***************** */
+  /* conformation Box when All toDO Delete btn clicked Show for conformation */
+  #conformationBox {
+    height: 120px;
+    width: 90%;
+    padding: 0px 5px;
+    left: 5%;
+  }
+
+  #topPart > h3 {
+    font-size: 15px;
+  }
+
+  #bottomPart {
+    gap: 12px;
+    padding: 0px 10px;
+  }
+
+  #bottomPart > button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  /* ---------todo card container-----------*/
+  #toDo {
+    width: 95%;
+    height: 95%;
+    margin-top: 15px;
+  }
+
+  #add-todo-title {
+    justify-content: space-evenly;
+  }
+
+  #add-todo-title > h2 {
+    padding: 8px 0px;
+    font-size: 15px;
+  }
+
+  #add-todo-title h2:nth-of-type(2) {
+    display: none;
+  }
+
+  #toDoMenu {
+    right: 10px;
+    cursor: pointer;
+  }
+
+  #deleeAllToDo {
+    right: 65px;
+    width: 150px;
+  }
+
+  #partion {
+    flex-direction: column;
+  }
+
+  #add-toDo {
+    height: 40%;
+    width: 100%;
+    border-right: unset;
+    margin-top: 5px;
+    border-bottom: 2px solid #52fff5;
+  }
+
+  #input-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .user-input {
+    height: 32%;
+    padding: 0px 15px;
+  }
+
+  .user-input > label {
+    font-size: 18px;
+  }
+
+  .user-input input[type="text"] {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  #submit-btn {
+    font-size: 20px;
+    padding: 6px 0px;
+  }
+
+  /* ******************Toto List Section****************** */
+  #toDo-List {
+    width: 100%;
+    height: 60%;
+  }
+
+  .list-title {
+    font-size: 16px;
+  }
+
+  .list-desc {
+    font-size: 14px;
+  }
+
+  /* toDo Empty title */
+  #toDoEmptyTitle {
+    width: 90%;
+    font-size: 30px;
+    top: 100px;
+  }
+
+  #toDo-List::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  /* -----------ToDO edit form section---------------- */
+  #edit-TodoContainer {
+    width: 90vw;
+  }
+
+  .edit-user-input {
+    padding: 0px 10px;
+  }
+
+  .edit-user-input > label {
+    font-size: 20px;
+  }
+
+  .edit-user-input input[type="text"] {
+    padding: 10px;
+  }
+
+  #edit-submit-btn {
+    font-size: 20px;
+  }
+
+  /* --------------Deleted card history section------------- */
+  /* conformation Box when All toDO Delete btn clicked Show for conformation */
+  #clearConformationBox {
+    height: 120px;
+    width: 90%;
+    padding: 0px 5px;
+    left: 5%;
+  }
+
+  #clearTopPart > h3 {
+    font-size: 16px;
+  }
+
+  #clearBottomPart {
+    gap: 12px;
+    padding: 0px 10px;
+  }
+
+  #clearBottomPart > button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  /* deleted card history container */
+  #deletedCardContainer {
+    width: 95%;
+    margin-top: 15px;
+  }
+
+  /* toDo Empty title */
+  #ClearEmptyTitle {
+    width: 90%;
+    font-size: 30px;
+    top: 240px;
+    left: 15px;
+  }
+
+  #deleted-card-header > h3 {
+    font-size: 15px;
+  }
+
+  #clearAllTodo {
+    right: 65px;
+    width: 150px;
+  }
+
+  #deletedCard-box {
+    gap: 10px;
+    padding: 6px;
+  }
+
+  #deletedCard-box::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  .deleted-lists-card {
+    width: 100%;
+  }
+}
+
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 375px) and (max-width: 411px) {
+  #todo-App {
+    font-size: 20px;
+    text-align: end;
+  }
+
+  nav {
+    width: 30%;
+    padding-right: 0px;
+  }
+
+  nav > ul {
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  #deleeAllToDo {
+    right: 95px;
+  }
+
+  #clearAllTodo {
+    right: 95px;
+  }
+}
+
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 390px) and (max-width: 411px) {
+  #todo-App {
+    font-size: 20px;
+    text-align: end;
+  }
+
+  nav {
+    width: 30%;
+    padding-right: 0px;
+  }
+
+  nav > ul {
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  #deleeAllToDo {
+    right: 110px;
+  }
+
+  #clearAllTodo {
+    right: 115px;
+  }
+
+  #del-History::after {
+    left: 48px;
+  }
+}
+
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 412px) and (max-width: 440px) {
+  #todo-App {
+    font-size: 22px;
+    text-align: end;
+  }
+
+  nav {
+    width: 30%;
+    padding-right: 0px;
+  }
+
+  nav > ul {
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  #deleeAllToDo {
+    right: 118px;
+  }
+
+  #clearAllTodo {
+    right: 120px;
+  }
+
+  #del-History::after {
+    left: 55px;
+  }
+}
+
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 540px) and (max-width: 767px) {
+  #todo-App {
+    font-size: 20px;
+    text-align: end;
+  }
+
+  nav {
+    width: 30%;
+    padding-right: 0px;
+  }
+
+  nav > ul {
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  #deleeAllToDo {
+    right: 170px;
+  }
+
+  #clearAllTodo {
+    right: 170px;
+  }
+
+  #del-History::after {
+    left: 82.5px;
+  }
+}
+
+/* -------------------------------------------------------------- */
+@media screen and (min-width: 768px) and (max-width: 915px) {
+  #todo-App {
+    width: 60%;
+  }
+
+  nav {
+    width: 40%;
+    padding-right: 25px;
+  }
+
+  #home::after {
+    left: 14px;
+  }
+
+  #del-History::after {
+    content: "Deleted";
+    left: 70px;
+  }
+
+  /* *********************Add toDo Section***************** */
+  /* conformation Box when All toDO Delete btn clicked Show for conformation */
+  #conformationBox {
+    left: 17.5%;
+  }
+
+  /* ---------todo card container-----------*/
+  #toDo {
+    height: 90vh;
+    width: 95vw;
+    margin-top: 10px;
+  }
+
+  #add-todo-title > h2 {
+    font-size: 20px;
+  }
+
+  #deleeAllToDo {
+    right: 110px;
+    width: 150px;
+  }
+
+  #toDo-List::-webkit-scrollbar {
+    width: 2.5px;
+  }
+
+  .list-title {
+    font-size: 15px;
+  }
+
+  .list-desc {
+    font-size: 12px;
+  }
+
+  /* toDo Empty title */
+  #toDoEmptyTitle {
+    width: 60%;
+    font-size: 30px;
+  }
+
+  /* -----------ToDO edit form section---------------- */
+  #edit-TodoContainer {
+    width: 45vw;
+  }
+
+  /* --------------Deleted card history section------------- */
+  /* conformation Box when All toDO Delete btn clicked Show for conformation */
+  #clearConformationBox {
+    left: 17.5%;
+  }
+
+  /* deleted card history container */
+  #deletedCardContainer {
+    width: 95%;
+    margin-top: 10px;
+  }
+
+  /* toDo Empty title */
+  #ClearEmptyTitle {
+    width: 50%;
+    font-size: 35px;
+    top: 240px;
+    left: 200px;
+  }
+
+  #deleted-card-header > h3 {
+    font-size: 20px;
+  }
+
+  /* clear all historyToDO permanently.... */
+  #clearAllTodo {
+    right: 60px;
+  }
+
+  #deletedCard-box::-webkit-scrollbar {
+    width: 2.5px;
+  }
+}
+
+/* --------------------------------------------------------------- */
+@media screen and (min-width: 820px) and (max-width: 915px) {
+  #del-History::after {
+    left: 80px;
+  }
+}
+/* created Date: 22/8/2024 to 31/8/2024 saturday by @Abhishekh1516techboy */
