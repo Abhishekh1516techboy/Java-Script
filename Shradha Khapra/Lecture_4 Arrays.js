@@ -18,7 +18,7 @@ console.log(typesof, marks);
 
 // let heros["ironman", "spiderman", "superman", "krish", "padman", "mrAmerica"];
 
-// for (let i = 0; i < heros.length; i++{
+// for (let i = 0; i < heros.length; i++){
   // console.log(i);
 // }
 
