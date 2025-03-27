@@ -13,24 +13,35 @@ console.log(typesof, marks);
 
 //............Looping over an Array.............
 
-
 //Using for loop...
 
-// let heros["ironman", "spiderman", "superman", "krish", "padman", "mrAmerica"];
+let heros = [
+  "ironman",
+  "spiderman",
+  "superman",
+  "krish",
+  "padman",
+  "mrAmerica",
+];
 
-// for (let i = 0; i < heros.length; i++){
-  // console.log(i);
-// }
-
+for (let i = 0; i < heros.length; i++) {
+  console.log(i);
+}
 
 //Using for-of loops.......
 
-// let heros["ironman", "spiderman", "superman", "krish", "padman", "mrAmerica"];
+let Heros = [
+  "ironman",
+  "spiderman",
+  "superman",
+  "krish",
+  "padman",
+  "mrAmerica",
+];
 
-// for (let hero of heros) {
-  // console.log(hero);
-// }
-
+for (let hero of Heros) {
+  console.log(hero);
+}
 
 let cities = ["delhi", "patna", "hydrabad", "kolkata", "mumbai"];
 
@@ -49,7 +60,6 @@ for (let val of marks) {
 
 let avg = sum / marks.length;
 console.log(`Avg of marks of the class = ${avg}`);
-
 
 //Q.2... offers discount 10% price of product price  [245,655,400,450,60]...
 
@@ -70,11 +80,10 @@ for (let val of items) {
 // let items = [245, 655, 400, 450, 60];
 
 // for (let i = 0; i < items.length; i++) {
-  // let offer = items[i] / 10;
-  // items[i] =  - offer;
+// let offer = items[i] / 10;
+// items[i] =  - offer;
 // }
 // console.log(items);
-
 
 //=========Array methods in js==========
 
@@ -92,14 +101,13 @@ for (let val of items) {
 // console.log(foodItems);
 // console.log("deleted Products", deletedItems);
 
-
 //.toString() methods...  Change arry to Strings...
 
 // let foodItems = ["potato", "apple", "mango", "grapes", "watermellon"];
 // console.log(foodItems);
 // console.log(foodItems.toString());
 
-//.concat().... 
+//.concat()....
 
 // let marvelHeros = ["thor", "spiderman", "ironman", "CaptionAmerica", "hulk"];
 // let dcHeros = ["superman", "Batman"];
@@ -121,7 +129,6 @@ for (let val of items) {
 // let val = marvelHeros.shift();
 // console.log("Deleted items", val);
 
-
 //.slice().... return the pice of specific index of Array...
 
 //.slice(startIdx, endIdx)..
@@ -131,7 +138,6 @@ for (let val of items) {
 // console.log(marvelHeros);
 
 // console.log(marvelHeros.slice(1, 4));
-
 
 //.splice()... change original Array (add, remove , replace)...
 
@@ -145,11 +151,9 @@ arr.splice(3, 1); //Delete Elements
 
 arr.splice(3, 1, 27); //Replace elements
 
-
 //Q.3 create an Array to store compines , then (a).Remove first comny (b). Remove others  and add new compny in its place (c). Add Technologyfire at the End of Array ....
 
-
-//(a)... 
+//(a)...
 let compny = ["microsoft", "apple", "samsung", "sony", "watsapp"];
 let deleted = compny.shift();
 
@@ -160,8 +164,3 @@ compny.splice(2, 1, "facebook");
 //(c)...
 // let compny = ["microsoft", "apple", "samsung", "sony", "watsapp"];
 compny.push("Technologyfire");
-
-
-
-
-
