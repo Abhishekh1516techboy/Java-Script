@@ -1,0 +1,4 @@
+
+MONGODB_URI='mongodb://localhost:27017/Voting-App' 
+
+JWT_SECRET='7c927c932f238cb656d72e00aa099f91d9367ab957020987f645023d9fbbaf25' 

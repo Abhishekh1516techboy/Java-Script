@@ -1,0 +1,54 @@
+-------------------- Voting Application -----------------------
+
+What is it?
+A functionality where users can vote for a given set of candidates.
+
+Models??
+Routes??
+
+------------------------------------------------------------------------
+*** Voting Application funcinality ***
+1 Step:-> Users can sign up or sign in.
+2 Step:-> Users can view a list of available candidates.
+3 Step:-> Users can vote for one candidate. After voting, they cannot vote for any other candidate.
+4 Step:-> Vote counts are displayed in real time and sorted by the number of votes.
+5 Step:-> User data must include a unique government ID proof: Aadhar Number.
+6 Step:-> There should be one admin who can manage the list of candidates.
+7 Step:-> Users can change their password.
+8 Step:-> Users can log in using only their Aadhar Number and password.
+
+-------------------------------------------------------------------------
+## Voting Application API Routes
+
+** User Authentication:
+POST /auth/signup: create a new user account. ["Name", "age", "Gender", "phone", "state", "city", "pin-Code", "Aadhar No.", "password"]
+POST /auth/login: Log-in to existing account. ["Aadhar No.", "password"]
+
+
+** Voting:
+GET /candidates: Get the lists of candidates. ["Name", "age", "Gender", "candidateId", "party", "constituency", "imageUrl"]
+POST /vote/:candidateId: vote for a specific candidate. ["userId", "candidateId", "party", "timeStamp"]
+
+
+** voting Live results:
+GET /vote/results: get the lists of candidates, sorted by there vote count. ["voteCount", "Name", "Gender", "age", "party", "constituency", "imageUrl"]
+
+
+** User Profile:
+GET /user/profile: get the users profile information. ["Name", "Aadhar No.", "hasVoted", "votedParty" "votedCandidateId", "votedTimeStamp"]
+PUT /user/profile/change-password: Change the user password. ["oldPassword", "newPassword"]
+
+
+** (ADMIN) Authentication:
+POST /auth/admin/signup: create a new Admin account. ["Name", "age", "Gender", "state", "city", "pin-Code", "Aadhar No.", "password"]
+POST /auth/admin/login: Log-in to existing account. ["Aadhar No.", "password"]
+PUT /admin/profile/change-password: Change the Admin password. ["oldPassword", "newPassword"]
+
+
+** (ADMIN) candidate management:
+POST /candidates: create a new candidate. ["Name", "age", "Gender", "Aadhar No.", "candidateId", "party", "constituency", "imageUrl", "voteCount"]
+PUT /candidates/:candidateId: Update an existing candidate. ["constituency", "party", "candidateId", "imageUrl", "age"]
+DELETE /candidates/:candidateId: Delete a candidate from Voting lists. ["candidateId"]
+
+
+
