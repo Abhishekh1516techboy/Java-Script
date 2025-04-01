@@ -97,7 +97,7 @@ const UserSchema = new Schema(
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );
 
-//// Hash password before saving
+// Hash password before saving
 UserSchema.pre("save", async function (next) {
   try {
     // Only hash the password if it has been modified (or is new)
@@ -115,7 +115,7 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-//// Add comparePassword method for matching password by user and database stored password
+// Add comparePassword method for matching password by user and database stored password
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.password);

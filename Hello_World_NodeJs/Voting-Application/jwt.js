@@ -21,9 +21,9 @@ const jwtAuthMiddleware = (req, res, next) => {
     console.error("JWT Authentication Error:", error.message);
 
     if (error.name === "TokenExpiredError") {
-      return res.status(403).json({ error: "Forbidden: Token expired" });
+      return res.status(403).json({ error: "Unauthorized: Token expired" });
     } else if (error.name === "JsonWebTokenError") {
-      return res.status(403).json({ error: "Forbidden: Invalid token" });
+      return res.status(401).json({ error: "Unauthorized: Invalid token" });
     }
 
     return res.status(500).json({ error: "Internal server error" });
@@ -33,7 +33,7 @@ const jwtAuthMiddleware = (req, res, next) => {
 // Generate JWT Token
 const generateJwtToken = (userData) => {
   // Generate new JWT token using userData
-  return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: "5m" }); // expires in 5 min
+  return jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: "1h" }); // expires in 5 min
 };
 
 export { jwtAuthMiddleware, generateJwtToken };

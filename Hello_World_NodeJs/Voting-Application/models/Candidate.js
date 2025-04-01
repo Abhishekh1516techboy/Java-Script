@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// import bcrypt from "bcryptjs"; // Added bcrypt import
 
 const { Schema, model, models } = mongoose;
 
@@ -25,19 +24,23 @@ const CandidateSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      trim:true,
       match: /^[2-9]{1}[0-9]{11}$/, // Aadhar number must be a 12-digit number starting with 2-9
-      //   select: false, // Hide by default in queries
+      index: true, // Optimize lookups
+      select: false, // Hide by default in queries
     },
     candidateId: {
       type: String,
       required: true,
       unique: true,
+      trim: true,
       index: true, // Improve query performance
     },
     party: {
       type: String,
       required: true,
-    },
+      trim: true,
+      },
     constituency: {
       type: String,
       required: true,
@@ -46,6 +49,7 @@ const CandidateSchema = new Schema(
     imageUrl: {
       type: String,
       required: true,
+      trim:true
     },
     votedCount: {
       type: Number,
@@ -66,38 +70,35 @@ const CandidateSchema = new Schema(
           type: Date,
           default: Date.now(),
         },
+        _id: false, // Disable auto-generated _id
       },
     ],
   },
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );
 
-//// Hash password before saving
-// UserSchema.pre("save", async function (next) {
-//   try {
-//     // Only hash the password if it has been modified (or is new)
-//     if (!this.isModified("password")) {
-//       return next();
-//     }
 
-//     // Generate hash with salt rounds of 10
-//     const salt = await bcrypt.genSalt(10);
-//     // password encryption and save
-//     this.password = await bcrypt.hash(this.password, salt);
-//     next();
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+// Add the pre-hook to prevent updates to votedCount and votes
+CandidateSchema.pre("findOneAndUpdate", async function (next) {
+  try {
+    // Get the update object from the query
+    const update = this.getUpdate();
 
-//// Add comparePassword method for matching password by user and database stored password
-// UserSchema.methods.comparePassword = async function (candidatePassword) {
-//   try {
-//     return await bcrypt.compare(candidatePassword, this.password);
-//   } catch (error) {
-//     throw new Error("Password comparison failed");
-//   }
-// };
+    // Remove restricted fields
+    delete update.votedCount; // Remove votedCount from the update
+    delete update.votes;      // Remove votes from the update
+
+    // Set the modified update object back to the query
+    this.setUpdate(update);
+
+    // Proceed to the next middleware or operation
+    next();
+  } catch (error) {
+    // Pass any errors to the next middleware
+    next(error);
+  }
+});
+
 
 // Export the model, using `User` as the model name
 export default models.Candidate || model("Candidate", CandidateSchema);
