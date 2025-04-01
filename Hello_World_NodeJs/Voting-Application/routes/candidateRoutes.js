@@ -1,6 +1,6 @@
 import express from "express";
 import Candidate from "../models/Candidate.js";
-import { jwtAuthMiddleware, generateJwtToken } from "../jwt.js";
+import { jwtAuthMiddleware} from "../jwt.js";
 import isAdmin from "../middleware.js";
 import {
   //   formatAadharNumber,
