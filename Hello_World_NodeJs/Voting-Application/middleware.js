@@ -7,13 +7,13 @@ const isAdmin = async (req, res, next) => {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    // Fetch the user from the database
+    // Fetch the user from the database by role [admin, voter]
     const user = await User.findById(req.user.id).select("role");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Check if the user is an admin
+    // Check if the user is an admin or not
     if (user.role !== "admin") {
       return res.status(403).json({ error: "Access denied: Admin privileges required" });
     }

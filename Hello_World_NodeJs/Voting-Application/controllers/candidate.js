@@ -6,6 +6,7 @@ import {
   validateGender,
 } from "../helpers/validators.js";
 
+// ********************** /admin/manage **********************
 export const createCandidate = async (req, res) => {
   try {
     // Body contains form data

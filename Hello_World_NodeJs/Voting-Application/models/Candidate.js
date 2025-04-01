@@ -64,7 +64,6 @@ const CandidateSchema = new Schema(
           ref: "User", // References users who voted for this candidate
           required: true,
           index: true, // Optimize reverse lookups
-          select: false, // Hidden by default for privacy and performance
         },
         votedAt: {
           type: Date,

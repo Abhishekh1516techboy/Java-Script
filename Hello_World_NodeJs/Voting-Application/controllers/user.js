@@ -11,6 +11,7 @@ import {
   validatePinCode,
 } from "../helpers/validators.js";
 
+// ********************** /user **********************
 export const signUp = async (req, res) => {
   try {
     // Body contains form data
@@ -269,6 +270,51 @@ export const passwordChange = async (req, res) => {
     // Catch any errors during database operation
     res.status(500).json({
       error: "Failed to Changed User Password",
+    });
+  }
+};
+
+// ********************** /admin/manage/u **********************
+export const getAllUsers = async (req, res) => {
+  try {
+    // Fetch AllUsers from Database
+    const users = await User.find({ role: { $ne: "admin" } });
+    // Respond with the find User
+    res.status(200).json({
+      message: "User Data found successfully",
+      user: users,
+    });
+  } catch (error) {
+    console.error("Error finding User:", error);
+    res.status(500).json({ message: "Failed to find User" });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    // Extract the :id parameter from the route
+    const UserId = req.params.id;
+    console.log(UserId)
+
+    // Attempt to find and permanently delete the User document from the database
+    const deletedUserData = await User.findByIdAndDelete(UserId);
+
+    // If no document is found with the given ID, return a 404 error
+    if (!deletedUserData) {
+      return res.status(404).json({
+        error: "User not found in DataBase", // Indicates the ID doesn't exist
+      });
+    }
+
+    // Returns status 200 with a message and the deleted User data
+    res.status(200).json({
+      message: "User data deleted successfully", // Confirmation message
+      user: deletedUserData, // Return the deleted document for reference
+    });
+  } catch (error) {
+    // Handle any errors that occur during the database operation
+    res.status(500).json({
+      error: "Failed to Delete User", // Generic error message for client
     });
   }
 };

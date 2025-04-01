@@ -1,8 +1,14 @@
 import express from "express";
 import { jwtAuthMiddleware } from "../jwt.js";
-import { signUp, login, profile, passwordChange } from "../controllers/user.js";
+import {
+  signUp,
+  login,
+  profile,
+  passwordChange,
+} from "../controllers/user.js";
 const router = express.Router();
 
+// ********************** /user Routes **********************
 // User SignUp Post Routes
 router.post("/auth/signup", signUp);
 
