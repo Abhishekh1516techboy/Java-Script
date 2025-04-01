@@ -5,12 +5,8 @@ import isAdmin from "../middleware.js";
 import {
   //   formatAadharNumber,
   validateAadhar,
-  validateEmail,
   validateAge,
   validateGender,
-  validatePhone,
-  validatePassword,
-  validatePinCode,
 } from "../helpers/validators.js";
 const router = express.Router();
 
