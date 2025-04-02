@@ -1,4 +1,6 @@
 -------------------- Voting Application -----------------------
+Date: 03/04/2025
+Time: 02:25 AM
 
 What is it?
 A functionality where users can vote for a given set of candidates.
