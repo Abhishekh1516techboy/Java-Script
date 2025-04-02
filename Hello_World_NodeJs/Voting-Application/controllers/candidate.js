@@ -102,7 +102,7 @@ export const updateCandidate = async (req, res) => {
     validateAge(updateCandidate.age);
     validateGender(updateCandidate.gender);
 
-    // Update User document in database using Mongoose
+    // Update Candidate document in database using Mongoose
     const updatedCandidateData = await Candidate.findByIdAndUpdate(
       candidateId,
       updateCandidate,
@@ -115,13 +115,13 @@ export const updateCandidate = async (req, res) => {
     // Returns 404 if no document matches the provided ID
     if (!updatedCandidateData) {
       return res.status(404).json({
-        error: "User not found in DataBase",
+        error: "Candidate not found in DataBase",
       });
     }
 
     // Success response with status 200 and updated User data
     res.status(200).json({
-      message: "User data updated successfully",
+      message: "Candidate data updated successfully",
       user: updatedCandidateData, // Return the updated document
     });
   } catch (error) {
@@ -144,7 +144,7 @@ export const updateCandidate = async (req, res) => {
 
     // Catch any errors during database operation
     res.status(500).json({
-      error: "Failed to update User",
+      error: "Failed to update Candidate",
     });
   }
 };
@@ -154,25 +154,25 @@ export const deleteCandidate = async (req, res) => {
     // Extract the :id parameter from the route
     const CandidateId = req.params.id;
 
-    // Attempt to find and permanently delete the User document from the database
+    // Attempt to find and permanently delete the Candidate document from the database
     const deletedCandidate = await Candidate.findByIdAndDelete(CandidateId);
 
     // If no document is found with the given ID, return a 404 error
     if (!deletedCandidate) {
       return res.status(404).json({
-        error: "User not found in DataBase", // Indicates the ID doesn't exist
+        error: "Candidate not found in DataBase", // Indicates the ID doesn't exist
       });
     }
 
     // Returns status 200 with a message and the deleted User data
     res.status(200).json({
-      message: "User data deleted successfully", // Confirmation message
+      message: "Candidate data deleted successfully", // Confirmation message
       user: deletedCandidate, // Return the deleted document for reference
     });
   } catch (error) {
     // Handle any errors that occur during the database operation
     res.status(500).json({
-      error: "Failed to Delete User", // Generic error message for client
+      error: "Failed to Delete Candidate", // Generic error message for client
     });
   }
 };

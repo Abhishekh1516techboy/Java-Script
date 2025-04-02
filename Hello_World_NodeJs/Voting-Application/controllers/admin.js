@@ -11,7 +11,7 @@ import {
   validatePinCode,
 } from "../helpers/validators.js";
 
-// ********************** /user **********************
+// ********************** /admin **********************
 export const signUp = async (req, res) => {
   try {
     // Body contains form data
@@ -31,24 +31,35 @@ export const signUp = async (req, res) => {
     validatePassword(data.password);
     validatePinCode(data.address.pinCode);
 
-    // Check if user already exists by Unique Aadhar Number
-    const existingUser = await User.findOne({
-      aadharNumber: data.aadharNumber,
-    });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    // Check if an admin already exists in the database
+    const adminExist = await User.findOne({ role: "admin" });
+
+    if (adminExist) {
+      return res.status(400).json({
+        success: false,
+        message: "Admin already exists. Only one admin is allowed.",
+      });
     }
 
-    // Create new newUser document using mongoose model
-    const newUser = new User(data);
+    // Check if user already exists by Unique Aadhar Number
+    const existingAdmin = await User.findOne({
+      aadharNumber: data.aadharNumber,
+    });
+
+    if (existingAdmin) {
+      return res.status(400).json({ message: "Admin Already exists" });
+    }
+
+    // Create new newAdmin document using mongoose model
+    const newAdmin = new User(data);
 
     // Save to MongoDB
-    await newUser.save();
+    await newAdmin.save();
 
     // Create JWT payload
     const payload = {
-      id: newUser.id,
-      role: newUser.role,
+      id: newAdmin.id,
+      role: newAdmin.role,
     };
 
     // Generate JWT token
@@ -56,18 +67,18 @@ export const signUp = async (req, res) => {
 
     // Respond with the saved User
     res.status(201).json({
-      message: "User created successfully",
+      message: "Admin created successfully",
       user: {
-        id: newUser.id,
-        name: newUser.name,
-        gender: newUser.gender,
-        email: newUser.email,
-        role: newUser.role,
+        id: newAdmin.id,
+        name: newAdmin.name,
+        gender: newAdmin.gender,
+        email: newAdmin.email,
+        role: newAdmin.role,
       },
       authToken: token,
     });
   } catch (error) {
-    console.error("Error saving User:", error);
+    console.error("Error saving Admin:", error);
 
     // Handle Mongoose validation errors
     if (error.name === "ValidationError") {
@@ -86,7 +97,7 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ message: error.message });
     }
 
-    res.status(500).json({ message: "Failed to save User" });
+    res.status(500).json({ message: "Failed to save Admin" });
   }
 };
 
@@ -97,45 +108,59 @@ export const login = async (req, res) => {
 
     //check form data is available in body or not
     if (!aadharNumber && !password) {
-      return res.status(400).json({ error: "Form data is required" });
+      return res.status(400).json({
+        success: false,
+        message: "Aadhar number and password are required",
+      });
     }
 
     // Apply validations (errors thrown here are caught below)
     validateAadhar(aadharNumber);
     const validatedPassword = validatePassword(password);
 
-    // Find the user by aadharNumber
-    const user = await User.findOne({ aadharNumber: aadharNumber }).select(
+    // Find the user by aadharNumber and include password field
+    const admin = await User.findOne({ aadharNumber: aadharNumber }).select(
       "+password"
     );
 
     // If user does not exist or password does not matched, return error
-    if (!user || !(await user.comparePassword(validatedPassword))) {
-      return res.status(401).json({ error: "Invalid username OR password!" });
+    if (!admin || !(await admin.comparePassword(validatedPassword))) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Aadhar number or password" });
+    }
+
+    // Check if the user is an admin
+    if (admin.role !== "admin") {
+      return res.status(400).json({
+        success: false,
+        message: "You are not an admin. Please login as a user",
+      });
     }
 
     //If username and password matched generate JWT token
     // Create JWT payload
     const payload = {
-      id: user.id,
-      role: user.role,
+      id: admin.id,
+      role: admin.role,
     };
 
     // Generate JWT token
     const token = generateJwtToken(payload);
 
-    // Redirect to profile route using user's _id as the slug
-    const profileUrl = `/user/profile/${user.id}`;
+    // Redirect to profile route using after Loginin success
+    const profileUrl = `/admin/profile`;
 
     // return JWT token as response
     res.status(200).json({
-      message: "Login successful",
+      success: true,
+      message: "Admin logged in successfully",
       user: {
-        id: user.id,
-        name: user.name,
-        gender: user.gender,
-        email: user.email,
-        role: user.role,
+        id: admin.id,
+        name: admin.name,
+        gender: admin.gender,
+        email: admin.email,
+        role: admin.role,
       },
       authToken: token,
       redirect: profileUrl,
@@ -166,49 +191,33 @@ export const login = async (req, res) => {
 
 export const profile = async (req, res) => {
   try {
-    // Extract the userId from the route parameter
-    const userId = req.params.id;
-
     // Get the authenticated user's ID from JWT
-    const authUserId = req.user.id;
-
-    // Check if the requested userId matches the authenticated user's ID
-    if (userId !== authUserId) {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to view this profile" });
-    }
+    const authAdminId = req.user.id;
 
     //find user by userId
-    const user = await User.findById(userId);
+    const admin = await User.findById(authAdminId).select("-hasVoted -votedCandidateId -votedParty -votedAt");
 
     // if user not found
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
     }
 
     // return user response
-    res.status(200).json({ user });
+    res.status(200).json({ admin });
   } catch (error) {
-    console.error("Profile error:", error);
-    res.status(500).json({ message: "Server error during profile retrieval" });
+    console.error("Admin Profile error:", error);
+    res
+      .status(500)
+      .json({ message: "Server error during Admin profile retrieval" });
   }
 };
 
 export const passwordChange = async (req, res) => {
   try {
-    const userId = req.params.id; // Extract the User ID from URL parameters
 
     const authUserId = req.user.id; // Get the authenticated user's ID from JWT
 
-    // Check if the requested userId matches the authenticated user's ID
-    if (userId !== authUserId) {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to Change this password." });
-    }
-
-    const { oldPassword, newPassword } = req.body; // Get the data from the request body for change User password
+    const { oldPassword, newPassword } = req.body; // Get the data from the request body for change admin password
 
     //check form data is available in body or not
     if (!oldPassword || !newPassword) {
@@ -229,30 +238,30 @@ export const passwordChange = async (req, res) => {
     }
 
     // Find the user by id
-    const user = await User.findById(userId).select("+password");
+    const admin = await User.findById(authUserId).select("+password");
 
     // Returns 404 if no document matches the provided ID
-    if (!user) {
+    if (!admin) {
       return res.status(404).json({
-        error: "User not found in DataBase",
+        error: "Admin not found in DataBase",
       });
     }
 
     // If password does not matched, return error
-    if (!(await user.comparePassword(validatedOldPassword))) {
+    if (!(await admin.comparePassword(validatedOldPassword))) {
       return res.status(401).json({ error: "Incorrect old password" });
     }
 
-    user.password = validatedNewPassword; // Set the new password
-    await user.save(); // Save password after change
+    admin.password = validatedNewPassword; // Set the new password
+    await admin.save(); // Save password after change
 
     // Success response with status 200 and updated User data
     res.status(200).json({
-      message: "User Password changed successfully",
-      user: user.id,
+      message: "Admin Password changed successfully",
+      admin: admin.id,
     });
   } catch (error) {
-    console.error("User Password-change error:", error);
+    console.error("Admin Password-change error:", error);
 
     // Handle Mongoose validation errors
     if (error.name === "ValidationError") {
@@ -273,52 +282,7 @@ export const passwordChange = async (req, res) => {
 
     // Catch any errors during database operation
     res.status(500).json({
-      error: "Failed to Changed User Password",
-    });
-  }
-};
-
-// ********************** /admin/manage/u **********************
-export const getAllUsers = async (req, res) => {
-  try {
-    // Fetch AllUsers from Database
-    const users = await User.find({ role: { $ne: "admin" } });
-    // Respond with the find User
-    res.status(200).json({
-      message: "User Data found successfully",
-      user: users,
-    });
-  } catch (error) {
-    console.error("Error finding User:", error);
-    res.status(500).json({ message: "Failed to find User" });
-  }
-};
-
-export const deleteUser = async (req, res) => {
-  try {
-    // Extract the :id parameter from the route
-    const UserId = req.params.id;
-    console.log(UserId);
-
-    // Attempt to find and permanently delete the User document from the database
-    const deletedUserData = await User.findByIdAndDelete(UserId);
-
-    // If no document is found with the given ID, return a 404 error
-    if (!deletedUserData) {
-      return res.status(404).json({
-        error: "User not found in DataBase", // Indicates the ID doesn't exist
-      });
-    }
-
-    // Returns status 200 with a message and the deleted User data
-    res.status(200).json({
-      message: "User data deleted successfully", // Confirmation message
-      user: deletedUserData, // Return the deleted document for reference
-    });
-  } catch (error) {
-    // Handle any errors that occur during the database operation
-    res.status(500).json({
-      error: "Failed to Delete User", // Generic error message for client
+      error: "Failed to Changed Admin Password",
     });
   }
 };

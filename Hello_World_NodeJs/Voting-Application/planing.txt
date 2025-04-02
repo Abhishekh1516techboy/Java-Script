@@ -21,34 +21,43 @@ Routes??
 ## Voting Application API Routes
 
 ** User Authentication:
-POST /auth/signup: create a new user account. ["Name", "age", "Gender", "phone", "state", "city", "pin-Code", "Aadhar No.", "password"]
-POST /auth/login: Log-in to existing account. ["Aadhar No.", "password"]
-
-
-** Voting:
-GET /candidates: Get the lists of candidates. ["Name", "age", "Gender", "candidateId", "party", "constituency", "imageUrl"]
-POST /vote/:candidateId: vote for a specific candidate. ["userId", "candidateId", "party", "timeStamp"]
-
-
-** voting Live results:
-GET /vote/results: get the lists of candidates, sorted by there vote count. ["voteCount", "Name", "Gender", "age", "party", "constituency", "imageUrl"]
+POST /user/auth/signup: create a new user account. ["Name", "age", "Gender", "phone", "state", "city", "pin-Code", "Aadhar No.", "password"]
+POST /user/auth/login: Log-in to existing account. ["Aadhar No.", "password"]
 
 
 ** User Profile:
-GET /user/profile: get the users profile information. ["Name", "Aadhar No.", "hasVoted", "votedParty" "votedCandidateId", "votedTimeStamp"]
-PUT /user/profile/change-password: Change the user password. ["oldPassword", "newPassword"]
+GET /user/profile/:userId: get the users profile information. ["Name", "Aadhar No.", "hasVoted", "votedParty" "votedCandidateId", "votedTimeStamp"]
+PUT /user/profile/change-password/:userId: Change the user password. ["oldPassword", "newPassword"]
+
+
+** Voting:
+GET /voting/candidates: Get the lists of candidates. ["Name", "age", "Gender", "candidateId", "party", "constituency", "imageUrl"]
+POST /voting/vote/:Candidateid: vote for a specific candidate. ["userId", "candidateId", "party", "timeStamp"]
+
+
+** voting Live results:
+GET /voting/results: get the lists of candidates, sorted by there vote count. ["voteCount", "Name", "Gender", "age", "party", "constituency", "imageUrl"]
 
 
 ** (ADMIN) Authentication:
-POST /auth/admin/signup: create a new Admin account. ["Name", "age", "Gender", "state", "city", "pin-Code", "Aadhar No.", "password"]
-POST /auth/admin/login: Log-in to existing account. ["Aadhar No.", "password"]
+POST /admin/auth/signup: create a new Admin account. ["Name", "age", "Gender", "state", "city", "pin-Code", "Aadhar No.", "password"]
+POST /admin/auth/login: Log-in to existing account. ["Aadhar No.", "password"]
+
+
+** (ADMIN) Profile:
+GET /admin/profile: get the Admin profile information. ["Name", "age", "gender", "email", "role", "address"]
 PUT /admin/profile/change-password: Change the Admin password. ["oldPassword", "newPassword"]
 
 
 ** (ADMIN) candidate management:
-POST /candidates: create a new candidate. ["Name", "age", "Gender", "Aadhar No.", "candidateId", "party", "constituency", "imageUrl", "voteCount"]
-PUT /candidates/:candidateId: Update an existing candidate. ["constituency", "party", "candidateId", "imageUrl", "age"]
-DELETE /candidates/:candidateId: Delete a candidate from Voting lists. ["candidateId"]
+POST /admin/manage/candidate/create: create a new candidate. ["Name", "age", "Gender", "Aadhar No.", "candidateId", "party", "constituency", "imageUrl", "voteCount"]
+PUT /admin/manage/candidate/update/:candidateId: Update an existing candidate. ["constituency", "party", "candidateId", "imageUrl", "age"]
+DELETE /admin/manage/candidate/delete/:candidateId: Delete a candidate from Voting lists. ["candidateId"]
+
+
+** (ADMIN) candidate management:
+GET /admin/manage/u/users: Get All User Lists. ["Name", "age", "gender", "email" , "address" "hasVoted", "votedParty" "votedCandidateId", "votedTimeStamp"]
+DELETE /admin/manage/u/delete/:userId: Delete a user from User Lists. ["userId"]
 
 
 
