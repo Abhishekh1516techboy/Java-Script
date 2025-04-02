@@ -56,6 +56,13 @@ export const castVote = async (req, res) => {
         .json({ success: false, message: "Candidate not found." });
     }
 
+    // admin cant cast vote
+    if(user.role === "admin"){
+      return res
+      .status(404)
+      .json({ success: false, message: "Admin is not allowed for Vote." });
+    }
+
     // Check if the user has already voted
     if (user.hasVoted) {
       return res.status(400).json({
