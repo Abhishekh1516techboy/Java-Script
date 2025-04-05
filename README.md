@@ -53,12 +53,12 @@ Make sure you have the following installed:
 3. Follow the instructions in the respective README files to run examples.
 
 ## Resources
-- [Chai aur Code - JavaScript](https://www.youtube.com/@chaiaurcode)
-- [CodeWithHarry - JavaScript](https://www.codewithharry.com/)
-- [Hello World - Node.js](https://www.youtube.com/HelloWorldbyprince)
-- [Sigma Web Dev](https://www.youtube.com/@sigmawebdev)
-- [Shradha Khapra](https://www.youtube.com/@ShradhaKhapra)
-- [Sheryians Coding School](https://www.youtube.com/@SheryiansCodingSchool)
+- [Chai aur Code - JavaScript](https://youtube.com/playlist?list=PLu71SKxNbfoBuX3f4EOACle2y-tRC5Q37&si=5GDomdsN4-n2UycC)
+- [CodeWithHarry - JavaScript](https://youtube.com/playlist?list=PLu0W_9lII9ahR1blWXxgSlL4y9iQBnLpR&si=i-y0TUpPaUz6-9_v)
+- [Hello World - Node.js](https://youtube.com/playlist?list=PLzjZaW71kMwScTRKzoasdyB1sX-a9EbFp&si=aY6BB9YgZEHoyuTy)
+- [Sigma Web Dev](https://youtube.com/playlist?list=PLu0W_9lII9agq5TrH9XLIKQvv0iaF2X3w&si=iQwWyJPJsS6VGkMj)
+- [Shradha Khapra](https://youtube.com/playlist?list=PLGjplNEQ1it_oTvuLRNqXfz_v_0pq6unW&si=_crqLftxrBjBjtcG)
+- [Sheryians Coding School](https://youtube.com/playlist?list=PLbtI3_MArDOkXRLxdMt1NOMtCS-84ibHH&si=QeMPoCvKm1ZLr71Q)
 
 ## Contributing
 Feel free to contribute by adding more examples or improving documentation.
