@@ -6,12 +6,13 @@ This repository contains JavaScript code and learning resources, covering both f
 
 ```
 📂 JavaScript
-   ├── 📁 ChaiAurCode          # JavaScript lessons from Chai aur Code
-   ├── 📁 Cwh_SigmaWebDev      # CodeWithHarry Sigma Web Dev Full stack react, NextJS
-   ├── 📁 Hello_World_NodeJs   # Backend Node.js
-   ├── 📁 Shradha Khapra       # JavaScript tutorials by Shradha Khapra
-   ├── 📁 codeWithHarry        # JavaScript code from CodeWithHarry tutorials
-   ├── 📄 README.md            # Documentation
+   ├── 📁 ChaiAurCode               # JavaScript lessons from Chai aur Code
+   ├── 📁 Cwh_SigmaWebDev           # CodeWithHarry Sigma Web Dev Full stack react, NextJS
+   ├── 📁 Hello_World_NodeJs        # Backend Node.js
+   ├── 📁 Shradha Khapra            # JavaScript tutorials by Shradha Khapra
+   ├── 📁 codeWithHarry             # JavaScript code from CodeWithHarry tutorials
+   ├── 📁 Sheryians_Coding_Backend  # NodeJS Backend from Sheryians Coding School
+   ├── 📄 README.md                 # Documentation
 ```
 
 ### Frontend JavaScript
@@ -57,6 +58,7 @@ Make sure you have the following installed:
 - [Hello World - Node.js](https://www.youtube.com/HelloWorldbyprince)
 - [Sigma Web Dev](https://www.youtube.com/@sigmawebdev)
 - [Shradha Khapra](https://www.youtube.com/@ShradhaKhapra)
+- [Sheryians Coding School](https://www.youtube.com/@SheryiansCodingSchool)
 
 ## Contributing
 Feel free to contribute by adding more examples or improving documentation.
