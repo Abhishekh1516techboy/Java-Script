@@ -14,7 +14,7 @@ This series by **Sheryians Coding School** is designed to take you from zero to 
 
 ## 🎥 YouTube Playlist
 
-👉 **Watch Now:** [Sheryians Coding School Backend Series](https://www.youtube.com/@SheryiansCodingSchool)
+👉 **Watch Now:** [Sheryians Coding School Backend Series](https://youtube.com/playlist?list=PLbtI3_MArDOkXRLxdMt1NOMtCS-84ibHH&si=QeMPoCvKm1ZLr71Q)
 
 > 🎯 Start today and build real-world skills in Node.js, APIs, MongoDB, and more!
 
