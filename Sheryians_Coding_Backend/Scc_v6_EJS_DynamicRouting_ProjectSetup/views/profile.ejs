@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profile - <%= user.name %>
+        </title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="bg-gray-900 text-gray-200 font-sans min-h-screen flex flex-col md:flex-row">
+        <!-- Sidebar Profile Card -->
+        <div class="w-full md:w-80 bg-gray-800 p-4 sm:p-6 shadow-xl md:fixed md:h-full flex flex-col justify-between">
+            <!-- Profile Header -->
+            <div class="text-center">
+                <img src="https://picsum.photos/seed/<%= user.name %>/200/200" alt="<%= user.name %>'s Profile Picture"
+                    class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl mx-auto mb-4 border-2 border-indigo-500 object-cover transform hover:scale-105 transition duration-300">
+                <h1 class="text-2xl sm:text-3xl font-bold text-indigo-300">
+                    <%= user.name %>
+                </h1>
+                <p class="text-xs sm:text-sm text-gray-400 mt-2">Member since <%= user.joined || 'April 2025' %>
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-4 mt-4">
+                <button
+                    class="w-full bg-indigo-600 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300 text-sm sm:text-base">
+                    Follow <%= user.name %>
+                </button>
+                <button
+                    class="w-full bg-gray-700 text-gray-200 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-600 transition duration-300 text-sm sm:text-base">
+                    Message
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-4 sm:p-8 md:ml-80">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Bio Section -->
+                <section class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-indigo-300 mb-3">About Me</h2>
+                    <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                        <%= user.bio || `Hi, I'm ${user.name}! I love coding, exploring new technologies, and building
+                            projects with Node.js and Tailwind CSS.` %>
+                    </p>
+                </section>
+
+                <!-- Profile Details -->
+                <section
+                    class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Full Name</p>
+                        <p class="text-base sm:text-lg font-medium text-gray-200">
+                            <%= user.fullName || `${user.name}` %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Email</p>
+                        <p class="text-base sm:text-lg font-medium text-gray-200">
+                            <%= user.email || `${user.name.toLowerCase()}@example.com` %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Location</p>
+                        <p class="text-base sm:text-lg font-medium text-gray-200">
+                            <%= user.location || 'New York, USA' %>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-xs sm:text-sm text-gray-400 uppercase tracking-wide">Joined</p>
+                        <p class="text-base sm:text-lg font-medium text-gray-200">
+                            <%= user.joined || 'April 6, 2025' %>
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Stats Section -->
+                <section
+                    class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                    <div
+                        class="bg-gray-700 p-3 sm:p-4 rounded-lg transform hover:scale-105 transition duration-300 text-center">
+                        <p class="text-2xl sm:text-3xl font-bold text-indigo-400">
+                            <%= user.projects || 42 %>
+                        </p>
+                        <p class="text-xs sm:text-sm text-gray-400">Projects</p>
+                    </div>
+                    <div
+                        class="bg-gray-700 p-3 sm:p-4 rounded-lg transform hover:scale-105 transition duration-300 text-center">
+                        <p class="text-2xl sm:text-3xl font-bold text-indigo-400">
+                            <%= user.followers || 15 %>
+                        </p>
+                        <p class="text-xs sm:text-sm text-gray-400">Followers</p>
+                    </div>
+                    <div
+                        class="bg-gray-700 p-3 sm:p-4 rounded-lg transform hover:scale-105 transition duration-300 text-center">
+                        <p class="text-2xl sm:text-3xl font-bold text-indigo-400">
+                            <%= user.following || 28 %>
+                        </p>
+                        <p class="text-xs sm:text-sm text-gray-400">Following</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </body>
+
+</html>
