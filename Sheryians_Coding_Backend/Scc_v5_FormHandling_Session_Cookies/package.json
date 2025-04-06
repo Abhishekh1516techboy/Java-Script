@@ -1,0 +1,18 @@
+{
+  "name": "scc_v5_formhandling_session_cookies",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "Backend NodeJs Form-Handling Session & Cookies by @SheryiansCodingSchool",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0"
+  }
+}
