@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Task Details - <%= fileName.replace('.txt', '' ) %>
+        </title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="min-h-screen bg-gradient-to-br from-gray-900 via-zinc-900 to-black text-white p-2 sm:p-4 md:p-6">
+        <div
+            class="w-full max-w-md sm:max-w-lg md:max-w-2xl mx-auto bg-zinc-800/90 rounded-xl shadow-2xl border border-zinc-700/50 p-4 sm:p-6">
+            <!-- Task Title -->
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-center text-blue-300 mb-4 sm:mb-6">
+                <%= fileName.replace('.txt', '' ) %>
+            </h1>
+
+            <!-- Task Content -->
+            <p class="text-xs sm:text-sm md:text-base tracking-wide font-normal text-gray-200 p-2 whitespace-pre-wrap">
+                <%= data %>
+            </p>
+
+            <!-- Back Button -->
+            <div class="mt-4 sm:mt-6 text-center">
+                <a href="/"
+                    class="inline-block w-full sm:w-auto p-2 sm:p-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-md text-sm sm:text-base">
+                    Back to Tasks
+                </a>
+            </div>
+        </div>
+    </body>
+
+</html>

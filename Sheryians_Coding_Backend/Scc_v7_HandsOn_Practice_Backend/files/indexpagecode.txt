@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Backend EJS and Dynamic Routing</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="min-h-screen bg-gradient-to-br from-gray-900 via-zinc-900 to-black text-white p-2 sm:p-4">
+        <div class="main w-full flex flex-col md:flex-row md:justify-around gap-4 md:gap-6">
+            <!-- Form -->
+            <div
+                class="form w-full md:w-1/2 bg-zinc-800/90 backdrop-blur-sm p-4 sm:p-6 rounded-xl shadow-2xl border border-zinc-700/50">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center text-blue-300">Create a Task</h2>
+                <form action="/create" method="post" class="space-y-4 sm:space-y-5">
+                    <input type="text" name="title" id="title" placeholder="Task Title"
+                        class="w-full p-2 sm:p-3 bg-zinc-900/50 text-white rounded-lg border border-zinc-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-zinc-400 transition-all duration-200 text-sm sm:text-base">
+                    <textarea name="details" id="details" placeholder="Write Task Details Here"
+                        class="w-full p-2 sm:p-3 bg-zinc-900/50 text-white rounded-lg border border-zinc-600/50 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-zinc-400 min-h-[200px] sm:min-h-[450px] resize-none transition-all duration-200 text-sm sm:text-base"></textarea>
+                    <input type="submit" value="Add Task"
+                        class="w-full p-2 sm:p-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold cursor-pointer shadow-md text-sm sm:text-base">
+                </form>
+            </div>
+
+            <!-- Tasks Card -->
+            <div
+                class="tasks w-full md:w-1/2 p-4 bg-zinc-800/90 rounded-xl shadow-2xl border border-zinc-700/50 text-white transition-all duration-300 hover:shadow-blue-900/20">
+                <h2
+                    class="text-2xl sm:text-3xl font-bold text-center text-blue-300 sticky top-0 bg-zinc-800/90 z-10 py-2">
+                    Task List</h2>
+                <div
+                    class="space-y-3 mt-6 overflow-y-auto max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-10rem)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <% if (files.length> 0) { %>
+                        <% files.forEach(element=> { %>
+                            <div
+                                class="w-full bg-gray-700 h-20 sm:h-24 p-2 rounded-lg font-medium flex flex-col items-center text-center justify-between">
+                                <h2 class="text-lg sm:text-xl">
+                                    <%= element.replace('.txt', '' ) %>
+                                </h2>
+                                <div class="text-end w-full">
+                                    <a href="/read/files/<%= element %>"
+                                        class="text-xs sm:text-sm font-sans text-blue-300">Read More</a>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <h4
+                                        class="text-xl sm:text-3xl text-gray-400 font-bold flex justify-center items-center min-h-[calc(100vh-8rem)] sm:min-h-[calc(100vh-10rem)]">
+                                        No task yet
+                                    </h4>
+                                    <% } %>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
