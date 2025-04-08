@@ -1,0 +1,40 @@
+Spring Boot Dummy Notes
+Created: April 08, 2025
+
+1. Spring Boot Basics
+- Spring Boot is a framework to simplify Spring application development.
+- Key feature: Auto-configuration - reduces manual setup.
+- Embedded servers like Tomcat or Jetty - no need for external server setup.
+- Use @SpringBootApplication annotation to start.
+
+2. Project Setup
+- Use Spring Initializr (https://start.spring.io/) to generate a project.
+- Add dependencies: Spring Web, Spring Data JPA, H2 Database (for testing).
+- Directory structure:
+  - src/main/java: Java code (controllers, services, etc.)
+  - src/main/resources: application.properties, static files.
+
+3. Configuration
+- application.properties file:
+  spring.datasource.url=jdbc:h2:mem:testdb
+  spring.datasource.driverClassName=org.h2.Driver
+  spring.jpa.hibernate.ddl-auto=update
+- Customize port: server.port=8081
+
+4. Creating a REST API
+- Use @RestController for endpoints.
+- Example:
+  @GetMapping("/hello")
+  public String sayHello() {
+      return "Hello, Spring Boot!";
+  }
+- Test with Postman or curl.
+
+5. To-Do
+- Add error handling for API endpoints.
+- Integrate with a real database (e.g., MySQL or PostgreSQL).
+- Write unit tests using JUnit and Mockito.
+
+Notes:
+- Remember to run 'mvn spring-boot:run' to start the app.
+- Check logs for debugging.

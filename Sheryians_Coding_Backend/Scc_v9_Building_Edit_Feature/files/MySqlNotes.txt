@@ -1,0 +1,53 @@
+MySQL Short Cheat Sheet
+Updated: April 08, 2025
+
+1. Connection
+- Login: mysql -u username -p
+- Show Databases: SHOW DATABASES;
+- Use Database: USE mydb;
+
+2. Database Management
+- Create: CREATE DATABASE mydb;
+- Drop: DROP DATABASE mydb;
+
+3. Table Operations
+- Create Table: CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));
+- Drop Table: DROP TABLE users;
+- Show Tables: SHOW TABLES;
+
+4. Data Manipulation
+- Insert: INSERT INTO users (name) VALUES ('John');
+- Update: UPDATE users SET name = 'Jane' WHERE id = 1;
+- Delete: DELETE FROM users WHERE id = 1;
+- Select: SELECT * FROM users;
+
+5. Queries
+- Filter: SELECT name FROM users WHERE id > 2;
+- Sort: SELECT * FROM users ORDER BY name ASC;
+- Limit: SELECT * FROM users LIMIT 5;
+- Join: SELECT u.name, o.order_id FROM users u JOIN orders o ON u.id = o.user_id;
+
+6. Data Types
+- INT: Integer (e.g., 10)
+- VARCHAR(n): Variable-length string (e.g., VARCHAR(50))
+- DATE: Date (e.g., '2025-04-08')
+- TEXT: Large text
+
+7. Indexes
+- Create: CREATE INDEX idx_name ON users(name);
+- Drop: DROP INDEX idx_name ON users;
+
+8. Constraints
+- Primary Key: id INT PRIMARY KEY
+- Foreign Key: FOREIGN KEY (user_id) REFERENCES users(id)
+- Not Null: name VARCHAR(50) NOT NULL
+
+9. Aggregate Functions
+- Count: SELECT COUNT(*) FROM users;
+- Sum: SELECT SUM(price) FROM orders;
+- Avg: SELECT AVG(age) FROM users;
+
+10. Tips
+- Backup: mysqldump -u username -p mydb > backup.sql
+- Run SQL File: mysql -u username -p mydb < script.sql
+- Case-insensitive: table names and queries

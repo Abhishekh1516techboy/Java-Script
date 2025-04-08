@@ -1,0 +1,55 @@
+Java Program Cheat Sheet
+Updated: April 08, 2025
+
+1. Basics
+- Class Declaration: public class MyClass { }
+- Main Method: public static void main(String[] args) { }
+- Print: System.out.println("Hello, World!");
+
+2. Variables & Data Types
+- int x = 10; (Integer, 4 bytes)
+- double d = 5.99; (Floating-point)
+- char c = 'A'; (Single character)
+- String s = "Java"; (Text)
+- boolean b = true; (true/false)
+
+3. Operators
+- Arithmetic: + - * / % 
+- Comparison: == != > < >= <=
+- Logical: && || !
+
+4. Control Flow
+- If-Else: if (x > 0) { } else { }
+- Switch: switch (day) { case 1: break; }
+- For Loop: for (int i = 0; i < 5; i++) { }
+- While: while (x < 10) { x++; }
+
+5. Arrays
+- Declaration: int[] numbers = new int[5];
+- Initialization: int[] nums = {1, 2, 3};
+- Access: nums[0] = 1;
+
+6. Methods
+- Define: public int add(int a, int b) { return a + b; }
+- Call: int sum = add(3, 4);
+
+7. OOP Concepts
+- Class: blueprint for objects
+- Object: MyClass obj = new MyClass();
+- Inheritance: class Child extends Parent { }
+- Polymorphism: @Override methods
+- Encapsulation: private int x; public int getX() { return x; }
+
+8. Exceptions
+- Try-Catch: try { } catch (Exception e) { e.printStackTrace(); }
+- Throw: throw new Exception("Error!");
+
+9. Collections
+- ArrayList: List<String> list = new ArrayList<>();
+- Add: list.add("Item");
+- Loop: for (String item : list) { }
+
+10. Useful Tips
+- Compile: javac MyClass.java
+- Run: java MyClass
+- Comments: // single-line, /* multi-line */

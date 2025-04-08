@@ -1,0 +1,51 @@
+Database Cheat Sheet
+Updated: April 08, 2025
+
+1. Core Concepts
+- Database: Organized collection of data
+- Table: Stores data in rows and columns
+- Primary Key: Unique identifier for each row
+- Foreign Key: Links tables together
+
+2. Basic Commands
+- Create DB: CREATE DATABASE mydb;
+- Use DB: USE mydb;
+- Create Table: CREATE TABLE employees (id INT PRIMARY KEY, name VARCHAR(50));
+- Drop Table: DROP TABLE employees;
+
+3. Inserting Data
+- Single Row: INSERT INTO employees (id, name) VALUES (1, 'Alice');
+- Multiple Rows: INSERT INTO employees (id, name) VALUES (2, 'Bob'), (3, 'Charlie');
+
+4. Querying Data
+- All Data: SELECT * FROM employees;
+- Specific Columns: SELECT name FROM employees;
+- Filter: SELECT * FROM employees WHERE id > 1;
+- Sort: SELECT * FROM employees ORDER BY name DESC;
+
+5. Modifying Data
+- Update: UPDATE employees SET name = 'Alicia' WHERE id = 1;
+- Delete: DELETE FROM employees WHERE id = 2;
+
+6. Relationships
+- Join: SELECT e.name, d.dept_name FROM employees e JOIN departments d ON e.dept_id = d.id;
+- Types: INNER JOIN, LEFT JOIN, RIGHT JOIN
+
+7. Constraints
+- Not Null: name VARCHAR(50) NOT NULL
+- Unique: UNIQUE (email)
+- Default: age INT DEFAULT 18
+
+8. Aggregations
+- Count: SELECT COUNT(*) FROM employees;
+- Max: SELECT MAX(salary) FROM employees;
+- Group By: SELECT dept_id, COUNT(*) FROM employees GROUP BY dept_id;
+
+9. Indexing
+- Add Index: CREATE INDEX idx_name ON employees(name);
+- Why: Speeds up queries
+
+10. Best Practices
+- Normalize: Avoid data duplication
+- Backup: Regularly export DB
+- Optimize: Use indexes for frequent queries
