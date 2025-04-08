@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            <%= user?.name || 'User Not Found' %>
+        </title>
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="bg-zinc-950 text-white min-h-screen font-sans">
+
+        <% if (user) { %>
+            <!-- Profile Header -->
+            <div class="max-w-4xl mx-auto px-4 py-10">
+                <div class="flex items-center gap-8 flex-col sm:flex-row">
+                    <img src="<%= user.imageUrl %>" alt="Profile Picture"
+                        class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md" />
+
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-3xl font-bold mb-1">
+                            <%= user.name %>
+                        </h1>
+                        <p class="text-zinc-400 text-sm mb-2">
+                            <%= user.email %>
+                        </p>
+                        <p class="text-zinc-300 max-w-md">
+                            <%= userPosts.bio
+                                || 'A passionate developer who loves to explore new things and create amazing experiences.'
+                                %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div class="max-w-4xl mx-auto px-4 pb-20">
+                <h2 class="text-xl font-semibold mb-4 border-b border-zinc-700 pb-2">Posts</h2>
+                <% if (userPosts.posts && userPosts.posts.length> 0) { %>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <% userPosts.posts.forEach(post=> { %>
+                            <div class="aspect-square overflow-hidden rounded-lg shadow-lg hover:scale-105 transition">
+                                <img src="<%= post.image %>" alt="Post" class="w-full h-full object-cover" />
+                            </div>
+                            <% }) %>
+                    </div>
+                    <% } else { %>
+                        <p class="text-zinc-500">No posts available.</p>
+                        <% } %>
+            </div>
+
+            <% } else { %>
+                <div class="min-h-screen flex flex-col items-center justify-center text-center">
+                    <h1 class="text-3xl font-bold">User Not Found</h1>
+                    <a href="/users" class="text-indigo-400 hover:underline mt-4 text-sm">← Back to User List</a>
+                </div>
+                <% } %>
+    </body>
+
+</html>
