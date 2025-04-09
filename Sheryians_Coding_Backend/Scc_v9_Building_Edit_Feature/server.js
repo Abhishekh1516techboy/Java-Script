@@ -100,7 +100,7 @@ app.post("/edit/files/:slug", (req, res) => {
 });
 
 // Delete files
-app.get("/delete/files/:slug", (req, res) => {
+app.delete("/delete/files/:slug", (req, res) => {
   // Unlink files
   const fileName = req.params.slug;
   fs.unlink(`./files/${fileName}`, (err) => {
