@@ -9,9 +9,20 @@
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
 
-    <body class="bg-gradient-to-br from-zinc-900 to-black min-h-screen flex items-center justify-center">
-        <div class="w-full max-w-md px-6">
-            <div class="bg-zinc-800/90 backdrop-blur-md border border-zinc-700 rounded-2xl p-8 shadow-2xl">
+    <body class=" bg-gradient-to-br from-zinc-900 to-black min-h-screen flex flex-col items-center justify-center">
+
+        <!-- Navigation Bar -->
+        <nav class="w-full fixed top-0 left-0">
+            <div
+                class="flex items-center justify-end space-x-4 md:space-x-12 text-sm md:text-lg bg-zinc-800  md:px-6 px-3 py-2 shadow-lg">
+                <a href="/users" class="text-white font-medium hover:text-indigo-400 transition">All Users</a>
+                <a href="/" class="text-white font-medium hover:text-indigo-400 transition">Create User</a>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <div class="w-full max-w-md md:px-6 px-3">
+            <div class="bg-zinc-800/90 backdrop-blur-md border border-zinc-700 rounded-2xl p-3 md:p-8 shadow-2xl">
                 <h2 class="text-3xl font-semibold text-center text-white mb-8 tracking-tight">
                     Create User
                 </h2>
@@ -35,7 +46,7 @@
                     </div>
 
                     <button type="submit"
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl transition-all duration-300">
+                        class="w-full cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-xl transition-all duration-300">
                         Submit
                     </button>
                 </form>

@@ -40,7 +40,7 @@ app.post("/user/create", async (req, res) => {
     // Check if user already exists by email
     const existingUser = await User.findOne({ email: data.email });
     if (existingUser) {
-        res.redirect("/");
+      res.redirect("/");
     }
 
     // if user not exist create new user
@@ -54,6 +54,7 @@ app.post("/user/create", async (req, res) => {
   }
 });
 
+// All-Users List
 app.get("/users", async (req, res) => {
   try {
     // Check if user already exists by email
@@ -67,26 +68,71 @@ app.get("/users", async (req, res) => {
   }
 });
 
+// User Profile view
 app.get("/user/:email", async (req, res) => {
-  const email = decodeURIComponent(req.params.email);
-  const user = await User.findOne({ email });
+  try {
+    const email = decodeURIComponent(req.params.email);
 
-  const userPosts = {
-    bio: "Frontend dev | Music lover | Coffee addict ☕️",
-    posts: [
-      { image: "https://picsum.photos/300/300?random=1" },
-      { image: "https://picsum.photos/300/300?random=2" },
-      { image: "https://picsum.photos/300/300?random=3" },
-      { image: "https://picsum.photos/300/300?random=4" },
-      { image: "https://picsum.photos/300/300?random=5" },
-      { image: "https://picsum.photos/300/300?random=6" },
-      { image: "https://picsum.photos/300/300?random=7" },
-      { image: "https://picsum.photos/300/300?random=8" },
-      { image: "https://picsum.photos/300/300?random=9" },
-    ],
-  };
+    // Check if email exists in the request
+    if (!email) {
+      return res.status(400).json({ error: "Email is required for find user" });
+    }
 
-  res.render("user", { user, userPosts });
+    const user = await User.findOne({ email }); // find user by email address
+
+    // If no user found with that email
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Dummy userPost data for testing
+    const userPosts = {
+      bio: "Full-Stack developer | Music lover | Coffee addict ☕️",
+      posts: [
+        { image: "https://picsum.photos/300/300?random=1" },
+        { image: "https://picsum.photos/300/300?random=2" },
+        { image: "https://picsum.photos/300/300?random=3" },
+        { image: "https://picsum.photos/300/300?random=4" },
+        { image: "https://picsum.photos/300/300?random=5" },
+        { image: "https://picsum.photos/300/300?random=6" },
+        { image: "https://picsum.photos/300/300?random=7" },
+        { image: "https://picsum.photos/300/300?random=8" },
+        { image: "https://picsum.photos/300/300?random=9" },
+      ],
+    };
+
+    res.render("user", { user, userPosts }); // if user found render profile page
+  } catch (error) {
+    console.error("Error view User Profile:", error);
+    res.status(500).json({ error: "Failed to view User Profile" });
+  }
+});
+
+// User Delete route
+app.delete("/user/delete/:email", async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email);
+
+    // Check if email exists in the request
+    if (!email) {
+      return res
+        .status(400)
+        .json({ error: "Email is required for delete user" });
+    }
+
+    // Delete user by email
+    const deleteUser = await User.findOneAndDelete({ email });
+
+    // if user not found by email in DB
+    if (!deleteUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.redirect("/users"); // redirect when user delete
+  } catch (error) {
+    console.error("Error Deleted user:", error);
+    res.status(500).json({ error: "Failed to Deleted user" });
+  }
 });
 
 app.listen(port, () => {

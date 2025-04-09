@@ -13,21 +13,31 @@
 
     <body class="bg-zinc-950 text-white min-h-screen font-sans">
 
+        <!-- Navigation Bar -->
+        <nav class="w-full fixed top-0 left-0 z-10">
+            <div
+                class="flex items-center justify-end space-x-4 md:space-x-12 text-sm md:text-lg bg-zinc-800  md:px-6 px-3 py-2 shadow-lg">
+                <a href="/users" class="text-white font-medium hover:text-indigo-400 transition">All Users</a>
+                <a href="/" class="text-white font-medium hover:text-indigo-400 transition">Create User</a>
+            </div>
+        </nav>
+
+        <!-- Main content -->
         <% if (user) { %>
             <!-- Profile Header -->
-            <div class="max-w-4xl mx-auto px-4 py-10">
+            <div class="max-w-4xl mx-auto px-4 py-18">
                 <div class="flex items-center gap-8 flex-col sm:flex-row">
-                    <img src="<%= user.imageUrl %>" alt="Profile Picture"
-                        class="w-32 h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md" />
+                    <img src="<%= user.imageUrl %>" alt="Profile Picture" title="Profile pic"
+                        class="w-25 h-25  md:w-32 md:h-32 rounded-full object-cover border-4 border-indigo-500 shadow-md" />
 
                     <div class="text-center sm:text-left">
-                        <h1 class="text-3xl font-bold mb-1">
+                        <h1 class="text-2xl md:text-3xl font-bold mb-1" title="User name">
                             <%= user.name %>
                         </h1>
-                        <p class="text-zinc-400 text-sm mb-2">
+                        <p class="text-zinc-400 text-sm mb-2" title="User email">
                             <%= user.email %>
                         </p>
-                        <p class="text-zinc-300 max-w-md">
+                        <p class="text-zinc-300 max-w-md" title="Bio">
                             <%= userPosts.bio
                                 || 'A passionate developer who loves to explore new things and create amazing experiences.'
                                 %>
@@ -39,10 +49,10 @@
             <!-- Posts Grid -->
             <div class="max-w-4xl mx-auto px-4 pb-20">
                 <h2 class="text-xl font-semibold mb-4 border-b border-zinc-700 pb-2">Posts</h2>
-                <% if (userPosts.posts && userPosts.posts.length> 0) { %>
+                <% if (userPosts.posts && userPosts.posts.length > 0) { %>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <% userPosts.posts.forEach(post=> { %>
-                            <div class="aspect-square overflow-hidden rounded-lg shadow-lg hover:scale-105 transition">
+                            <div class="aspect-square overflow-hidden rounded-lg shadow-lg hover:scale-105 transition z-1">
                                 <img src="<%= post.image %>" alt="Post" class="w-full h-full object-cover" />
                             </div>
                             <% }) %>
