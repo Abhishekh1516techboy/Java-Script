@@ -27,8 +27,7 @@
                 <% users.forEach(user=> { %>
                     <div
                         class="flex items-center justify-between bg-zinc-800 hover:bg-zinc-900 transition-all border border-zinc-700 rounded-xl p-4  shadow-lg">
-                        <a href="/user/<%= encodeURIComponent(user.email) %>" target="_parent"
-                            class="flex items-center gap-4 flex-1 ">
+                        <a href="/user/<%= user.id %>" target="_parent" class="flex items-center gap-4 flex-1 ">
                             <img src="<%= user.imageUrl %>" alt="User Avatar" title="profile pic"
                                 class="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-indigo-500 object-cover" />
                             <div>
@@ -43,8 +42,8 @@
                         <!-- Edit and Delete Icons -->
                         <!-- EDIT Button -->
                         <div class="flex items-center gap-3">
-                            <a href="/user/edit/<%= encodeURIComponent(user.email) %>"
-                                class="text-zinc-400 hover:text-indigo-400 transition" title="Edit User">
+                            <a href="/user/update/<%=user.id %>" class="text-zinc-400 hover:text-indigo-400 transition"
+                                title="Edit User">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,7 +51,7 @@
                                 </svg>
                             </a>
                             <!-- DELETE Button -->
-                            <a href="#" onclick="deleteUser('<%= encodeURIComponent(user.email) %>')"
+                            <a href="#" onclick="deleteUser(`<%=user.id %>`)"
                                 class="text-zinc-400 hover:text-red-400 transition" title="Delete User">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="1.5">

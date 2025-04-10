@@ -9,10 +9,6 @@ const app = express();
 dotenv.config(); // Load environment variables from .env file
 const port = 3000;
 
-app.use(express.json()); // Middleware to parse JSON
-
-dbConnect(); // Connect to the database
-
 app.set("view engine", "ejs"); // EJS templates will be used for dynamic HTML
 
 // Derive __filename and __dirname for ES modules
@@ -23,6 +19,8 @@ const __dirname = path.dirname(__filename); // Get the directory of the current 
 app.use(express.json()); // Parse incoming JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the 'public' directory
+
+dbConnect(); // Connect to the database
 
 app.get("/", (req, res) => {
   res.render("index");
@@ -39,8 +37,9 @@ app.post("/user/create", async (req, res) => {
 
     // Check if user already exists by email
     const existingUser = await User.findOne({ email: data.email });
+
     if (existingUser) {
-      res.redirect("/");
+      return res.redirect("/");
     }
 
     // if user not exist create new user
@@ -69,16 +68,16 @@ app.get("/users", async (req, res) => {
 });
 
 // User Profile view
-app.get("/user/:email", async (req, res) => {
+app.get("/user/:id", async (req, res) => {
   try {
-    const email = decodeURIComponent(req.params.email);
+    const id = req.params.id;
 
-    // Check if email exists in the request
-    if (!email) {
-      return res.status(400).json({ error: "Email is required for find user" });
+    // Check if id exists in the request
+    if (!id) {
+      return res.status(400).json({ error: "id is required for find user" });
     }
 
-    const user = await User.findOne({ email }); // find user by email address
+    const user = await User.findById(id); // find user by id
 
     // If no user found with that email
     if (!user) {
@@ -108,20 +107,71 @@ app.get("/user/:email", async (req, res) => {
   }
 });
 
-// User Delete route
-app.delete("/user/delete/:email", async (req, res) => {
+// Edit User get route for edit user data
+app.get("/user/update/:id", async (req, res) => {
   try {
-    const email = decodeURIComponent(req.params.email);
+    const id = req.params.id;
 
-    // Check if email exists in the request
-    if (!email) {
-      return res
-        .status(400)
-        .json({ error: "Email is required for delete user" });
+    // Check if id exists in the request
+    if (!id) {
+      return res.status(400).json({ error: "id is required for edit user" });
+    }
+
+    const user = await User.findById(id); // find user by id
+
+    // If no user found with that email
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.render("edit", { user }); // if user found render profile page
+  } catch (error) {
+    console.error("Error view User Profile:", error);
+    res.status(500).json({ error: "Failed to view User Profile" });
+  }
+});
+
+// PUT Route for update user
+app.put("/user/update/:id", async (req, res) => {
+  const userId = req.params.id;
+  const { name, imageUrl } = req.body;
+
+  try {
+    // Step 1: Find the user
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Step 2: Check if data has changed
+    const isSameName = existingUser.name === name;
+    const isSameImage = existingUser.imageUrl === imageUrl;
+
+    if (isSameName && isSameImage) {
+      return res.status(400).json({ error: "No changes detected" });
+    }
+
+    // Step 3: Update only if data is different
+    await User.findByIdAndUpdate(userId, { name, imageUrl });
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    res.status(500).json({ error: "Failed to update user" });
+  }
+});
+
+// User Delete route
+app.delete("/user/delete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Check if id exists in the request
+    if (!id) {
+      return res.status(400).json({ error: "id is required for delete user" });
     }
 
     // Delete user by email
-    const deleteUser = await User.findOneAndDelete({ email });
+    const deleteUser = await User.findOneAndDelete({ _id: id });
 
     // if user not found by email in DB
     if (!deleteUser) {
