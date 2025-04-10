@@ -2,6 +2,7 @@ import express from "express";
 import path from "path"; // Node.js module for handling file paths
 import { fileURLToPath } from "url"; // Utility to convert ES module URLs to file paths
 import dotenv from "dotenv";
+import methodOverride from "method-override";
 import User from "./models/User.js";
 import dbConnect from "./lib/dbConnect.js";
 
@@ -19,6 +20,7 @@ const __dirname = path.dirname(__filename); // Get the directory of the current 
 app.use(express.json()); // Parse incoming JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the 'public' directory
+app.use(methodOverride("_method")); // method override middleware
 
 dbConnect(); // Connect to the database
 
@@ -26,13 +28,13 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-// User creation route
+// User creation route (POST)
 app.post("/user/create", async (req, res) => {
   try {
     const data = req.body;
 
     if (!data || Object.keys(data).length === 0) {
-      return res.status(400).json({ error: "Form data is required" });
+      return res.status(400).send("Form data is required");
     }
 
     // Check if user already exists by email
@@ -46,42 +48,39 @@ app.post("/user/create", async (req, res) => {
     const newUser = new User(data);
     await newUser.save(); // save User in DB
 
-    res.status(201).redirect("/users");
+    res.redirect("/users");
   } catch (error) {
     console.error("Error saving user:", error);
-    res.status(500).json({ error: "Failed to save user" });
+    res.status(500).send("Failed to save user");
   }
 });
 
-// All-Users List
+// All-Users List (GET)
 app.get("/users", async (req, res) => {
   try {
-    // Check if user already exists by email
     const users = await User.find();
-    if (users) {
-      res.render("allUsers", { users });
-    }
+    res.render("allUsers", { users });
   } catch (error) {
-    console.error("Error saving user:", error);
-    res.status(500).json({ error: "Failed to save user" });
+    console.error("Error fetching users:", error);
+    res.status(500).send("Failed to fetch users");
   }
 });
 
-// User Profile view
+// User Profile view (GET)
 app.get("/user/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
     // Check if id exists in the request
     if (!id) {
-      return res.status(400).json({ error: "id is required for find user" });
+      return res.status(400).send("ID is required");
     }
 
     const user = await User.findById(id); // find user by id
 
     // If no user found with that email
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).send("User not found");
     }
 
     // Dummy userPost data for testing
@@ -102,72 +101,77 @@ app.get("/user/:id", async (req, res) => {
 
     res.render("user", { user, userPosts }); // if user found render profile page
   } catch (error) {
-    console.error("Error view User Profile:", error);
-    res.status(500).json({ error: "Failed to view User Profile" });
+    console.error("Error viewing user profile:", error);
+    res.status(500).send("Failed to view user profile");
   }
 });
 
-// Edit User get route for edit user data
+// Edit User route (GET)
 app.get("/user/update/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
     // Check if id exists in the request
     if (!id) {
-      return res.status(400).json({ error: "id is required for edit user" });
+      return res.status(400).send("ID is required");
     }
 
     const user = await User.findById(id); // find user by id
 
     // If no user found with that email
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).send("User not found");
     }
 
     res.render("edit", { user }); // if user found render profile page
   } catch (error) {
-    console.error("Error view User Profile:", error);
-    res.status(500).json({ error: "Failed to view User Profile" });
+    console.error("Error fetching user for edit:", error);
+    res.status(500).send("Failed to fetch user");
   }
 });
 
-// PUT Route for update user
+// update user Route (PUT)
 app.put("/user/update/:id", async (req, res) => {
-  const userId = req.params.id;
-  const { name, imageUrl } = req.body;
-
   try {
-    // Step 1: Find the user
-    const existingUser = await User.findById(userId);
-    if (!existingUser) {
-      return res.status(404).json({ error: "User not found" });
+    const userId = req.params.id;
+    const { name, imageUrl } = req.body;
+
+    // validation
+    if (!name || !imageUrl) {
+      return res.status(400).send("form data required");
     }
 
-    // Step 2: Check if data has changed
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      return res.status(400).send("user not found");
+    }
+
+    // Check if data has changed
     const isSameName = existingUser.name === name;
     const isSameImage = existingUser.imageUrl === imageUrl;
 
     if (isSameName && isSameImage) {
-      return res.status(400).json({ error: "No changes detected" });
+      return res.status(400).redirect(`/user/${userId}`);
     }
 
-    // Step 3: Update only if data is different
+    // Update only if data is different
     await User.findByIdAndUpdate(userId, { name, imageUrl });
-    res.status(200).json({ message: "User updated successfully" });
-  } catch (err) {
-    console.error("Error updating user:", err);
-    res.status(500).json({ error: "Failed to update user" });
+    res.redirect(`/user/${userId}`);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Failed to update user");
   }
 });
 
-// User Delete route
+// User Delete route (DELETE)
 app.delete("/user/delete/:id", async (req, res) => {
   try {
     const id = req.params.id;
 
     // Check if id exists in the request
     if (!id) {
-      return res.status(400).json({ error: "id is required for delete user" });
+      return res.status(400).send("ID is required");
     }
 
     // Delete user by email
@@ -175,13 +179,13 @@ app.delete("/user/delete/:id", async (req, res) => {
 
     // if user not found by email in DB
     if (!deleteUser) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).send("User not found");
     }
 
     res.redirect("/users"); // redirect when user delete
   } catch (error) {
-    console.error("Error Deleted user:", error);
-    res.status(500).json({ error: "Failed to Deleted user" });
+    console.error("Error deleting user:", error);
+    res.status(500).send("Failed to delete user");
   }
 });
 
