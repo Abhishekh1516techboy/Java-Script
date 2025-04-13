@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create User - NodeJS Authentication</title>
+        <link rel="stylesheet" href="/stylesheets/output.css">
+    </head>
+
+    <body class="bg-slate-900 min-h-screen flex items-center justify-center">
+        <div class="w-full max-w-sm p-4  md:p-6 bg-slate-800 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">Create New User</h2>
+
+            <form action="/register" method="POST" class="space-y-2">
+                <!-- Username -->
+                <div>
+                    <label for="userName" class="block text-sm font-medium text-gray-300">UserName</label>
+                    <input type="text" id="userName" name="userName" required
+                        class="mt-1 w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your username" />
+                </div>
+
+                <!-- Age -->
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-300">Age</label>
+                    <input type="number" id="age" name="age" min="18" required
+                        class="mt-1 w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your age" />
+                </div>
+
+                <!-- Gender -->
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-300">Gender</label>
+                    <select id="gender" name="gender" required
+                        class="mt-1 w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                    <input type="email" id="email" name="email" required
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        class="mt-1 w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your email" />
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <input type="password" id="password" name="password" required minlength="8"
+                        class="mt-1 w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your password" />
+                    <p class="mt-1 text-xs text-gray-400">Minimum 8 characters</p>
+                </div>
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit"
+                        class="w-full cursor-pointer py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-medium transition duration-200">
+                        Create Account
+                    </button>
+                </div>
+            </form>
+
+            <!-- Link to Login -->
+            <p class="mt-4 text-center text-sm text-gray-400">
+                Already have an account? <a href="/login" class="text-blue-400 hover:underline">Login</a>
+            </p>
+        </div>
+    </body>
+
+</html>
