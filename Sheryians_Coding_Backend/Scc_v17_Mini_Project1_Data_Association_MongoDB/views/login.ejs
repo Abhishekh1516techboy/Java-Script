@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login | B4Blog</title>
+        <link rel="stylesheet" href="/stylesheets/output.css" />
+    </head>
+
+    <body
+        class="bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center md:p-6 p-2">
+
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full md:p-8 p-4 space-y-6">
+
+            <div class="text-center">
+                <h1 class="md:text-3xl text-2xl font-extrabold text-gray-900">Login to Your Account</h1>
+                <p class="text-gray-500 mt-2 text-xs md:text-sm">Welcome back! Please enter your credentials.</p>
+            </div>
+
+            <% if (errors && errors.length> 0) { %>
+                <div class="mb-2 bg-red-50 border border-red-400 text-red-700 px-5 py-2 rounded-lg shadow-sm">
+                    <ul class="list-disc list-inside space-y-1">
+                        <% errors.forEach(error=> { %>
+                            <li class="text-xs md:text-sm">
+                                <%= error.msg %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+                <% } %>
+
+
+                    <form action="/login" method="POST" class="space-y-4">
+                        <div>
+                            <label for="userNameOrEmail"
+                                class="block mb-1 text-sm font-medium text-gray-700">Email/UserName</label>
+                            <input type="text" id="userNameOrEmail" name="userNameOrEmail" required autofocus
+                                placeholder="Email OR UserName" value="<%= registerUser ? registerUser.userName : "" %>"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <div>
+                            <label for="loginPassword"
+                                class="block mb-1 text-sm font-medium text-gray-700">Password</label>
+                            <input type="password" id="loginPassword" name="password" required placeholder="Password"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <button type="submit"
+                            class="w-full cursor-pointer bg-indigo-600 text-white py-2 rounded-xl font-bold text-lg hover:bg-indigo-700 transition duration-300 shadow-md">
+                            Login
+                        </button>
+                    </form>
+
+                    <p class="text-center text-sm text-gray-600">Don’t have an account?
+                        <a href="/register" class="text-indigo-600 hover:underline font-medium">Register</a>
+                    </p>
+        </div>
+
+    </body>
+
+</html>

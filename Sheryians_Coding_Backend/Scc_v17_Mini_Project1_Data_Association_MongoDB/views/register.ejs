@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>User Registration</title>
+        <link rel="stylesheet" href="/stylesheets/output.css" />
+    </head>
+
+    <body
+        class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center md:p-5 p-2">
+
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full md:p-8 p-4 ">
+
+            <div class="mb-4 text-center">
+                <h1 class="md:text-4xl text-2xl font-extrabold text-gray-900 mb-2">Create Account</h1>
+            </div>
+
+            <% if (errors && errors.length> 0) { %>
+                <div class="mb-2 bg-red-50 border border-red-400 text-red-700 px-5 py-2 rounded-lg shadow-sm">
+                    <ul class="list-disc list-inside space-y-1">
+                        <% errors.forEach(error=> { %>
+                            <li>
+                                <%= error.msg %>
+                            </li>
+                            <% }) %>
+                    </ul>
+                </div>
+                <% } %>
+
+                    <form action="/register" method="POST" class="space-y-2">
+                        <div>
+                            <label for="userName"
+                                class="block mb-2 text-sm font-semibold text-gray-700">Username</label>
+                            <input type="text" id="userName" name="userName" required placeholder="userName" autofocus
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-semibold text-gray-700">Full Name</label>
+                            <input type="text" id="name" name="name" required placeholder="Full Name"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <div>
+                            <label for="age" class="block mb-2 text-sm font-semibold text-gray-700">Age</label>
+                            <input type="number" id="age" name="age" min="18" required placeholder="Age"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <div>
+                            <label for="gender" class="block mb-2 text-sm font-semibold text-gray-700">Gender</label>
+                            <select id="gender" name="gender" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm bg-white focus:outline-none focus:ring-4 focus:ring-indigo-300 transition">
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-semibold text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="Email"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <div>
+                            <label for="password"
+                                class="block mb-2 text-sm font-semibold text-gray-700">Password</label>
+                            <input type="password" id="password" name="password" required placeholder="password"
+                                minlength="8"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                        </div>
+
+                        <button type="submit"
+                            class="w-full cursor-pointer bg-indigo-600 text-white py-2 rounded-xl font-bold text-lg hover:bg-indigo-700 transition duration-300 shadow-md">
+                            Register
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <p class="text-center text-sm text-gray-600 mt-3">
+                        Already have an account?
+                        <a href="/login" class="text-indigo-600 hover:underline font-medium">Login</a>
+                    </p>
+        </div>
+    </body>
+
+</html>
