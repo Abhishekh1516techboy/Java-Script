@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Profile - <%= user && user.userName ? user.userName : 'User' %>
+        </title>
+        <!-- Tailwind CSS -->
+        <link rel="stylesheet" href="/stylesheets/output.css" />
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    </head>
+
+    <body class="bg-gradient-to-r from-blue-600 to-purple-600 min-h-screen text-white font-sans antialiased">
+        <!-- Navigation Bar -->
+        <nav class="bg-purple-800 sticky top-0 z-30 p-2 shadow-lg flex justify-between items-center px-5">
+            <h1 class="md:text-3xl text-2xl font-extrabold">B4Blog</h1>
+            <a href="/logout"
+                class="flex items-center bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-xl transition transform hover:scale-103 shadow-md">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+        </nav>
+
+        <main class="container mx-auto md:p-6 p-2 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Sidebar: Profile Info + Post Form -->
+            <section
+                class="bg-white bg-opacity-90 rounded-2xl md:p-6 p-3 shadow-lg text-gray-900 flex flex-col gap-6 lg:mt-10 md:mt-0 mt-6 ">
+                <!-- Profile Info -->
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-10 h-10 md:w-12 md:h-12 bg-indigo-700 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                        <%= user && user.userName ? user.userName.charAt(0).toUpperCase() : 'U' %>
+                    </div>
+                    <div>
+                        <h2 class="md:text-2xl text-xl font-bold">
+                            <%= user && user.userName ? user.userName : 'User' %>
+                        </h2>
+                        <p class="md:text-sm text-xs text-gray-600 flex items-center gap-2">
+                            <i class="fas fa-envelope text-indigo-600"></i>
+                            <%= user && user.email ? user.email : '' %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Post Form -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-indigo-800">Write a new post</h3>
+                    <form action="/create/post" method="POST" class="flex flex-col gap-4">
+                        <select name="category" required
+                            class="p-3 rounded-md border border-gray-300 focus:outline-indigo-500 text-gray-900">
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="Tech">Tech</option>
+                            <option value="Food">Food</option>
+                            <option value="Software">Software</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <textarea name="postData" rows="10" required placeholder="Share your thoughts..."
+                            class="p-3 rounded-md border border-gray-300 focus:outline-indigo-500 resize-none text-gray-900"></textarea>
+                        <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl font-semibold transition transform duration-300 cursor-pointer hover:scale-102">
+                            <i class="fas fa-paper-plane mr-2"></i> Post
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Post Feed -->
+            <section id="posts-feed" class="lg:col-span-2 flex flex-col gap-6 max-h-[36rem] overflow-y-auto">
+                <h2
+                    class="text-3xl font-extrabold mb-2 text-white text-center sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 bg-opacity-80 z-10 py-2">
+                    Your Posts
+                </h2>
+
+                <% if (posts && posts.length> 0) { %>
+                    <% posts.forEach(post=> { %>
+                        <article
+                            class="bg-white bg-opacity-90 rounded-xl p-5 shadow-lg hover:shadow-xl transition transform hover:scale-[1.01] relative">
+                            <!-- Post category badge -->
+                            <div class="absolute top-2 left-4">
+                                <span title="Category"
+                                    class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                                    <%= post.category || 'Uncategorized' %>
+                                </span>
+                            </div>
+
+                            <p class="text-gray-900 mb-4 whitespace-pre-line">
+                                <!-- <%= post.content %> -->
+                                <%= post && post.content ? post.content.substring(0, 120) + (post.content.length> 100 ?
+                                    '...' : '') : 'Post' %>
+                            </p>
+                            <p class="text-gray-400 font-bold text-xs flex justify-between">
+                                Posted on <%= post.postedAt ? new Date(post.postedAt).toLocaleDateString() : 'Unknown'
+                                    %>
+                                    <!-- Read More Button -->
+                                    <a href="/read/<%= post._id %>/blog" title="Read More"
+                                        class="text-xs sm:text-sm font-sans text-blue-400 hover:text-blue-600">
+                                        Read More
+                                    </a>
+                            </p>
+
+                            <div class="absolute top-2 right-4 flex gap-2">
+                                <!-- Edit Button -->
+                                <a href="/post/<%= post._id %>/update" title="Edit"
+                                    class="text-indigo-600 hover:text-indigo-800 border border-indigo-600 px-3 py-1 rounded-full text-xs md:text-sm font-semibold flex items-center gap-1 transition">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+
+                                <!-- Delete Button: Use a form to POST or DELETE -->
+                                <form action="/post/<%= post._id %>/delete?_method=DELETE" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                    <button type="submit"
+                                        class="text-red-600 cursor-pointer hover:text-red-800 border border-red-600 px-3 py-1 rounded-full text-xs md:text-sm font-semibold flex items-center gap-1 transition">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </article>
+                        <% }); %>
+                            <% } else { %>
+                                <p class="text-white text-center text-lg mt-10">No posts yet. Share your thoughts in the
+                                    form on the left!</p>
+                                <% } %>
+            </section>
+        </main>
+
+        <!-- Custom Styling with Tailwind -->
+        <style>
+            #posts-feed::-webkit-scrollbar {
+                display: none;
+            }
+
+            #posts-feed {
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+        </style>
+    </body>
+
+</html>

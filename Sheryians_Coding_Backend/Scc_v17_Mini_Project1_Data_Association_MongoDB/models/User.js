@@ -8,7 +8,7 @@ const UserSchema = new Schema(
     userName: {
       type: String,
       required: true,
-      unique: true ,
+      unique: true,
       trim: true,
     },
     name: {
@@ -30,7 +30,7 @@ const UserSchema = new Schema(
       type: String,
       trim: true, // Remove leading/trailing whitespace
       lowercase: true, // Normalize email
-      unique: true ,
+      unique: true,
       match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     },
     password: {
@@ -40,6 +40,13 @@ const UserSchema = new Schema(
       match: /^.{8,}$/, // At least 8 characters
       select: false, // Prevent password from being returned in queries
     },
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Post",
+        index: true,
+      },
+    ],
   },
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );

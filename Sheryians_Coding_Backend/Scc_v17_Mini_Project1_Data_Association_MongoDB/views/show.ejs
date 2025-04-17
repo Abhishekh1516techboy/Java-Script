@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+            <%= post && post.category ? post.category : 'Post' %> - B4Blog
+        </title>
+        <!-- Tailwind CSS -->
+        <link rel="stylesheet" href="/stylesheets/output.css" />
+        <!-- Font Awesome for icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    </head>
+
+    <body class="bg-gradient-to-r from-blue-600 to-purple-600 min-h-screen text-white font-sans antialiased">
+        <!-- Navigation Bar -->
+        <nav class="bg-purple-800 sticky top-0 z-30 p-2 shadow-lg flex justify-between items-center px-5">
+            <h1 class="md:text-3xl text-2xl font-extrabold">B4Blog</h1>
+            <a href="/logout"
+                class="flex items-center bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-xl transition transform hover:scale-103 shadow-md">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+        </nav>
+
+        <main class="container mx-auto md:p-6 p-2">
+            <section
+                class="bg-white bg-opacity-90 rounded-2xl md:p-6 p-4 shadow-lg text-gray-900 max-w-4xl mx-auto mt-2">
+                <div class="mb-4 flex items-center justify-between">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                        <%= post && post.category ? post.category : 'Uncategorized' %>
+                    </span>
+                    <span class="text-gray-400 font-bold text-xs md:text-sm">
+                        @<%= user && user.userName ? user.userName : 'Unknown' %>
+                    </span>
+                </div>
+                <p class="text-gray-900 mb-4 whitespace-pre-line text-sm md:text-base tracking-wide">
+                    <%= post && post.content ? post.content : 'No content available' %>
+                </p>
+                <p class="text-gray-400 font-bold text-xs mb-6">
+                    Posted on <%= post && post.postedAt ? new Date(post.postedAt).toLocaleDateString() : 'Unknown' %>
+                </p>
+                <div class="flex gap-4">
+                    <a href="/profile"
+                        class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-sm md:text-md font-semibold transition transform duration-300 cursor-pointer hover:scale-102 text-center">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Profile
+                    </a>
+                    <a href="/post/<%= post._id %>/update"
+                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-xl text-sm md:text-md font-semibold transition transform duration-300 cursor-pointer hover:scale-102 text-center">
+                        <i class="fas fa-edit mr-2"></i> Edit Post
+                    </a>
+                </div>
+            </section>
+        </main>
+    </body>
+
+</html>
