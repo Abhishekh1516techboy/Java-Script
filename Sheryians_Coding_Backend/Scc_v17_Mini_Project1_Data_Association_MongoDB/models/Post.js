@@ -26,6 +26,28 @@ const PostSchema = new Schema(
       required: true,
       index: true,
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        index: true,
+      },
+    ],
+    dislikedBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        index: true,
+      },
+    ],
     postedAt: {
       type: Date,
       default: Date.now(),

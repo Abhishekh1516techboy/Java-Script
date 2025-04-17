@@ -30,70 +30,10 @@ app.use(methodOverride("_method")); // method override middleware
 
 dbConnect(); // Connect to the database
 
+// ------------------------Public Routes---------------------------
 // index page method (GET)
 app.get("/", (req, res) => {
   res.render("index");
-});
-
-// Blog's page method (GET)
-app.get("/blogs", async (req, res) => {
-  try {
-    let user = null;
-    // Check for token and verify it if present
-    if (req.cookies.token) {
-      try {
-        const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-        user = decoded; // Assuming the token payload contains user data (e.g., id)
-      } catch (jwtError) {
-        console.error("JWT verification failed:", jwtError.message);
-        // Token is invalid or expired; treat as non-logged-in user
-      }
-    }
-
-    const { search, category, page = 1 } = req.query;
-    const limit = 10;
-    const skip = (page - 1) * limit;
-
-    // Build query
-    let query = {};
-    if (category) {
-      query.category = category;
-    }
-    if (search) {
-      query.content = { $regex: search, $options: "i" };
-    }
-
-    // Fetch posts
-    const posts = await Post.find(query)
-      .populate("author", "userName")
-      .sort({ postedAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean();
-
-    // Fetch latest post
-    const latestPost = await Post.findOne(query)
-      .populate("author", "userName")
-      .sort({ postedAt: -1 })
-      .lean();
-
-    // Count total posts
-    const totalPosts = await Post.countDocuments(query);
-    const totalPages = Math.ceil(totalPosts / limit);
-
-    res.render("blogs", {
-      posts,
-      latestPost,
-      user: user || null, // Pass user ID if logged in, else null
-      search,
-      category,
-      page: parseInt(page),
-      totalPages,
-    });
-  } catch (error) {
-    console.error("Error fetching blogs:", error);
-    res.status(500).send("Failed to load blogs");
-  }
 });
 
 // register page method (GET)
@@ -262,7 +202,219 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// profile page (GET)
+// All-Blog's page method (GET)
+app.get("/blogs", async (req, res) => {
+  try {
+    let user = null;
+    // Check for token and verify it if present
+    if (req.cookies.token) {
+      try {
+        const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+        user = decoded; // Assuming the token payload contains user data (e.g., id)
+      } catch (jwtError) {
+        console.error("JWT verification failed:", jwtError.message);
+        // Token is invalid or expired; treat as non-logged-in user
+      }
+    }
+
+    const { search, category, page = 1 } = req.query;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    // Build query
+    let query = {};
+    if (category) {
+      query.category = category;
+    }
+    if (search) {
+      query.content = { $regex: search, $options: "i" };
+    }
+
+    // Fetch posts
+    const posts = await Post.find(query)
+      .populate("author", "userName")
+      .sort({ postedAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    // Fetch latest post
+    const latestPost = await Post.findOne(query)
+      .populate("author", "userName")
+      .sort({ postedAt: -1 })
+      .lean();
+
+    // Count total posts
+    const totalPosts = await Post.countDocuments(query);
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    res.render("blogs", {
+      posts,
+      latestPost,
+      user: user || null, // Pass user ID if logged in, else null
+      search,
+      category,
+      page: parseInt(page),
+      totalPages,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    res.status(500).send("Failed to load blogs");
+  }
+});
+
+// Read blog (GET)
+app.get("/post/:id", async (req, res) => {
+  try {
+    let user = null;
+    // Check for token and verify it if present
+    if (req.cookies.token) {
+      try {
+        const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+        user = decoded; // Assuming the token payload contains user data (e.g., id)
+      } catch (jwtError) {
+        console.error("JWT verification failed:", jwtError.message);
+        // Token is invalid or expired; treat as non-logged-in user
+      }
+    }
+
+    const id = req.params.id;
+
+    // Check if id exists in the request
+    if (!id) {
+      return res.status(400).send("ID is required");
+    }
+
+    const post = await Post.findById(id).populate("author", "userName"); // find post by id
+
+    // If no post found with that id
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+
+    res.render("post", { post, user }); // if post found render show page
+  } catch (error) {
+    console.error("Error viewing show:", error);
+    res.status(500).send("Failed to view show");
+  }
+});
+
+// View post-author page  (GET)
+app.get("/author/:id", async (req, res) => {
+  try {
+    let user = null;
+    // Check for token and verify it if present
+    if (req.cookies.token) {
+      try {
+        const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+        user = decoded; // Assuming the token payload contains user data (e.g., id)
+      } catch (jwtError) {
+        console.error("JWT verification failed:", jwtError.message);
+        // Token is invalid or expired; treat as non-logged-in user
+      }
+    }
+
+    const userId = req.params.id;
+
+    const author = await User.findById(userId);
+    const posts = await Post.find({ author: userId }).sort({ postedAt: -1 }); // Sort by latest first
+
+    res.render("author", {
+      author,
+      posts,
+      user: user || null, // From authentication middleware, if any
+    });
+  } catch (error) {
+    console.error(error);
+    res.render("author", {
+      author: null,
+      posts: [],
+      user: req.user || null,
+    });
+  }
+});
+
+// -----------------Authenticated Route----------------------
+// Posts likes route (POST)
+app.post("/post/:id/like", isLoggedIn, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("author");
+    const user = await User.findById(req.user.id);
+
+    if (!post || !user) {
+      return res.redirect("/blogs");
+    }
+    // If already liked, remove the like
+    if (
+      post.likedBy.includes(req.user.id) ||
+      user.likedPosts.includes(req.params.id)
+    ) {
+      post.likes = (post.likes || 1) - 1;
+      post.likedBy.pull(req.user.id);
+      user.likedPosts.pull(req.params.id);
+      await post.save();
+      await user.save();
+      return res.redirect(req.get("referer") || "/blogs");
+    }
+    // Remove dislike if present
+    if (post.dislikedBy.includes(req.user.id)) {
+      post.dislikes = (post.dislikes || 1) - 1;
+      post.dislikedBy.pull(req.user.id);
+      user.dislikedPosts.pull(req.params.id);
+    }
+    // Add like
+    post.likes = (post.likes || 0) + 1;
+    post.likedBy.push(req.user.id);
+    await post.save();
+    user.likedPosts.push(req.params.id);
+    await user.save();
+    return res.redirect(req.get("referer") || "/blogs");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/blogs");
+  }
+});
+
+// Posts dislikes route (POST)
+app.post("/post/:id/dislike", isLoggedIn, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("author");
+    const user = await User.findById(req.user.id);
+    if (!post || !user) {
+      return res.redirect("/blogs");
+    }
+    // If already disliked, remove the dislike
+    if (
+      post.dislikedBy.includes(req.user.id) ||
+      user.dislikedPosts.includes(req.params.id)
+    ) {
+      post.dislikes = (post.dislikes || 1) - 1;
+      post.dislikedBy.pull(req.user.id);
+      user.dislikedPosts.pull(req.params.id);
+      await post.save();
+      await user.save();
+      return res.redirect(req.get("referer") || "/blogs");
+    }
+    // Remove like if present
+    if (post.likedBy.includes(req.user.id)) {
+      post.likes = (post.likes || 1) - 1;
+      post.likedBy.pull(req.user.id);
+      user.likedPosts.pull(req.params.id);
+    }
+    // Add dislike
+    post.dislikes = (post.dislikes || 0) + 1;
+    post.dislikedBy.push(req.user.id);
+    await post.save();
+    user.dislikedPosts.push(req.params.id);
+    await user.save();
+    return res.redirect(req.get("referer") || "/blogs");
+  } catch (error) {
+    console.error(error);
+    res.redirect("/blogs");
+  }
+});
+
+// Profile page (GET)
 app.get("/profile", isLoggedIn, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -283,7 +435,6 @@ app.get("/profile", isLoggedIn, async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     res.render("profile", {
       posts: user.posts || [], // Ensure posts is an array even if empty
       user,

@@ -47,6 +47,20 @@ const UserSchema = new Schema(
         index: true,
       },
     ],
+    likedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        indes: true,
+      },
+    ],
+    dislikedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        indes: true,
+      },
+    ],
   },
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );
