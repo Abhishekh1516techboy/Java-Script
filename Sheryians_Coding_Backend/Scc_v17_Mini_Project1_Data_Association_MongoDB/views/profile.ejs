@@ -15,17 +15,24 @@
     <body class="bg-gradient-to-r from-blue-600 to-purple-600 min-h-screen text-white font-sans antialiased">
         <!-- Navigation Bar -->
         <nav class="bg-purple-800 sticky top-0 z-30 p-2 shadow-lg flex justify-between items-center px-5">
-            <h1 class="md:text-3xl text-2xl font-extrabold">B4Blog</h1>
-            <a href="/logout"
-                class="flex items-center bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-xl transition transform hover:scale-103 shadow-md">
-                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            <a href="/"
+                class="md:text-3xl text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-pink-400 hover:scale-105 transition transform duration-300">
+                B4Blog
             </a>
+            <div class="flex space-x-5 items-center">
+                <a href="/blogs"
+                    class="text-white font-semibold hover:text-indigo-300 transition md:text-lg text-base">Blogs</a>
+                <a href="/logout"
+                    class="flex items-center bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-xl transition transform hover:scale-103 shadow-md">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+            </div>
         </nav>
 
         <main class="container mx-auto md:p-6 p-2 grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Sidebar: Profile Info + Post Form -->
             <section
-                class="bg-white bg-opacity-90 rounded-2xl md:p-6 p-3 shadow-lg text-gray-900 flex flex-col gap-6 lg:mt-10 md:mt-0 mt-6 ">
+                class="bg-white bg-opacity-90 rounded-2xl md:p-6 p-3 shadow-lg text-gray-900 flex flex-col gap-2 md:gap-4 lg:mt-5 md:mt-0 mt-2 ">
                 <!-- Profile Info -->
                 <div class="flex items-center gap-4">
                     <div
@@ -59,6 +66,11 @@
                             <option value="Education">Education</option>
                             <option value="Others">Others</option>
                         </select>
+                        <div class="flex-1">
+                            <input type="text" name="postTitle" id="postTitle" placeholder="Post Title" required
+                                maxlength="100"
+                                class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 transition bg-white placeholder-gray-500" />
+                        </div>
                         <textarea name="postData" rows="10" required placeholder="Share your thoughts..."
                             class="p-3 rounded-md border border-gray-300 focus:outline-indigo-500 resize-none text-gray-900"></textarea>
                         <button type="submit"
@@ -86,6 +98,10 @@
                                     class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
                                     <%= post.category || 'Uncategorized' %>
                                 </span>
+                                <!-- Post Title -->
+                                <h3 class="text-sm md:text-xl font-bold text-blue-700  pt-2 pl-1" title="Title">
+                                    <%= post.postTitle || 'Untitled Post' %>
+                                </h3>
                             </div>
 
                             <p class="text-gray-900 mb-4 whitespace-pre-line">

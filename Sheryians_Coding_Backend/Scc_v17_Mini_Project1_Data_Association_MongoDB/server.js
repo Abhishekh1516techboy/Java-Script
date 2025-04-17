@@ -38,6 +38,18 @@ app.get("/", (req, res) => {
 // Blog's page method (GET)
 app.get("/blogs", async (req, res) => {
   try {
+    let user = null;
+    // Check for token and verify it if present
+    if (req.cookies.token) {
+      try {
+        const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+        user = decoded; // Assuming the token payload contains user data (e.g., id)
+      } catch (jwtError) {
+        console.error("JWT verification failed:", jwtError.message);
+        // Token is invalid or expired; treat as non-logged-in user
+      }
+    }
+
     const { search, category, page = 1 } = req.query;
     const limit = 10;
     const skip = (page - 1) * limit;
@@ -69,13 +81,10 @@ app.get("/blogs", async (req, res) => {
     const totalPosts = await Post.countDocuments(query);
     const totalPages = Math.ceil(totalPosts / limit);
 
-    // Log user for debugging
-    console.log("req.user:", req.user);
-
     res.render("blogs", {
       posts,
       latestPost,
-      user: req.user || null,
+      user: user || null, // Pass user ID if logged in, else null
       search,
       category,
       page: parseInt(page),
@@ -289,7 +298,7 @@ app.get("/profile", isLoggedIn, async (req, res) => {
 // Create a post (POST)
 app.post("/create/post", isLoggedIn, async (req, res) => {
   try {
-    const { category, postData } = req.body;
+    const { category, postTitle, postData } = req.body;
     const userId = req.user.id;
 
     // Validate input
@@ -309,6 +318,7 @@ app.post("/create/post", isLoggedIn, async (req, res) => {
     // Create new post
     const post = new Post({
       category,
+      postTitle,
       content: postData,
       author: userId,
       postedAt: new Date(),
@@ -381,7 +391,7 @@ app.get("/post/:id/update", isLoggedIn, async (req, res) => {
 app.put("/post/:id/update", isLoggedIn, async (req, res) => {
   try {
     const postId = req.params.id;
-    const { category, content } = req.body;
+    const { category, postTitle, content } = req.body;
 
     // validation
     if (!category || !content) {
@@ -396,14 +406,15 @@ app.put("/post/:id/update", isLoggedIn, async (req, res) => {
 
     // Check if data has changed
     const isSameCategory = post.category === category;
+    const isSamePostTitle = post.postTitle === postTitle;
     const isSameContent = post.content === content;
 
-    if (isSameCategory && isSameContent) {
+    if (isSameCategory && isSameContent && isSamePostTitle) {
       return res.status(400).redirect(`/post/${postId}/update`);
     }
 
     // Update only if data is different
-    await Post.findByIdAndUpdate(postId, { category, content });
+    await Post.findByIdAndUpdate(postId, { category, postTitle, content });
     return res.redirect("/profile");
   } catch (error) {
     console.error("Error updating post:", error);
