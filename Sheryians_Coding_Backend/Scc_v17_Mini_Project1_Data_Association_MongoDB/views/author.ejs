@@ -208,67 +208,6 @@
             }
         </style>
         <script src="/javascripts/likeDislikePostBtn.js"></script>
-
-        <script>
-            window.handleFollow = async (event, authorId) => {
-                event.preventDefault(); // Prevent any default behavior
-
-                const followBtn = document.querySelector(`#follow-btn-${authorId}`);
-                const followersCountElements = document.querySelectorAll(`#followers-count-${authorId}`);
-
-                if (!followBtn || followersCountElements.length === 0) {
-                    console.error(`Button or count elements not found for author ${authorId}`);
-                    return;
-                }
-
-                // Show loading state
-                const originalBtnContent = followBtn.innerHTML;
-                followBtn.disabled = true;
-                followBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-
-                try {
-                    const response = await fetch(`/author/${authorId}/follow`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest', // Ensure backend recognizes AJAX
-                        },
-                        credentials: 'include', // Include cookies (e.g., session)
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Update button
-                        followBtn.innerHTML = `
-                    <i class="fas ${data.isFollowing ? 'fa-user-minus' : 'fa-user-plus'}"></i>
-                    ${data.isFollowing ? 'Unfollow' : 'Follow'}
-                  `;
-                        // Update onclick to reflect new state
-                        followBtn.onclick = () => handleFollow(event, authorId);
-
-                        // Update all followers count elements
-                        followersCountElements.forEach(
-                            (element) => (element.textContent = data.followersCount || 0)
-                        );
-                    } else {
-                        const errorData = await response.json();
-                        if (response.status === 401) {
-                            window.location.href = '/login';
-                            return;
-                        }
-                        console.error('Failed to update follow:', errorData.error);
-                        alert('Failed to update follow: ' + errorData.error);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An unexpected error occurred. Please try again later.');
-                } finally {
-                    // Restore button state
-                    followBtn.disabled = false;
-                    followBtn.innerHTML = originalBtnContent;
-                }
-            };
-        </script>
     </body>
 
 </html>
