@@ -342,7 +342,7 @@ app.post("/post/:id/like", isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user.id);
 
     if (!post || !user) {
-      return res.redirect("/blogs");
+      return res.status(404).json({ error: "Post or user not found" });
     }
     // If already liked, remove the like
     if (
@@ -354,7 +354,7 @@ app.post("/post/:id/like", isLoggedIn, async (req, res) => {
       user.likedPosts.pull(req.params.id);
       await post.save();
       await user.save();
-      return res.redirect(req.get("referer") || "/blogs");
+      return res.json({ likes: post.likes, dislikes: post.dislikes || 0 });
     }
     // Remove dislike if present
     if (post.dislikedBy.includes(req.user.id)) {
@@ -368,10 +368,10 @@ app.post("/post/:id/like", isLoggedIn, async (req, res) => {
     await post.save();
     user.likedPosts.push(req.params.id);
     await user.save();
-    return res.redirect(req.get("referer") || "/blogs");
+    return res.json({ likes: post.likes, dislikes: post.dislikes || 0 });
   } catch (error) {
     console.error(error);
-    res.redirect("/blogs");
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -381,7 +381,7 @@ app.post("/post/:id/dislike", isLoggedIn, async (req, res) => {
     const post = await Post.findById(req.params.id).populate("author");
     const user = await User.findById(req.user.id);
     if (!post || !user) {
-      return res.redirect("/blogs");
+      return res.status(404).json({ error: "Post or user not found" });
     }
     // If already disliked, remove the dislike
     if (
@@ -393,7 +393,7 @@ app.post("/post/:id/dislike", isLoggedIn, async (req, res) => {
       user.dislikedPosts.pull(req.params.id);
       await post.save();
       await user.save();
-      return res.redirect(req.get("referer") || "/blogs");
+      return res.json({ likes: post.likes || 0, dislikes: post.dislikes });
     }
     // Remove like if present
     if (post.likedBy.includes(req.user.id)) {
@@ -407,10 +407,10 @@ app.post("/post/:id/dislike", isLoggedIn, async (req, res) => {
     await post.save();
     user.dislikedPosts.push(req.params.id);
     await user.save();
-    return res.redirect(req.get("referer") || "/blogs");
+    return res.json({ likes: post.likes || 0, dislikes: post.dislikes });
   } catch (error) {
     console.error(error);
-    res.redirect("/blogs");
+    res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -443,6 +443,46 @@ app.get("/profile", isLoggedIn, async (req, res) => {
   } catch (error) {
     console.error("Error viewing user profile:", error);
     res.status(500).send("Failed to view user profile");
+  }
+});
+
+// Follow/Unfollow a user
+app.post("/author/:id/follow", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const authorId = req.params.id;
+
+    const author = await User.findById(authorId); // find author
+
+    if (!userId || !author) {
+      return res.status(404).send("User or author not found");
+    }
+
+    if (userId === authorId) {
+      return res.status(400).send("Cannot follow yourself");
+    }
+
+    const user = await User.findById(userId); // find user
+
+    const isFollowing = author.followers.includes(userId);
+
+    // Remove following if follow
+    if (isFollowing) {
+      // Unfollow
+      author.followers.pull(userId); // Remove user from author's followers
+      user.following.pull(authorId); // Remove author from user's following
+    } else {
+      // Follow
+      author.followers.push(userId); // Add user to author's followers
+      user.following.push(authorId); // Add author to user's following
+    }
+
+    await author.save();
+    await user.save();
+    res.redirect(`/author/${authorId}`); // Redirect to author's profile
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
   }
 });
 

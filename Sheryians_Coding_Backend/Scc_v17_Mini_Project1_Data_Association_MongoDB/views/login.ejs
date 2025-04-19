@@ -48,12 +48,16 @@
                                 placeholder="Email OR UserName" value="<%= registerUser ? registerUser.userName : "" %>"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
                         </div>
-
-                        <div>
+                        <div class="relative">
                             <label for="loginPassword"
                                 class="block mb-1 text-sm font-medium text-gray-700">Password</label>
                             <input type="password" id="loginPassword" name="password" required placeholder="Password"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition" />
+                            <button type="button"
+                                class="absolute inset-y-0 right-3 flex items-center text-sm text-gray-500 top-6 hover:text-indigo-600"
+                                onclick="togglePassword()" id="toggleButton">
+                                Show
+                            </button>
                         </div>
 
                         <button type="submit"
@@ -66,7 +70,17 @@
                         <a href="/register" class="text-indigo-600 hover:underline font-medium">Register</a>
                     </p>
         </div>
+        <script>
+            // Toggle password Show or Hide for Login
+            const togglePassword = () => {
+                const passwordField = document.getElementById("loginPassword");
+                const toggleButton = document.getElementById("toggleButton");
 
+                const isHidden = passwordField.type === "password"; // check password is hidden or Not
+                passwordField.type = isHidden ? "text" : "password";
+                toggleButton.textContent = isHidden ? "Hide" : "Show";
+            };
+        </script>
     </body>
 
 </html>

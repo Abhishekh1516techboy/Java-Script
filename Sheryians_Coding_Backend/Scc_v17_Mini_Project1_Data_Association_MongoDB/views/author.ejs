@@ -4,207 +4,167 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Posts by @<%= author && author.userName ? author.userName : 'Unknown' %> - B4Blog</title>
-        <!-- Tailwind CSS -->
-        <link rel="stylesheet" href="/stylesheets/output.css" />
+        <title>@<%= author && author.userName ? author.userName : 'Unknown' %> - B4Blog</title>
+        <!-- Tailwind CSS via CDN for prototyping -->
+        <script src="https://cdn.tailwindcss.com"></script>
         <!-- Font Awesome for icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     </head>
 
-    <body class="bg-gradient-to-r from-blue-600 to-purple-600 min-h-screen text-white font-sans antialiased">
+    <body class="bg-gray-950 text-white font-sans antialiased min-h-screen">
         <!-- Navigation Bar -->
-        <nav class="bg-purple-800 sticky top-0 z-30 p-2 shadow-lg flex justify-between items-center px-5">
+        <nav class="bg-purple-900 sticky top-0 z-30 p-2 shadow-lg flex justify-between items-center px-5">
             <a href="/"
                 class="md:text-3xl text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-pink-400 hover:scale-105 transition transform duration-300">
                 B4Blog
             </a>
             <div class="flex items-center gap-6">
+                <a href="/blogs"
+                    class="text-white font-semibold hover:text-indigo-300 transition md:text-lg text-base">Blog's</a>
                 <% if (user) { %>
                     <a href="/profile"
                         class="text-white font-semibold hover:text-indigo-300 transition md:text-lg text-base">Profile</a>
-                    <a href="/logout"
-                        class="flex items-center bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-xl transition transform hover:scale-103 shadow-md">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </a>
                     <% } else { %>
                         <a href="/login"
                             class="text-white font-semibold hover:text-indigo-300 transition md:text-lg text-base">Login</a>
-                        <a href="/register"
-                            class="text-white font-semibold hover:text-indigo-300 transition md:text-lg text-base">Signup</a>
                         <% } %>
             </div>
         </nav>
 
-        <!-- Main content -->
-        <main class="container mx-auto md:p-12 p-4">
-            <!-- Author Header -->
-            <section class="mb-8 text-center">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-200 mb-4">
-                    Posts by @<%= author && author.userName ? author.userName : 'Unknown' %>
-                </h1>
-                <% if (posts && posts.length> 0) { %>
-                    <p class="text-gray-300 text-lg">
-                        <%= posts.length %> Post<%= posts.length !==1 ? 's' : '' %>
-                    </p>
-                    <% } else { %>
-                        <p class="text-gray-300 text-lg">
-                            No posts found for this author.
-                        </p>
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-12 max-w-6xl">
+            <!-- Author Hero Section -->
+            <section class="relative mb-10">
+                <!-- Background Glow -->
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/20 to-pink-500/20 blur-3xl rounded-full">
+                </div>
+                <!-- Author Card -->
+                <div
+                    class="relative bg-black/30 backdrop-blur-lg rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 border border-white/20 shadow-xl">
+                    <!-- Author Image -->
+                    <div
+                        class="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-indigo-400/50 shadow-neon">
+                        <img src="<%= author && author.profileImage ? author.profileImage : '/images/user.png' %>"
+                            alt="Author Profile" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-pink-500/20"></div>
+                    </div>
+                    <!-- Author Info -->
+                    <div class="flex-1 text-center md:text-left">
+                        <h1
+                            class="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">
+                            @<%= author && author.userName ? author.userName : 'Unknown' %>
+                        </h1>
+                        <!-- Stats -->
+                        <div class="flex flex-wrap gap-6 mt-4 text-gray-300 text-sm justify-center md:justify-start">
+                            <span class="flex items-center animate-pulse-slow">
+                                <i class="fas  fa-thumbs-up mr-1 text-pink-400"></i>
+                                <%= posts && posts.length ? posts.reduce((sum, post)=> sum + (post.likes || 0), 0) : 0
+                                    %> Likes
+                            </span>
+                            <span class="flex items-center animate-pulse-slow" style="animation-delay: 0.2s;">
+                                <i class="fas fa-users mr-2 text-indigo-400"></i>
+                                <%= author && author.followers ? author.followers.length : 0 %> Followers
+                            </span>
+                            <span class="flex items-center animate-pulse-slow" style="animation-delay: 0.4s;">
+                                <i class="fas fa-user-plus mr-2 text-blue-400"></i>
+                                <%= author && author.following ? author.following.length : 0 %> Following
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Follow Button -->
+                    <% if (user && user._id !==author._id) { %>
+                        <form action="/author/<%= author._id %>/follow" method="POST">
+                            <button type="submit"
+                                class="bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-medium px-6 py-2 rounded-full hover:scale-105 transition transform flex items-center gap-2 shadow-neon">
+                                <i
+                                    class="fas <%= author.followers && user && author.followers.includes(user.id) ? 'fa-user-minus' : 'fa-user-plus' %>"></i>
+                                <%= author.followers && user && author.followers.includes(user.id) ? 'Unfollow'
+                                    : 'Follow' %>
+                            </button>
+                        </form>
                         <% } %>
+                </div>
             </section>
 
-            <!-- Latest Post -->
-            <% if (posts && posts.length> 0) { %>
-                <section class="mb-12">
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-center mb-6 text-gray-200">
-                        Latest Post
-                    </h2>
-                    <div
-                        class="block bg-gradient-to-br from-white to-indigo-50/80 rounded-3xl p-4 md:p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 max-w-4xl mx-auto border border-indigo-300/30 animate-fade-in">
-                        <div class="flex flex-col sm:flex-row gap-6">
-                            <div class="flex-1">
-                                <!-- Clickable content -->
-                                <a href="/post/<%= posts[0]._id %>" class="block">
-                                    <div class="flex items-center gap-3 mb-2">
+            <!-- Posts Section -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-200 mb-8 text-center">Posts</h2>
+                <% if (posts && posts.length> 0) { %>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <% posts.forEach((post, index)=> { %>
+                            <div class="bg-black/30 backdrop-blur-lg rounded-xl p-6 border border-white/20 hover:shadow-neon transition-all duration-300 animate-fade-in"
+                                style="animation-delay: <%= Math.min(index * 0.1, 0.8) %>s;">
+                                <a href="/post/<%= post._id %>" class="block">
+                                    <div class="mb-3">
                                         <span
-                                            class="bg-indigo-100 text-indigo-800 text-xs md:text-sm font-semibold px-4 py-1 rounded-full hover:bg-indigo-200 transition">
-                                            <%= posts[0].category || 'Others' %>
-                                        </span>
-                                        <span class="text-gray-500 font-medium text-xs md:text-sm">
-                                            <%= posts[0].postedAt ? new Date(posts[0].postedAt).toLocaleDateString()
-                                                : 'N/A' %>
+                                            class="bg-indigo-500/50 text-indigo-200 text-xs font-medium px-3 py-1 rounded-full">
+                                            <%= post.category || 'Others' %>
                                         </span>
                                     </div>
-                                    <h3
-                                        class="text-lg md:text-3xl font-bold text-indigo-600 mb-3 hover:text-green-600 transition">
-                                        <%= (posts[0].postTitle || 'Untitled' ).substring(0, 50) + (posts[0].postTitle
-                                            && posts[0].postTitle.length> 50 ? '...' : '') %>
+                                    <h3 class="text-lg font-semibold text-gray-200 hover:text-indigo-400 transition">
+                                        <%= (post.postTitle || 'Untitled' ).substring(0, 50) + (post.postTitle &&
+                                            post.postTitle.length> 50 ? '...' : '') %>
                                     </h3>
-                                    <p class="text-gray-700 text-base md:text-lg leading-relaxed mb-4">
-                                        <%= (posts[0].content || '' ).substring(0, 200) + (posts[0].content &&
-                                            posts[0].content.length> 200 ? '...' : '') %>
+                                    <p class="text-gray-400 text-sm mt-2">
+                                        <%= (post.content || '' ).substring(0, 100) + (post.content &&
+                                            post.content.length> 100 ? '...' : '') %>
                                     </p>
                                 </a>
-                                <!-- Non-clickable content -->
-                                <div class="flex items-center gap-4 mt-4">
-                                    <span
-                                        class="text-gray-500 font-semibold text-xs md:text-base hover:text-indigo-600 transition">
-                                        <a href="/author/<%= posts[0].author._id %>">@<%= author && author.userName ?
-                                                author.userName : 'Unknown' %></a>
-                                    </span>
-                                    <!-- Likes and Dislikes Post btn -->
+                                <div class="flex items-center justify-between text-gray-400 text-xs mt-4">
+                                    <div class="flex gap-2">
+                                        <span class="hover:text-indigo-400 transition">
+                                            <a href="/author/<%= post.author._id %>">@<%= author && author.userName ?
+                                                    author.userName : 'Unknown' %></a>
+                                        </span>
+                                        <span>
+                                            <%= post.postedAt ? new Date(post.postedAt).toLocaleDateString() : 'N/A' %>
+                                        </span>
+                                    </div>
+                                    <!-- Like/Dislike Buttons -->
                                     <div class="flex gap-3">
-                                        <form action="/post/<%= posts[0]._id %>/like" method="POST">
+                                        <form action="/post/<%= post._id %>/like" method="POST"
+                                            onsubmit="handleLike(event, '<%= post._id %>')">
                                             <button type="submit"
                                                 class="text-gray-600 hover:text-green-600 flex items-center gap-1">
                                                 <i class="fas fa-thumbs-up"></i>
-                                                <%= posts[0].likes || 0 %>
+                                                <span id="like-count-<%= post._id %>">
+                                                    <%= post.likes || 0 %>
+                                                </span>
                                             </button>
                                         </form>
-                                        <form action="/post/<%= posts[0]._id %>/dislike" method="POST">
+                                        <form action="/post/<%= post._id %>/dislike" method="POST"
+                                            onsubmit="handleDislike(event, '<%= post._id %>')">
                                             <button type="submit"
                                                 class="text-gray-600 hover:text-red-600 flex items-center gap-1">
                                                 <i class="fas fa-thumbs-down"></i>
-                                                <%= posts[0].dislikes || 0 %>
+                                                <span id="dislike-count-<%= post._id %>">
+                                                    <%= post.dislikes || 0 %>
+                                                </span>
                                             </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <% }); %>
                     </div>
-                </section>
-                <% } %>
-
-                    <!-- All Posts -->
-                    <section
-                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[calc(100vh-15rem)] overflow-y-auto relative blog-list">
-                        <% if (posts && posts.length> 0) { %>
-                            <% posts.forEach((post, index)=> { %>
-                                <div class="bg-gradient-to-br from-white to-indigo-100 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-indigo-200/50 animate-fade-in transform hover:-translate-y-1"
-                                    style="animation-delay: <%= Math.min(index * 0.1, 1) %>s;">
-                                    <a href="/post/<%= post._id %>" class="block">
-                                        <div class="mb-2">
-                                            <span
-                                                class="bg-indigo-100 text-indigo-800 text-xs md:text-sm font-semibold px-3 py-1 rounded-full hover:bg-indigo-200 transition">
-                                                <%= post.category || 'Others' %>
-                                            </span>
-                                        </div>
-                                        <h3
-                                            class="text-lg lg:text-xl font-bold text-indigo-600 mb-3 hover:text-indigo-700 transition">
-                                            <%= (post.postTitle || 'Untitled' ).substring(0, 50) + (post.postTitle &&
-                                                post.postTitle.length> 50 ? '...' : '') %>
-                                        </h3>
-                                        <p class="text-gray-700 text-base leading-relaxed mb-3">
-                                            <%= (post.content || '' ).substring(0, 120) + (post.content &&
-                                                post.content.length> 120 ? '...' : '') %>
-                                        </p>
-                                    </a>
-                                    <div
-                                        class="flex items-center justify-between md:text-sm text-xs text-gray-600 mt-4">
-                                        <div class="flex gap-2">
-                                            <span class="font-semibold hover:text-indigo-600 transition">
-                                                <a href="/author/<%= post.author._id %>">@<%= author && author.userName
-                                                        ? author.userName : 'Unknown' %></a>
-                                            </span>
-                                            <span class="text-gray-500">
-                                                <%= post.postedAt ? new Date(post.postedAt).toLocaleDateString() : 'N/A'
-                                                    %>
-                                            </span>
-                                        </div>
-                                        <div class="flex gap-3">
-                                            <form action="/post/<%= post._id %>/like" method="POST">
-                                                <button type="submit"
-                                                    class="text-gray-600 hover:text-green-600 flex items-center gap-1">
-                                                    <i class="fas fa-thumbs-up"></i>
-                                                    <%= post.likes || 0 %>
-                                                </button>
-                                            </form>
-                                            <form action="/post/<%= post._id %>/dislike" method="POST">
-                                                <button type="submit"
-                                                    class="text-gray-600 hover:text-red-600 flex items-center gap-1">
-                                                    <i class="fas fa-thumbs-down"></i>
-                                                    <%= post.dislikes || 0 %>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% }); %>
-                                    <% } else { %>
-                                        <p class="text-white text-center text-lg col-span-full mt-12">
-                                            No posts found for this author.
-                                        </p>
-                                        <% } %>
-                    </section>
+                    <% } else { %>
+                        <p class="text-gray-400 text-center text-base mt-8">No posts found for this author.</p>
+                        <% } %>
+            </section>
         </main>
 
         <!-- Custom Styling -->
         <style>
-            /* Blog list scrollbar and fade effect */
-            .blog-list::-webkit-scrollbar {
-                width: 8px;
+            /* Smooth Scroll */
+            html {
+                scroll-behavior: smooth;
             }
 
-            .blog-list::-webkit-scrollbar-track {
-                background: transparent;
-            }
-
-            .blog-list::-webkit-scrollbar-thumb {
-                background: rgba(255, 255, 255, 0.3);
-                border-radius: 4px;
-            }
-
-            .blog-list {
-                scrollbar-width: thin;
-                scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-            }
-
-            /* Fade-in animation */
+            /* Fade-in Animation */
             @keyframes fade-in {
                 from {
                     opacity: 0;
-                    transform: translateY(20px);
+                    transform: translateY(10px);
                 }
 
                 to {
@@ -214,9 +174,101 @@
             }
 
             .animate-fade-in {
-                animation: fade-in 0.6s ease-out forwards;
+                animation: fade-in 0.5s ease-out forwards;
+            }
+
+            /* Pulse Animation for Stats */
+            @keyframes pulse-slow {
+
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+            }
+
+            .animate-pulse-slow {
+                animation: pulse-slow 2s infinite;
+            }
+
+            /* Neon Shadow */
+            .shadow-neon {
+                box-shadow: 0 0 10px rgba(79, 70, 229, 0.5), 0 0 20px rgba(236, 72, 153, 0.3);
+            }
+
+            /* Glassmorphism */
+            .glass {
+                background: rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
             }
         </style>
+        <script src="/javascripts/likeDislikePostBtn.js"></script>
+
+        <script>
+            window.handleFollow = async (event, authorId) => {
+                event.preventDefault(); // Prevent any default behavior
+
+                const followBtn = document.querySelector(`#follow-btn-${authorId}`);
+                const followersCountElements = document.querySelectorAll(`#followers-count-${authorId}`);
+
+                if (!followBtn || followersCountElements.length === 0) {
+                    console.error(`Button or count elements not found for author ${authorId}`);
+                    return;
+                }
+
+                // Show loading state
+                const originalBtnContent = followBtn.innerHTML;
+                followBtn.disabled = true;
+                followBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+
+                try {
+                    const response = await fetch(`/author/${authorId}/follow`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest', // Ensure backend recognizes AJAX
+                        },
+                        credentials: 'include', // Include cookies (e.g., session)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Update button
+                        followBtn.innerHTML = `
+                    <i class="fas ${data.isFollowing ? 'fa-user-minus' : 'fa-user-plus'}"></i>
+                    ${data.isFollowing ? 'Unfollow' : 'Follow'}
+                  `;
+                        // Update onclick to reflect new state
+                        followBtn.onclick = () => handleFollow(event, authorId);
+
+                        // Update all followers count elements
+                        followersCountElements.forEach(
+                            (element) => (element.textContent = data.followersCount || 0)
+                        );
+                    } else {
+                        const errorData = await response.json();
+                        if (response.status === 401) {
+                            window.location.href = '/login';
+                            return;
+                        }
+                        console.error('Failed to update follow:', errorData.error);
+                        alert('Failed to update follow: ' + errorData.error);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An unexpected error occurred. Please try again later.');
+                } finally {
+                    // Restore button state
+                    followBtn.disabled = false;
+                    followBtn.innerHTML = originalBtnContent;
+                }
+            };
+        </script>
     </body>
 
 </html>

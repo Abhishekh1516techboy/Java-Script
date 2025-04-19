@@ -78,18 +78,24 @@
                                     </a>
                                     <!-- Like and dislike buttons -->
                                     <div class="flex gap-3">
-                                        <form action="/post/<%= latestPost._id %>/like" method="POST">
+                                        <form action="/post/<%= latestPost._id %>/like" method="POST"
+                                            onsubmit="handleLike(event, '<%= latestPost._id %>')">
                                             <button type="submit"
                                                 class="text-gray-600 hover:text-green-600 flex items-center gap-1">
                                                 <i class="fas fa-thumbs-up"></i>
-                                                <%= latestPost.likes || 0 %>
+                                                <span id="like-count-<%= latestPost._id %>">
+                                                    <%= latestPost.likes || 0 %>
+                                                </span>
                                             </button>
                                         </form>
-                                        <form action="/post/<%= latestPost._id %>/dislike" method="POST">
+                                        <form action="/post/<%= latestPost._id %>/dislike" method="POST"
+                                            onsubmit="handleDislike(event, '<%= latestPost._id %>')">
                                             <button type="submit"
                                                 class="text-gray-600 hover:text-red-600 flex items-center gap-1">
                                                 <i class="fas fa-thumbs-down"></i>
-                                                <%= latestPost.dislikes || 0 %>
+                                                <span id="dislike-count-<%= latestPost._id %>">
+                                                    <%= latestPost.dislikes || 0 %>
+                                                </span>
                                             </button>
                                         </form>
                                     </div>
@@ -172,18 +178,24 @@
 
                                         <!--Like and dislike btn  -->
                                         <div class="flex gap-2">
-                                            <form action="/post/<%= post._id %>/like" method="POST">
+                                            <form action="/post/<%= post._id %>/like" method="POST"
+                                                onsubmit="handleLike(event, '<%= post._id %>')">
                                                 <button type="submit"
                                                     class="text-gray-600 hover:text-green-600 flex items-center gap-1">
                                                     <i class="fas fa-thumbs-up"></i>
-                                                    <%= post.likes || 0 %>
+                                                    <span id="like-count-<%= post._id %>">
+                                                        <%= post.likes || 0 %>
+                                                    </span>
                                                 </button>
                                             </form>
-                                            <form action="/post/<%= post._id %>/dislike" method="POST">
+                                            <form action="/post/<%= post._id %>/dislike" method="POST"
+                                                onsubmit="handleDislike(event, '<%= post._id %>')">
                                                 <button type="submit"
                                                     class="text-gray-600 hover:text-red-600 flex items-center gap-1">
                                                     <i class="fas fa-thumbs-down"></i>
-                                                    <%= post.dislikes || 0 %>
+                                                    <span id="dislike-count-<%= post._id %>">
+                                                        <%= post.dislikes || 0 %>
+                                                    </span>
                                                 </button>
                                             </form>
                                         </div>
@@ -257,6 +269,7 @@
                 animation: fade-in 0.6s ease-out forwards;
             }
         </style>
+        <script src="/javascripts/likeDislikePostBtn.js"></script>
     </body>
 
 </html>

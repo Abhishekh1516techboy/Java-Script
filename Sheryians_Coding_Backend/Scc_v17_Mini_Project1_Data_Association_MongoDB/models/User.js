@@ -61,6 +61,20 @@ const UserSchema = new Schema(
         indes: true,
       },
     ],
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        indes: true,
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        indes: true,
+      },
+    ],
   },
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );
