@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Profile</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 font-sans">
+        <div
+            class="bg-gray-800 p-8 rounded-xl shadow-2xl text-center max-w-md w-full transform hover:-translate-y-1 transition-transform duration-200">
+            <h2 class="text-2xl font-semibold text-white mb-6">User Profile</h2>
+            <% if (user) { %>
+                <img src="/images/uploads/<%= user.profilePic %>" alt="Profile Picture"
+                    class="w-40 h-40 rounded-full object-cover object-top mx-auto mb-2 border-4 border-gray-700 shadow-md">
+                <h3 class="text-3xl mb-2 capitalize font-bold">
+                    <%= user.name %>
+                </h3>
+                <form action="/image/remove" method="POST">
+                    <button type="submit"
+                        class="bg-red-600 text-white px-5 py-2.5 rounded-lg text-base font-medium hover:bg-red-700 active:scale-95 transition-all">Remove
+                        Picture</button>
+                </form>
+                <% } else { %>
+                    <img src="/images/uploads/default.png" alt="Default Profile Picture"
+                        class="w-40 h-40 rounded-full object-cover mx-auto mb-6 border-4 border-gray-700 shadow-md">
+                    <% } %>
+
+                        <form action="/image/upload" method="POST" enctype="multipart/form-data" id="uploadForm"
+                            class="mt-4">
+                            <input type="file" name="image" accept="image/*" class="hidden" id="fileInput" required>
+                            <button type="button"
+                                class="bg-green-600 text-white px-5 py-2.5 rounded-lg text-base font-medium hover:bg-green-700 active:scale-95 transition-all"
+                                onclick="document.getElementById('fileInput').click()">Edit Picture</button>
+                        </form>
+        </div>
+
+        <script>
+            // Automatically submit form when file is selected
+            document.getElementById('fileInput').addEventListener('change', function () {
+                document.getElementById('uploadForm').submit();
+            });
+        </script>
+    </body>
+
+</html>
