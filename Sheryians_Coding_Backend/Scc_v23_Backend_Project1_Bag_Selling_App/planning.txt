@@ -1,0 +1,31 @@
+-------------------- Bag Selling Application -----------------------
+Date: 28/04/2025
+Time: 12:22 AM
+------------------------------------------------------------------------
+*****userModel*****
+name - String
+age - Number
+gender - String
+phone - Number
+address - String
+pin - Number
+email - String
+password - String
+picture - String
+isAdmin - Boolean
+cart - Array
+orders - Array
+
+------------------------------------------------------------------------
+*****productModel*****
+productName - String
+productImage - String
+brandName - String
+price - Number
+discount - Number
+category - String
+productId - String
+bgColor - String
+panelColor - String
+
+
