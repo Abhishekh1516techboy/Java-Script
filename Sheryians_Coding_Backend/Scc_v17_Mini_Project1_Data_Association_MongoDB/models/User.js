@@ -51,28 +51,28 @@ const UserSchema = new Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
-        indes: true,
+        index: true,
       },
     ],
     dislikedPosts: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
-        indes: true,
+        index: true,
       },
     ],
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        indes: true,
+        index: true,
       },
     ],
     following: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        indes: true,
+        index: true,
       },
     ],
   },
