@@ -18,6 +18,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       enum: ["male", "female", "other"], // Standardized options
+      trim: true,
     },
     phone: {
       type: String,
@@ -56,10 +57,6 @@ const userSchema = new Schema(
       type: String,
       trim: true,
       default: "",
-    },
-    isAdmin: {
-      type: Boolean,
-      default: false,
     },
     wishlist: [
       {

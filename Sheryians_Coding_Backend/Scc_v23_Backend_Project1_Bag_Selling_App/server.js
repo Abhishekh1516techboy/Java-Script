@@ -6,16 +6,16 @@ import dotenv from "dotenv";
 import dbConnect from "./config/mongoose-connection.js";
 // import bcrypt from "bcryptjs";
 // import jwt from "jsonwebtoken";
-import Owner from "./models/owner-model.js";
-import User from "./models/user-model.js";
-import Product from "./models/product-model.js";
 // import { isLoggedIn } from "./middleware.js";
+import ownersRoutes from "./routes/ownersRoutes.js";
+import usersRoutes from "./routes/usersRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
 
 const app = express();
 dotenv.config(); // Load environment variables from .env file
 const port = 3000;
 
-// app.set("view engine", "ejs"); // EJS templates will be used for dynamic HTML
+app.set("view engine", "ejs"); // EJS templates will be used for dynamic HTML
 
 // Derive __filename and __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url); // Get the current file's path
@@ -33,9 +33,16 @@ app.get("/", (req, res) => {
   res.send("This is backend Project-1 Bag Selling Web App");
 });
 
+// Routes
+app.use("/owners", ownersRoutes);
+app.use("/users", usersRoutes);
+app.use("/products", productsRoutes);
+
 // Immediately Invoked Async Function Expression (IIAFE) to handle app startup
 (async () => {
   try {
+    console.log(`Running in ${process.env.NODE_ENV} mode`); // Log Production OR Development Mode
+
     await dbConnect(); // Connect to the database
     console.log("App ready to use database"); // Log successful DB connection
 

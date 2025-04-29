@@ -10,10 +10,15 @@ const ownerSchema = new Schema(
       required: true,
       trim: true,
     },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["male", "female", "other"], // Standardized options
+      trim: true,
+    },
     phone: {
       type: String,
       trim: true,
-      required: true,
       match: /^[6-9][0-9]{9}$/, // Indian phone number: 10 digits, starting with 6-9
       unique: true,
       select: false, // Prevent phone from being returned in queries
@@ -28,13 +33,12 @@ const ownerSchema = new Schema(
       index: true, // Add index for faster lookups
     },
     address: {
-      state: { type: String, trim: true, required: true },
-      city: { type: String, trim: true, required: true },
+      state: { type: String, trim: true },
+      city: { type: String, trim: true },
       pinCode: {
         type: String,
-        required: true,
-        match: /^[1-9][0-9]{5}$/,
         trim: true,
+        match: /^[1-9][0-9]{5}$/,
       },
     },
     password: {
@@ -49,12 +53,16 @@ const ownerSchema = new Schema(
       trim: true,
       default: "",
     },
+    isOwner: {
+      type: Boolean,
+      default: true,
+    },
     gstin: {
       type: String,
       required: true,
-      match: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, // Valid GSTIN format
       trim: true,
       unique: true,
+      match: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/, // Valid GSTIN format
     },
     aadharNumber: {
       type: String,
@@ -62,21 +70,19 @@ const ownerSchema = new Schema(
       unique: true,
       trim: true,
       match: /^[2-9]{1}[0-9]{11}$/, // Aadhar number must be a 12-digit number starting with 2-9
-      index: true, // Optimize lookups
       select: false, // Hide by default in queries
+      index: true, // Optimize lookups
     },
     bankDetails: {
-      bankName: { type: String, trim: true, required: true },
+      bankName: { type: String, trim: true },
       accountNumber: {
         type: String,
         trim: true,
-        required: true,
         match: /^[0-9]{9,18}$/, // Indian bank accounts: 9 to 18 digits
       },
       ifscCode: {
         type: String,
         trim: true,
-        required: true,
         match: /^[A-Z]{4}0[A-Z0-9]{6}$/i, // IFSC format
       },
     },
