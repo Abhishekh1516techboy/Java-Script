@@ -1,16 +1,33 @@
 import User from "../models/user-model.js";
 // import { generateJwtToken } from "../jwt.js";
-// import {
-//   validateAadhar,
-//   validateEmail,
-//   validateAge,
-//   validateGender,
-//   validatePhone,
-//   validatePassword,
-//   validatePinCode,
-// } from "../helpers/validators.js";
+import {
+  validateGstin,
+  validateAadhar,
+  validateEmail,
+  validateAge,
+  validateGender,
+  validatePhone,
+  validatePassword,
+  validatePinCode,
+} from "../helpers/validators.js";
 
 // ********************** /user **********************
+// Render user signUp page
+export const signUpPage = (req, res) => {
+res.render("userSignUp", {
+    wishlistCount: 5,
+    cartCount: 2, // Example cart count
+  });
+};
+
+// Render user login page
+export const loginPage = (req, res) => {
+  res.render("userLogin", {
+    wishlistCount: 5,
+    cartCount: 2, // Example cart count
+  });
+};
+
 // export const signUp = async (req, res) => {
 //   try {
 //     // Body contains form data

@@ -4,8 +4,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Owner Login</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <title>User Signup</title>
+        <link rel="stylesheet" href="/stylesheets/output.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     </head>
 
@@ -75,7 +75,7 @@
                 </div>
 
                 <!-- Icons -->
-                <div class="flex items-center space-x-4  lg:px-4">
+                <div class="flex items-center space-x-4 lg:px-4">
                     <!-- Search Icon (Mobile) -->
                     <button class="lg:hidden text-gray-800 hover:text-orange-600 transition" onclick="toggleSearch()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,12 +160,30 @@
             </div>
         </header>
 
-        <!-- Main Login Section -->
+        <!-- Main Signup Section -->
         <div class="flex-grow flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 transform transition-all hover:shadow-2xl">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Owner Login</h2>
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">User Account</h2>
 
-                <form action="/owners/auth/login" method="POST" class="space-y-6">
+                <form action="/users/auth/signup" method="POST" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" required
+                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                            placeholder="Enter your name" />
+                    </div>
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender <span
+                                class="text-red-500">*</span></label>
+                        <select id="gender" name="gender" required
+                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-gray-700">
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email <span
                                 class="text-red-500">*</span></label>
@@ -174,9 +192,9 @@
                             placeholder="Enter your email" />
                     </div>
                     <div>
-                        <label for="aadhar" class="block text-sm font-medium text-gray-700">Aadhar Number <span
+                        <label for="aadharNumber" class="block text-sm font-medium text-gray-700">Aadhar Number <span
                                 class="text-red-500">*</span></label>
-                        <input type="text" id="aadhar" name="aadharNumber" required
+                        <input type="text" id="aadharNumber" name="aadharNumber" required
                             class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
                             placeholder="Enter your Aadhar Number" />
                     </div>
@@ -195,17 +213,15 @@
                     </div>
                     <button type="submit"
                         class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
-                        Log In
+                        Sign Up
                     </button>
                 </form>
                 <p class="mt-6 text-center text-sm text-gray-600">
-                    <% if (process.env.NODE_ENV==='development' ) { %>
-                        Don't have an account? <a href="/owners/auth/signup"
-                            class="text-indigo-600 hover:underline font-medium">Sign Up</a>
-                        <span class="mx-2">|</span>
-                        <% } %>
-                            <a href="/users/auth/login" class="text-indigo-600 hover:underline font-medium">Login as
-                                User</a>
+                    Already have an account? <a href="/users/auth/login"
+                        class="text-indigo-600 hover:underline font-medium">Log In</a>
+                    <span class="mx-2">|</span>
+                    <a href="/owners/auth/signup" class="text-indigo-600 hover:underline font-medium">Sign Up as
+                        Owner</a>
                 </p>
             </div>
         </div>

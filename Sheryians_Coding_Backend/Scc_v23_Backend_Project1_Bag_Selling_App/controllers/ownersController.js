@@ -19,7 +19,10 @@ export const signUpPage = (req, res) => {
       error: "Owner signup is not allowed in Production environment",
     });
   }
-  res.render("ownerSignUp", { error: null });
+  res.render("ownerSignUp", {
+    wishlistCount: 5,
+    cartCount: 2, // Example cart count
+  });
 };
 
 export const signUp = async (req, res) => {
@@ -106,7 +109,10 @@ export const signUp = async (req, res) => {
 
 // Render owner login page
 export const loginPage = (req, res) => {
-  res.render("ownerLogin", { error: null });
+  res.render("ownerLogin", {
+    wishlistCount: 5,
+    cartCount: 2, // Example cart count
+  });
 };
 
 export const login = async (req, res) => {

@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Owner Login</title>
+        <title>User Login</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     </head>
@@ -75,7 +75,7 @@
                 </div>
 
                 <!-- Icons -->
-                <div class="flex items-center space-x-4  lg:px-4">
+                <div class="flex items-center space-x-4 lg:px-4">
                     <!-- Search Icon (Mobile) -->
                     <button class="lg:hidden text-gray-800 hover:text-orange-600 transition" onclick="toggleSearch()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,22 +163,15 @@
         <!-- Main Login Section -->
         <div class="flex-grow flex items-center justify-center p-4">
             <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 transform transition-all hover:shadow-2xl">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Owner Login</h2>
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">User Login</h2>
 
-                <form action="/owners/auth/login" method="POST" class="space-y-6">
+                <form action="/users/auth/login" method="POST" class="space-y-6">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email <span
                                 class="text-red-500">*</span></label>
                         <input type="email" id="email" name="email" required
                             class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
                             placeholder="Enter your email" />
-                    </div>
-                    <div>
-                        <label for="aadhar" class="block text-sm font-medium text-gray-700">Aadhar Number <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="aadhar" name="aadharNumber" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                            placeholder="Enter your Aadhar Number" />
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password <span
@@ -199,13 +192,10 @@
                     </button>
                 </form>
                 <p class="mt-6 text-center text-sm text-gray-600">
-                    <% if (process.env.NODE_ENV==='development' ) { %>
-                        Don't have an account? <a href="/owners/auth/signup"
-                            class="text-indigo-600 hover:underline font-medium">Sign Up</a>
-                        <span class="mx-2">|</span>
-                        <% } %>
-                            <a href="/users/auth/login" class="text-indigo-600 hover:underline font-medium">Login as
-                                User</a>
+                    Don't have an account? <a href="/users/auth/signup"
+                        class="text-indigo-600 hover:underline font-medium">Sign Up</a>
+                    <span class="mx-2">|</span>
+                    <a href="/owners/auth/login" class="text-indigo-600 hover:underline font-medium">Login as Owner</a>
                 </p>
             </div>
         </div>
