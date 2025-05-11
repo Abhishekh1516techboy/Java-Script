@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>user Profile</title>
+        <link href="/stylesheets/output.css" rel="stylesheet">
+    </head>
+
+    <body class="bg-gradient-to-br from-gray-50 to-indigo-50 font-sans justify-center">
+        <%- include('partials/header') %>
+
+            <!-- Flash message -->
+            <%- include('partials/flashMessage') %>
+
+                    <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full ">
+                        <h1 class="text-3xl font-bold text-center mb-6">Owner Profile</h1>
+
+                        <!-- Profile Picture -->
+                        <div class="flex justify-center mb-6">
+                            <% if (user.picture) { %>
+                                <img src="<%= user.picture %>" alt="Profile Picture"
+                                    class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
+                                <% } else { %>
+                                    <div
+                                        class="w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-2xl">
+                                        <%= user.name.charAt(0).toUpperCase() %>
+                                    </div>
+                                    <% } %>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h2 class="text-xl font-semibold mb-2">Personal Details</h2>
+                                <p><strong>Name:</strong>
+                                    <%= user.name %>
+                                </p>
+                                <p><strong>Gender:</strong>
+                                    <%= user.gender.charAt(0).toUpperCase() + user.gender.slice(1) %>
+                                </p>
+                                <p><strong>Email:</strong>
+                                    <%= user.email %>
+                                </p>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold mb-2">Address</h2>
+                                <p><strong>State:</strong>
+                                    <%= user.address.state || 'N/A' %>
+                                </p>
+                                <p><strong>City:</strong>
+                                    <%= user.address.city || 'N/A' %>
+                                </p>
+                                <p><strong>Pin Code:</strong>
+                                    <%= user.address.pinCode || 'N/A' %>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Business Information -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold mb-2">Business Details</h2>
+                            <p><strong>GSTIN:</strong>
+                                <%= user.gstin %>
+                            </p>
+                            <p><strong>Is user:</strong>
+                                <%= user.isuser ? 'Yes' : 'No' %>
+                            </p>
+                        </div>
+
+                        <!-- Bank Details -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold mb-2">Bank Details</h2>
+                            <p><strong>Bank Name:</strong>
+                                <%= user.bankDetails.bankName || 'N/A' %>
+                            </p>
+                            <p><strong>Account Number:</strong>
+                                <%= user.bankDetails.accountNumber || 'N/A' %>
+                            </p>
+                            <p><strong>IFSC Code:</strong>
+                                <%= user.bankDetails.ifscCode || 'N/A' %>
+                            </p>
+                        </div>
+
+                        <!-- Products -->
+                        <div class="mb-6">
+                            <h2 class="text-xl font-semibold mb-2">Products</h2>
+                            <% if (user.products && user.products.length> 0) { %>
+                                <ul class="list-disc pl-5">
+                                    <% user.products.forEach(product=> { %>
+                                        <li>
+                                            <%= product.category %> (Product ID: <%= product.product %>)
+                                        </li>
+                                        <% }) %>
+                                </ul>
+                                <% } else { %>
+                                    <p>No products listed.</p>
+                                    <% } %>
+                        </div>
+
+                        <!-- Edit Profile Button -->
+                        <div class="text-center">
+                            <a href="/user/edit"
+                                class="inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition">
+                                Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                    <!-- JavaScripts -->
+                    <script src="/javascripts/searchAndMenuToggle.js"></script>
+                    <script src="/javascripts/profileToggle.js"></script>
+                    <script src="/javascripts/passwordShowToggle.js"></script>
+    </body>
+
+</html>

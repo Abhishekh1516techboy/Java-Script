@@ -1,0 +1,14 @@
+<% if ((error && error.length> 0) || (success && success.length > 0)) { %>
+    <div id="flash-message-container" class="fixed z-50">
+        <div id="flash-message"
+            class="fixed right-0 top-15 px-6 py-4 rounded shadow-lg text-white font-semibold flex items-center justify-between max-w-sm transform translate-x-full opacity-0 transition-all duration-500 ease-in-out <%= success && success.length > 0 ? 'bg-green-600' : 'bg-red-600' %>">
+            <span>
+                <%= success && success.length> 0 ? success[0] : error[0] %>
+            </span>
+            <button onclick="removeFlash()"
+                class="ml-4 text-white text-2xl leading-none focus:outline-none cursor-pointer">
+                ×
+            </button>
+        </div>
+    </div>
+    <% } %>

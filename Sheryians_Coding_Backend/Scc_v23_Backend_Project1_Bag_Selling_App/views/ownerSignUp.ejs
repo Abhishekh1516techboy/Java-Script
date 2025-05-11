@@ -7,256 +7,170 @@
         <title>Owner Signup</title>
         <link rel="stylesheet" href="/stylesheets/output.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    </head>
+        <style>
+            /* Flash message Css */
+            @keyframes yoyo-bounce {
+                0% {
+                    transform: scale(0);
+                }
 
-    <body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 min-h-screen flex flex-col">
-        <!-- Navigation -->
-        <header class="bg-white/90 backdrop-blur-md sticky top-0 z-30 shadow-sm">
-            <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
-                <!-- Logo -->
-                <a href="/"
-                    class="sm:ml-4 sm:text-3xl text-xl font-bold text-orange-600 hover:text-orange-700 transition">
-                    B4Bag
-                </a>
+                50% {
+                    transform: scale(1.1);
+                    /* Slight overshoot for bounce */
+                }
 
-                <!-- Desktop Navigation Links and Search -->
-                <div class="hidden lg:flex items-center space-x-6">
-                    <!-- Category Dropdown -->
-                    <div class="relative group">
-                        <button
-                            class="flex items-center text-gray-800 hover:text-orange-600 transition font-semibold text-sm uppercase">
-                            Shop By Category
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div
-                            class="absolute hidden group-hover:flex flex-col bg-white shadow-2xl rounded-xl mt-2 w-48 z-50 opacity-0 group-hover:opacity-100 transform group-hover:-translate-y-1 transition-all duration-300">
-                            <a href="/categories/backpacks"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 rounded-t-xl text-base font-medium transition-all duration-200">Backpacks</a>
-                            <a href="/categories/luggage"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 text-base font-medium transition-all duration-200">Luggage</a>
-                            <a href="/categories/trolleys"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 text-base font-medium transition-all duration-200">Trolley
-                                Bags</a>
-                            <a href="/categories/duffels"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 text-base font-medium transition-all duration-200">Duffel
-                                Bags</a>
-                            <a href="/categories/laptop-bags"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 text-base font-medium transition-all duration-200">Laptop
-                                Bags</a>
-                            <a href="/categories/school-bags"
-                                class="block px-5 py-4 text-gray-800 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:text-orange-500 rounded-b-xl text-base font-medium transition-all duration-200">School
-                                Bags</a>
-                        </div>
-                    </div>
+                75% {
+                    transform: scale(0.95);
+                    /* Pull back slightly */
+                }
 
-                    <!-- Other Links -->
-                    <a href="/collections/new-arrivals"
-                        class="text-gray-800 hover:text-orange-600 transition font-semibold text-sm uppercase">New
-                        Arrivals</a>
-                    <a href="/collections/best-sellers"
-                        class="text-gray-800 hover:text-orange-600 transition font-semibold text-sm uppercase">Best
-                        Sellers</a>
-                    <a href="/offers"
-                        class="text-gray-800 hover:text-orange-600 transition font-semibold text-sm uppercase">Offers</a>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="hidden lg:block relative flex-1 max-w-xs mx-4">
-                    <input type="text" placeholder="Search for bags..."
-                        class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent text-sm" />
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-
-                <!-- Icons -->
-                <div class="flex items-center space-x-4 lg:px-4">
-                    <!-- Search Icon (Mobile) -->
-                    <button class="lg:hidden text-gray-800 hover:text-orange-600 transition" onclick="toggleSearch()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-
-                    <!-- Wishlist -->
-                    <a href="/wishlist" class="relative group" title="Wishlist">
-                        <div
-                            class="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            <%= wishlistCount %>
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6 text-gray-800 group-hover:text-orange-600 transition" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </a>
-
-                    <!-- Cart -->
-                    <a href="/cart" class="relative group" title="Cart">
-                        <div
-                            class="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            <%= cartCount %>
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6 text-gray-800 group-hover:text-orange-600 transition" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                        </svg>
-                    </a>
-
-                    <!-- Hamburger Menu (Mobile) -->
-                    <button class="lg:hidden text-gray-800 hover:text-orange-600 transition" onclick="toggleMenu()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden lg:hidden bg-white shadow-lg">
-                <div class="px-4 py-2">
-                    <a href="/categories/backpacks"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Backpacks</a>
-                    <a href="/categories/luggage"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Luggage</a>
-                    <a href="/categories/trolleys"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Trolley Bags</a>
-                    <a href="/categories/duffels"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Duffel Bags</a>
-                    <a href="/categories/laptop-bags"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Laptop Bags</a>
-                    <a href="/categories/school-bags"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">School Bags</a>
-                    <a href="/collections/new-arrivals"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">New Arrivals</a>
-                    <a href="/collections/best-sellers"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Best Sellers</a>
-                    <a href="/offers"
-                        class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Offers</a>
-                </div>
-            </div>
-
-            <!-- Mobile Search -->
-            <div id="mobileSearch" class="hidden lg:hidden px-4 py-3 bg-white border-t">
-                <div class="relative">
-                    <input type="text" placeholder="Search for bags..."
-                        class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent text-sm" />
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Signup Section -->
-        <div class="flex-grow flex items-center justify-center p-4">
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 transform transition-all hover:shadow-2xl">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Owner Account</h2>
-
-                <form action="/owners/auth/signup" method="POST" class="space-y-6">
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700">Name <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="name" name="name" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                            placeholder="Enter your name" />
-                    </div>
-                    <div>
-                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender <span
-                                class="text-red-500">*</span></label>
-                        <select id="gender" name="gender" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-gray-700">
-                            <option value="" disabled selected>Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email <span
-                                class="text-red-500">*</span></label>
-                        <input type="email" id="email" name="email" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                            placeholder="Enter your email" />
-                    </div>
-                    <div>
-                        <label for="gstin" class="block text-sm font-medium text-gray-700">GSTIN <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="gstin" name="gstin" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                            placeholder="Enter your GSTIN" />
-                    </div>
-                    <div>
-                        <label for="aadharNumber" class="block text-sm font-medium text-gray-700">Aadhar Number <span
-                                class="text-red-500">*</span></label>
-                        <input type="text" id="aadharNumber" name="aadharNumber" required
-                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                            placeholder="Enter your Aadhar Number" />
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password <span
-                                class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <input type="password" id="password" name="password" required
-                                class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
-                                placeholder="Enter your password" />
-                            <button type="button" onclick="togglePassword()"
-                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
-                                <i id="eyeIcon" class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit"
-                        class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200">
-                        Sign Up
-                    </button>
-                </form>
-                <p class="mt-6 text-center text-sm text-gray-600">
-                    Already have an account? <a href="/owners/auth/login"
-                        class="text-indigo-600 hover:underline font-medium">Log In</a>
-                    <span class="mx-2">|</span>
-                    <a href="/users/auth/signup" class="text-indigo-600 hover:underline font-medium">Sign Up as User</a>
-                </p>
-            </div>
-        </div>
-
-        <script>
-            function togglePassword () {
-                const passwordInput = document.getElementById('password');
-                const eyeIcon = document.getElementById('eyeIcon');
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
+                100% {
+                    transform: scale(1);
+                    /* Settle in place */
                 }
             }
 
-            function toggleMenu () {
-                const mobileMenu = document.getElementById('mobileMenu');
-                mobileMenu.classList.toggle('hidden');
+            .yoyo-bounce {
+                animation: yoyo-bounce 0.5s ease-in-out forwards;
             }
+        </style>
+    </head>
 
-            function toggleSearch () {
-                const mobileSearch = document.getElementById('mobileSearch');
-                mobileSearch.classList.toggle('hidden');
-            }
-        </script>
+    <body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
+        <!-- Header -->
+        <%- include('partials/header') %>
+
+            <!-- Flash message -->
+            <%- include('partials/flashMessage') %>
+
+                    <!-- Main Signup Section -->
+                    <div class="flex-grow flex items-center justify-center p-4">
+                        <div
+                            class="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden">
+                            <!-- Left Section: Image and Portfolio Info -->
+                            <div
+                                class="relative w-full md:w-1/2 h-64 md:h-auto bg-contain bg-center bg-no-repeat bg-gray-950 bg-[url('/images/fulllogo.png')] rounded-r-2xl hidden sm:block">
+                                <div
+                                    class="absolute inset-0 bg-black/50 flex flex-col justify-between p-6 rounded-r-2xl">
+                                    <div class="flex justify-between items-center">
+                                        <h2 class="text-white/95 text-2xl sm:text-3xl font-bold">Hello</h2>
+                                        <a href="/owners/auth/login"
+                                            class="text-white border border-white px-3 py-1 sm:px-4 sm:py-1 rounded-full hover:bg-white hover:text-black transition text-sm sm:text-base">Login</a>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <img src="/images/author.webp" alt="User Avatar"
+                                            class="w-10 h-10 rounded-full object-cover object-top border-2 border-yellow-300 bg-black">
+                                        <div>
+                                            <p class="text-white font-semibold text-sm sm:text-base">Full
+                                                Stack-Developer</p>
+                                            <p class="text-gray-300 text-xs">abhishekhkumar1516@gmail.com</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Section: Signup Form -->
+                            <div class="w-full md:w-1/2 p-4 sm:p-6 flex flex-col justify-center">
+                                <div class="flex justify-center items-center mb-4 sm:mb-6">
+                                    <h1 class="text-3xl sm:text-4xl font-bold uppercase">Owner Account</h1>
+                                </div>
+                                <form action="/owners/auth/signup" method="POST" class="space-y-4">
+                                    <div>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Name <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" id="name" name="name" required
+                                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                                            placeholder="Enter your name" />
+                                    </div>
+                                    <div>
+                                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender <span
+                                                class="text-red-500">*</span></label>
+                                        <select id="gender" name="gender" required
+                                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-gray-700">
+                                            <option value="" disabled selected>Select gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="email" id="email" name="email" required
+                                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                                            placeholder="Enter your email" />
+                                    </div>
+                                    <div>
+                                        <label for="gstin" class="block text-sm font-medium text-gray-700">GSTIN <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" id="gstin" name="gstin" required
+                                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                                            placeholder="Enter your GSTIN" />
+                                    </div>
+                                    <div>
+                                        <label for="aadharNumber" class="block text-sm font-medium text-gray-700">Aadhar
+                                            Number
+                                            <span class="text-red-500">*</span></label>
+                                        <input type="text" id="aadharNumber" name="aadharNumber" required
+                                            class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                                            placeholder="Enter your Aadhar Number" />
+                                    </div>
+                                    <div>
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password
+                                            <span class="text-red-500">*</span></label>
+                                        <div class="relative">
+                                            <input type="password" id="password" name="password" required
+                                                class="mt-1 block w-full px-4 py-3 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm placeholder-gray-400"
+                                                placeholder="Enter your password" />
+                                            <button type="button" onclick="togglePassword()"
+                                                class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600">
+                                                <i id="eyeIcon" class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <a href="/users/auth/signup" class="text-sm text-red-500 hover:underline">User
+                                            Signup?</a>
+                                    </div>
+                                    <div class="flex items-center justify-center my-4">
+                                        <hr class="w-1/3 border-gray-300"><span
+                                            class="mx-2 text-gray-500 text-sm">or</span>
+                                        <hr class="w-1/3 border-gray-300">
+                                    </div>
+                                    <button type="button"
+                                        class="w-full flex items-center justify-center border rounded-lg p-3 hover:bg-gray-100 transition text-sm sm:text-base">
+                                        <img src="https://www.google.com/favicon.ico" alt="Google Icon"
+                                            class="w-5 h-5 mr-2">
+                                        Sign Up with Google
+                                    </button>
+                                    <button type="submit"
+                                        class="w-full bg-indigo-600 text-white rounded-full p-3 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 text-sm sm:text-base">
+                                        Sign Up
+                                    </button>
+                                    <p class="mt-4 text-center text-sm text-gray-600">
+                                        Already have an account? <a href="/owners/auth/login"
+                                            class="text-red-500 hover:underline font-medium">Log In</a>
+                                    </p>
+                                </form>
+                                <div class="flex justify-center space-x-4 mt-4 sm:mt-6">
+                                    <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                            class="fab fa-facebook-f text-lg"></i></a>
+                                    <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                            class="fab fa-twitter text-lg"></i></a>
+                                    <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                            class="fab fa-linkedin-in text-lg"></i></a>
+                                    <a href="#" class="text-gray-500 hover:text-gray-700"><i
+                                            class="fab fa-instagram text-lg"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- JavaScripts -->
+                    <script src="/javascripts/searchAndMenuToggle.js"></script>
+                    <script src="/javascripts/profileToggle.js"></script>
+                    <script src="/javascripts/passwordShowToggle.js"></script>
+                    <script src="/javascripts/flashMessage.js"></script>
     </body>
 
 </html>

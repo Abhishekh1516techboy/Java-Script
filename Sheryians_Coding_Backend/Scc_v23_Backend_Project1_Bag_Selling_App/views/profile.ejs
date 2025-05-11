@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Profile</title>
+        <link href="/stylesheets/output.css" rel="stylesheet" />
+        <style>
+            /* Flash message Css */
+            @keyframes yoyo-bounce {
+                0% {
+                    transform: scale(0);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                    /* Slight overshoot for bounce */
+                }
+
+                75% {
+                    transform: scale(0.95);
+                    /* Pull back slightly */
+                }
+
+                100% {
+                    transform: scale(1);
+                    /* Settle in place */
+                }
+            }
+
+            .yoyo-bounce {
+                animation: yoyo-bounce 0.5s ease-in-out forwards;
+            }
+        </style>
+    </head>
+
+    <body class="bg-gradient-to-br from-purple-100 via-indigo-100 to-pink-100 min-h-screen text-gray-800">
+        <!-- Header Include -->
+        <%- include('partials/header') %>
+
+            <!-- Flash message -->
+            <%- include('partials/flashMessage') %>
+
+                <main class="max-w-6xl mx-auto px-6 py-10 space-y-12">
+                    <!-- Profile Card -->
+                    <section
+                        class="relative bg-white rounded-3xl shadow-lg p-8 flex flex-col sm:flex-row items-center gap-6">
+                        <!-- Avatar -->
+                        <div class="relative">
+                            <img src="<%= user.picture || '/images/default-user.png' %>" alt="User Avatar"
+                                class="w-32 h-32 rounded-full object-cover object-top ring-4 ring-indigo-500" />
+                        </div>
+
+                        <!-- Info -->
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h1 class="text-3xl font-bold mb-2">
+                                        <%= user.name %>
+                                    </h1>
+                                    <p class="text-sm text-gray-500">Email: <%= user.email %>
+                                    </p>
+                                    <p class="text-sm text-gray-500">Age: <%= user.age %>, Gender: <%= user.gender %>
+                                    </p>
+                                    <p class="text-sm text-gray-500">Address: <%= user.address.city %>, <%=
+                                                user.address.state %> - <%= user.address.pinCode %>
+                                    </p>
+                                </div>
+                                <!-- Edit button -->
+                                <a href="/users/profile/update/<%= user._id %>"
+                                    class="ml-4 bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-indigo-700 transition">
+                                    Edit Profile
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Sections Grid -->
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Wishlist -->
+                        <section class="bg-white rounded-2xl shadow p-6">
+                            <h2 class="text-xl font-semibold mb-4">Wishlist</h2>
+                            <% if (user.wishlist.length===0) { %>
+                                <p class="text-gray-500">Your wishlist is empty.</p>
+                                <% } else { %>
+                                    <ul class="space-y-2">
+                                        <% user.wishlist.forEach(item=> { %>
+                                            <li class="flex justify-between items-center border-b pb-2">
+                                                <span>
+                                                    <%= item.product.name %>
+                                                </span>
+                                                <span class="text-xs text-gray-400">
+                                                    <%= new Date(item.addedAt).toLocaleDateString() %>
+                                                </span>
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                    <% } %>
+                        </section>
+
+                        <!-- Cart -->
+                        <section class="bg-white rounded-2xl shadow p-6">
+                            <h2 class="text-xl font-semibold mb-4">Cart</h2>
+                            <% if (user.cart.length===0) { %>
+                                <p class="text-gray-500">Your cart is empty.</p>
+                                <% } else { %>
+                                    <ul class="space-y-3">
+                                        <% user.cart.forEach(item=> { %>
+                                            <li>
+                                                <p class="text-gray-700 font-medium">
+                                                    <%= item.product.name %>
+                                                </p>
+                                                <p class="text-xs text-gray-500">Qty: <%= item.quantity %> —
+                                                        <%= new Date(item.addedAt).toLocaleDateString() %>
+                                                </p>
+                                            </li>
+                                            <% }) %>
+                                    </ul>
+                                    <% } %>
+                        </section>
+
+                        <!-- Orders -->
+                        <section class="bg-white rounded-2xl shadow p-6 md:col-span-2">
+                            <h2 class="text-xl font-semibold mb-4">Orders</h2>
+                            <% if (user.orders.length===0) { %>
+                                <p class="text-gray-500">No orders placed yet.</p>
+                                <% } else { %>
+                                    <div class="grid sm:grid-cols-2 gap-4">
+                                        <% user.orders.forEach(order=> { %>
+                                            <div class="bg-gray-50 p-4 rounded-xl border">
+                                                <p><strong>Product:</strong>
+                                                    <%= order.product.name %>
+                                                </p>
+                                                <p><strong>Qty:</strong>
+                                                    <%= order.quantity %> | <strong>Status:</strong>
+                                                        <%= order.status %>
+                                                </p>
+                                                <p><strong>Date:</strong>
+                                                    <%= new Date(order.orderDate).toLocaleDateString() %>
+                                                </p>
+                                                <p><strong>Total:</strong> ₹<%= order.total.toFixed(2) %> |
+                                                        <strong>Pay:</strong>
+                                                        <%= order.paymentMethod %>
+                                                </p>
+                                                <% if (order.deliveryDate) { %>
+                                                    <p><strong>Delivered:</strong>
+                                                        <%= new Date(order.deliveryDate).toLocaleDateString() %>
+                                                    </p>
+                                                    <% } %>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                    <% } %>
+                        </section>
+
+                        <!-- Delivered Products -->
+                        <section class="bg-white rounded-2xl shadow p-6 md:col-span-2">
+                            <h2 class="text-xl font-semibold mb-4">Delivered Products</h2>
+                            <% if (user.deliveredProducts.length===0) { %>
+                                <p class="text-gray-500">No products delivered yet.</p>
+                                <% } else { %>
+                                    <div class="grid sm:grid-cols-2 gap-4">
+                                        <% user.deliveredProducts.forEach(p=> { %>
+                                            <div class="bg-gray-50 p-4 rounded-xl border">
+                                                <p><strong>Product:</strong>
+                                                    <%= p.productId.name %>
+                                                </p>
+                                                <p><strong>Qty:</strong>
+                                                    <%= p.quantity %> | <strong>Total:</strong> ₹<%= p.total.toFixed(2)
+                                                            %>
+                                                </p>
+                                                <p><strong>Payment:</strong>
+                                                    <%= p.paymentMethod %>
+                                                </p>
+                                                <p><strong>Delivered:</strong>
+                                                    <%= new Date(p.deliveryDate).toLocaleDateString() %>
+                                                </p>
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                    <% } %>
+                        </section>
+                    </div>
+                </main>
+
+                <!-- Scripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/passwordShowToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+    </body>
+
+</html>

@@ -1,5 +1,6 @@
 import Owner from "../models/owner-model.js";
-// import { generateJwtToken } from "../jwt.js";
+import generateToken from "../utils/generateToken.js";
+import jwt from "jsonwebtoken";
 import {
   validateGstin,
   validateAadhar,
@@ -12,227 +13,48 @@ import {
 } from "../helpers/validators.js";
 
 // ********************** /owner controllers **********************
-// Render owner signUp page only in Development Mode
-export const signUpPage = (req, res) => {
-  if (process.env.NODE_ENV !== "development") {
-    return res.status(403).render("error", {
-      error: "Owner signup is not allowed in Production environment",
-    });
-  }
-  res.render("ownerSignUp", {
-    wishlistCount: 5,
-    cartCount: 2, // Example cart count
-  });
-};
 
-export const signUp = async (req, res) => {
+export const profile = async (req, res) => {
+  let error = req.flash("error"); // Retrieve error flash messages
+  let success = req.flash("success"); // Retrieve success flash messages
+
   try {
-    // Restrict Owner signup to Production environment
-    if (process.env.NODE_ENV !== "development") {
-      return res.status(403).json({
-        success: false,
-        message: "Owner signup is only allowed in development environment.",
-      });
-    }
+    // Get the authenticated owner's ID from JWT
+    const authOwnerId = req.user.id;
 
-    const { name, gender, email, gstin, aadharNumber, password } = req.body;
+    //find owner by userId
+    const owner = await Owner.findById(authOwnerId).select(
+      "-products -bankDetails -aadharNumber -gstin -address"
+    );
 
-    // Check if form data is provided
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ error: "Form data is required" });
-    }
-
-    // Apply validations
-    validateAadhar(aadharNumber);
-    validateGender(gender);
-    validateEmail(email);
-    validateGstin(gstin);
-    validatePassword(password);
-
-    // Check for existing owner (single-owner rule)
-    const ownerCount = await Owner.countDocuments();
-    if (ownerCount > 0) {
-      return res.status(409).json({
-        success: false,
-        message: "An owner already exists. Only one owner is allowed.",
-      });
-    }
-
-    // Create and save new owner
-    const newOwner = new Owner({
-      name,
-      gender,
-      email,
-      gstin,
-      aadharNumber,
-      password,
-    });
-
-    // save newOwner in DB
-    await newOwner.save();
-
-    // Respond with created owner
-    res.status(201).json({
-      success: true,
-      message: "Owner created successfully",
-      owner: {
-        id: newOwner._id,
-        name: newOwner.name,
-        gender: newOwner.gender,
-        email: newOwner.email,
-        isOwner: newOwner.isOwner,
-      },
-    });
-  } catch (error) {
-    console.error("Error saving Owner:", error);
-
-    // Handle Mongoose validation errors
-    if (error.name === "ValidationError") {
-      const errors = Object.values(error.errors).map((err) => ({
-        path: err.path,
-        message: err.message,
-      }));
-      return res.status(400).json({
-        message: "Validation failed",
-        errors,
-      });
-    }
-
-    // Handle custom validation errors
-    if (error.message.includes("Invalid")) {
-      return res.status(400).json({ message: error.message });
-    }
-
-    res.status(500).json({ message: "Failed to save Owner" });
-  }
-};
-
-// Render owner login page
-export const loginPage = (req, res) => {
-  res.render("ownerLogin", {
-    wishlistCount: 5,
-    cartCount: 2, // Example cart count
-  });
-};
-
-export const login = async (req, res) => {
-  try {
-    // Extract the aadharNumber and password from req.body
-    const { email, aadharNumber, password } = req.body;
-
-    //check form data is available in body or not
-    if (!email && !aadharNumber && !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email, Aadhar number and password are required",
-      });
-    }
-
-    // Apply validations (errors thrown here are caught below)
-    validateAadhar(aadharNumber);
-    // const validatedPassword = validatePassword(password);
-
-    // Find owner by email and aadharNumber (include password field)
-    const owner = await Owner.findOne({
-      $and: [{ email }, { aadharNumber }],
-    }).select("+password");
-
-    // if Owner eamil and Aadhar not matched
+    // if owner not found
     if (!owner) {
-      return res
-        .status(401)
-        .json({ message: "Invalid email or Aadhar Number" });
+      return res.status(404).json({ message: "Owner not found" });
     }
 
-    // If user does not exist or password does not matched, return error
-    // if (!owner || !(await owner.comparePassword(validatedPassword))) {
-    //   return res
-    //     .status(401)
-    //     .json({ success: false, message: "Invalid Aadhar number or password" });
-    // }
-
-    // Check if the user is an admin
-    if (!owner.isOwner) {
-      return res.status(400).json({
-        success: false,
-        message: "You are not an Owner. Please login as a user",
-      });
+    // set owner is login
+    let isLogin = false;
+    if (authOwnerId) {
+      isLogin = true;
     }
 
-    //If username and password matched generate JWT token
-    // Create JWT payload
-    // const payload = {
-    //   id: admin.id,
-    //   role: admin.role,
-    // };
-
-    // Generate JWT token
-    // const token = generateJwtToken(payload);
-
-    // Redirect to profile route using after Loginin success
-    // const profileUrl = `/owner/profile`;
-
-    // return JWT token as response
-    res.status(200).json({
-      success: true,
-      message: "owner logged in successfully",
-      user: {
-        id: owner._id,
-        name: owner.name,
-        email: owner.email,
-        isOwner: owner.isOwner,
-      },
-      // authToken: token,
-      // redirect: profileUrl,
+    // return user response
+    res.render("ownerProfile", {
+      user: owner,
+      error,
+      success,
+      authPage: true,
+      isLogin,
+      wishlistCount: 5,
+      cartCount: 2, // Example cart count
     });
   } catch (error) {
-    console.error("Login error:", error);
-
-    // Handle Mongoose validation errors
-    if (error.name === "ValidationError") {
-      const errors = Object.values(error.errors).map((err) => ({
-        path: err.path,
-        message: err.message,
-      }));
-      return res.status(400).json({
-        message: "Validation failed",
-        errors: errors, // Array of specific validation errors
-      });
-    }
-
-    // Handle custom validation errors from validators.js
-    if (error.message.includes("Invalid")) {
-      return res.status(400).json({ message: error.message });
-    }
-
-    res.status(500).json({ message: "Server error during login" });
+    console.error("Admin Profile error:", error);
+    res
+      .status(500)
+      .json({ message: "Server error during Owner profile retrieval" });
   }
 };
-
-// export const profile = async (req, res) => {
-//   try {
-//     // Get the authenticated user's ID from JWT
-//     const authAdminId = req.user.id;
-
-//     //find user by userId
-//     const admin = await User.findById(authAdminId).select(
-//       "-hasVoted -votedCandidateId -votedParty -votedAt"
-//     );
-
-//     // if user not found
-//     if (!admin) {
-//       return res.status(404).json({ message: "Admin not found" });
-//     }
-
-//     // return user response
-//     res.status(200).json({ admin });
-//   } catch (error) {
-//     console.error("Admin Profile error:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Server error during Admin profile retrieval" });
-//   }
-// };
 
 // export const passwordChange = async (req, res) => {
 //   try {

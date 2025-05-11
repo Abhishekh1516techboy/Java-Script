@@ -6,17 +6,19 @@ export const formatAadharNumber = (aadharNumber) => {
   )}-${aadharNumber.slice(8)}`;
 };
 
-// Gstin validation
+// GSTIN validation
 export const validateGstin = (gstin) => {
   if (!gstin) {
     throw new Error("GSTIN is required.");
   }
 
-  const trimmedGstin = gstin.trim();
-  const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+  const trimmedGstin = gstin.trim().toUpperCase();
+  const gstinRegex =
+    /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[0-9A-Z]{1}$/;
+
   if (!gstinRegex.test(trimmedGstin)) {
     throw new Error(
-      "Invalid GSTIN. Must be 15 characters in format: 2 digits, 5 letters, 4 digits, 1 letter, 1 letter or digit, Z, 1 letter or digit"
+      "Invalid GSTIN. Must be 15 characters in format: 2 digits, 5 letters, 4 digits, 1 letter, 1 letter or digit, Z, 1 letter or digit."
     );
   }
 };
@@ -61,14 +63,16 @@ export const validateGender = (gender) => {
 
 // Phone validation
 export const validatePhone = (phone) => {
-  if (phone) {
-    const trimmedPhone = phone.trim();
-    const phoneRegex = /^[6-9][0-9]{9}$/;
-    if (!phoneRegex.test(trimmedPhone)) {
-      throw new Error(
-        "Invalid phone number. Must be a 10-digit number starting with 6-9"
-      );
-    }
+  if (!phone) {
+    throw new Error("Phone number is required.");
+  }
+
+  const trimmedPhone = phone.trim();
+  const phoneRegex = /^[6-9][0-9]{9}$/;
+  if (!phoneRegex.test(trimmedPhone)) {
+    throw new Error(
+      "Invalid phone number. Must be a 10-digit number starting with 6-9"
+    );
   }
 };
 
@@ -87,7 +91,9 @@ export const validatePassword = (password) => {
 
 // Pin code validation
 export const validatePinCode = (pinCode) => {
-  if (pinCode < 100000 || pinCode > 999999) {
-    throw new Error("Invalid Pin code must be a 6-digit number");
+  const trimmed = pinCode.toString().trim();
+  const pinRegex = /^[1-9][0-9]{5}$/;
+  if (!pinRegex.test(trimmed)) {
+    throw new Error("Invalid Pin code. Must be a 6-digit number");
   }
 };

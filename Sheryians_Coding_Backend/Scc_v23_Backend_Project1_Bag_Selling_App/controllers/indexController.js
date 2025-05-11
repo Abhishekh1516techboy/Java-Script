@@ -1,0 +1,172 @@
+import User from "../models/user-model.js";
+import jwt from "jsonwebtoken";
+
+import {
+  validateGstin,
+  validateAadhar,
+  validateEmail,
+  validateAge,
+  validateGender,
+  validatePhone,
+  validatePassword,
+  validatePinCode,
+} from "../helpers/validators.js";
+
+// index page method (GET)
+// export const index = (req, res) => {
+//   res.render("index", { bags: [], reviews: [], cartCount: 2 });
+// });
+
+// Example bag data (replace with database query in production)
+const bags = [
+  {
+    id: 1,
+    name: "Urban Explorer Backpack",
+    description:
+      "Durable and stylish, ideal for city adventures and daily commutes.",
+    price: 55.99,
+    image:
+      "https://skybags.co.in/cdn/shop/files/main-banner-backpack-2025-collection_2048x.jpg?v=1745838826",
+    category: "Backpacks",
+    rating: 4.5,
+    offer: null,
+  },
+  {
+    id: 2,
+    name: "Classic Leather Tote",
+    description: "Elegant and spacious, perfect for work or casual outings.",
+    price: 79.99,
+    image:
+      "https://skybags.co.in/cdn/shop/files/website-banner_2048x.jpg?v=1745836659",
+    category: "Duffel Bags",
+    rating: 4.1,
+    offer: 15,
+  },
+  {
+    id: 3,
+    name: "City Trek Backpack",
+    description: "Lightweight and sturdy, designed for urban explorers.",
+    price: 49.99,
+    image:
+      "https://vipbags.com/cdn/shop/files/Lexus_coral_1920x700_4ded0ccd-f631-481e-b930-4d59a9888362.jpg?v=1744357130",
+    category: "Backpacks",
+    rating: 4.2,
+    offer: 10,
+  },
+  {
+    id: 4,
+    name: "TravelPro Trolley",
+    description: "Robust and sleek, perfect for frequent travelers.",
+    price: 99.99,
+    image:
+      "https://skybags.co.in/cdn/shop/files/Skybags_KV_Web_banner_2048x.webp?v=1744887326",
+    category: "Trolley Bags",
+    rating: 4.5,
+    offer: null,
+  },
+  {
+    id: 5,
+    name: "Family Voyager Luggage",
+    description: "Spacious and durable, ideal for family trips.",
+    price: 129.99,
+    image: "https://vipbags.com/cdn/shop/files/family-travel.png?v=1696326469",
+    category: "Luggage",
+    rating: 4.0,
+    offer: 20,
+  },
+  {
+    id: 6,
+    name: "Student Scholar Backpack",
+    description: "Comfortable and roomy, tailored for school essentials.",
+    price: 39.99,
+    image:
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDUyfHx8ZW58MHx8fHx8",
+    category: "School Bags",
+    rating: 4.4,
+    offer: 10,
+  },
+  {
+    id: 7,
+    name: "TechGuard Laptop Bag",
+    description: "Padded and sleek, designed to protect your devices.",
+    price: 69.99,
+    image:
+      "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFnc3xlbnwwfHwwfHx8MA%3D%3D",
+    category: "Laptop Bags",
+    rating: 4.7,
+    offer: null,
+  },
+  {
+    id: 8,
+    name: "Adventure Duffel",
+    description: "Versatile and tough, great for gym or weekend getaways.",
+    price: 54.99,
+    image:
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDUyfHx8ZW58MHx8fHx8",
+    category: "Duffel Bags",
+    rating: 4.6,
+    offer: null,
+  },
+];
+
+const reviews = [
+  {
+    text: "Absolutely love my new bag!",
+    author: "Priya S.",
+    profilePic:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=60",
+    num: 4.5,
+  },
+  {
+    text: "Great quality and fast shipping.",
+    author: "Rahul M.",
+    profilePic:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=60",
+    num: 3.5,
+  },
+  {
+    text: "Very good and fast shipping.",
+    author: "Subham k.",
+    profilePic:
+      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnN8ZW58MHx8MHx8fDA%3D",
+    num: 3.7,
+  },
+  {
+    text: "Bags price and quility is awesom.",
+    author: "Rounak kr.",
+    profilePic:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dXNlcnN8ZW58MHx8MHx8fDA%3D",
+    num: 4.0,
+  },
+  {
+    text: "Nice bags good service.",
+    author: "karishma k.",
+    profilePic:
+      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDMwfHx8ZW58MHx8fHx8",
+    num: 4.2,
+  },
+];
+
+export const indexPage = (req, res) => {
+  let error = req.flash("error"); // Retrieve error flash messages
+  let success = req.flash("success"); // Retrieve success flash messages
+
+  let isLogin = false;
+  let user;
+  if (req.cookies?.token) {
+    isLogin = true;
+    const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+    user = decoded;
+  }
+  res.render("index", {
+    authPage: false,
+    error,
+    success,
+    user,
+    isLogin,
+    bags: bags, // Pass the enhanced array of bags
+    reviews: reviews,
+    cartCount: 2,
+    wishlistCount: 5,
+  });
+};

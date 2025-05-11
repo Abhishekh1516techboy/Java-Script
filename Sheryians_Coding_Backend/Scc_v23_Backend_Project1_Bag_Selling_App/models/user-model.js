@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs"; // Added bcrypt import
 
 const { Schema, model, models } = mongoose;
 
@@ -37,12 +38,19 @@ const userSchema = new Schema(
       match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       index: true,
     },
+    aadharNumber: {
+      type: String,
+      unique: true,
+      sparse: true, // Only uniqueness when value exists
+      trim: true,
+      match: /^[2-9]{1}[0-9]{11}$/, // Aadhar number must be a 12-digit number starting with 2-9
+      select: false, // Hide by default in queries
+    },
     address: {
-      state: { type: String, required: true, trim: true },
-      city: { type: String, required: true, trim: true },
+      state: { type: String, trim: true },
+      city: { type: String, trim: true },
       pinCode: {
         type: String,
-        required: true,
         match: /^[1-9][0-9]{5}$/,
       },
     },
@@ -161,6 +169,33 @@ const userSchema = new Schema(
   },
   { timestamps: true } // Enable timestamps (createdAt, updatedAt)
 );
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  try {
+    // Only hash the password if it has been modified (or is new)
+    if (!this.isModified("password")) {
+      return next();
+    }
+
+    // Generate hash with salt rounds of 10
+    const salt = await bcrypt.genSalt(10);
+    // password encryption and save
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Add comparePassword method for matching password by owner and database stored password
+userSchema.methods.comparePassword = async function (ownerPassword) {
+  try {
+    return await bcrypt.compare(ownerPassword, this.password);
+  } catch (error) {
+    throw new Error("Password comparison failed");
+  }
+};
 
 // Export the model, using `User` as the model name
 export default models.User || model("User", userSchema);
