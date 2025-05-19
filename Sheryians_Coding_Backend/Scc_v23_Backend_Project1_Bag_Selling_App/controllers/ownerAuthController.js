@@ -25,11 +25,13 @@ export const signUpPage = (req, res) => {
     user = decoded;
   }
 
+  // only render in Development Mode
   if (process.env.NODE_ENV !== "development") {
     return res.status(403).render("error", {
       error: "Owner signup is not allowed in Production environment",
     });
   }
+
   res.render("ownerSignUp", {
     authPage: true,
     error,

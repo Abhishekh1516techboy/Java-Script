@@ -19,10 +19,23 @@ export const signUpPage = (req, res) => {
 
   let isLogin = false;
   let user;
+
+  // Check if JWT token exists in cookies
   if (req.cookies?.token) {
     isLogin = true;
-    const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-    user = decoded;
+    try {
+      // Verify the token using the secret key
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      user = decoded;
+
+      // Token is valid — redirect the user to their profile page
+      return res.redirect(`/users/profile/${user.id}`);
+    } catch (err) {
+      // Token is invalid or expired — log the error and clear the cookie
+      console.error("Invalid or expired token:", err.message);
+      res.clearCookie("token"); // Remove invalid token from client
+      return res.redirect("/login"); // Redirect to login page
+    }
   }
 
   res.render("userSignUp", {
@@ -121,10 +134,23 @@ export const loginPage = (req, res) => {
 
   let isLogin = false;
   let user;
+
+  // Check if JWT token exists in cookies
   if (req.cookies?.token) {
     isLogin = true;
-    const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-    user = decoded;
+    try {
+      // Verify the token using the secret key
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      user = decoded;
+
+      // Token is valid — redirect the user to their profile page
+      return res.redirect(`/users/profile/${user.id}`);
+    } catch (err) {
+      // Token is invalid or expired — log the error and clear the cookie
+      console.error("Invalid or expired token:", err.message);
+      res.clearCookie("token"); // Remove invalid token from client
+      return res.redirect("/login"); // Redirect to login page
+    }
   }
 
   res.render("userLogin", {

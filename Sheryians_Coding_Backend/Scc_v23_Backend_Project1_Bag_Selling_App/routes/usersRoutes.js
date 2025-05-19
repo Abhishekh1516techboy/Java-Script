@@ -1,9 +1,6 @@
 import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
-import {
-  profile,
-  //   passwordChange,
-} from "../controllers/usersController.js";
+import { profilePage, passwordChange, profileUpdate } from "../controllers/usersController.js";
 
 import {
   signUpPage,
@@ -25,9 +22,12 @@ router.get("/auth/login", loginPage);
 router.post("/auth/login", login);
 
 // User Profile Routes
-router.get("/profile/:id", isLoggedIn, profile);
+router.get("/profile/:id", isLoggedIn, profilePage);
 
-// Update route for change User password in database by Id
-// router.put("/profile/change-password/:id", jwtAuthMiddleware, passwordChange);
+// change-password route
+router.put("/profile/:id/change-password", isLoggedIn, passwordChange);
+
+// User Profile-Update route
+router.put("/profile/:id/update", isLoggedIn, profileUpdate);
 
 export default router;

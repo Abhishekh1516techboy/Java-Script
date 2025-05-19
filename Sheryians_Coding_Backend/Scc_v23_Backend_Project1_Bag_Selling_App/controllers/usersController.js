@@ -13,7 +13,7 @@ import {
 } from "../helpers/validators.js";
 
 // ********************** /user **********************
-export const profile = async (req, res) => {
+export const profilePage = async (req, res) => {
   let error = req.flash("error"); // Retrieve error flash messages
   let success = req.flash("success"); // Retrieve success flash messages
 
@@ -31,7 +31,7 @@ export const profile = async (req, res) => {
     }
 
     //find user by userId
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("+phone +aadharNumber");
 
     // if user not found
     if (!user) {
@@ -42,6 +42,18 @@ export const profile = async (req, res) => {
     let isLogin = false;
     if (authUserId) {
       isLogin = true;
+    }
+
+    // if password Change show message
+    if (req.session.passwordChanged) {
+      success = ["Password changed successfully"];
+      delete req.session.passwordChanged;
+    }
+
+    // if Profile-Update show message
+    if (req.session.profileUpdate) {
+      success = ["Profile-Update successfully"];
+      delete req.session.profileUpdate;
     }
 
     // return user response
@@ -61,104 +73,122 @@ export const profile = async (req, res) => {
   }
 };
 
-// export const passwordChange = async (req, res) => {
-//   try {
-//     const userId = req.params.id; // Extract the User ID from URL parameters
+export const passwordChange = async (req, res) => {
+  try {
+    const userId = req.params.id; // Extract the User ID from URL parameters
 
-//     const authUserId = req.user.id; // Get the authenticated user's ID from JWT
+    const authUserId = req.user.id; // Get the authenticated user's ID from JWT
 
-//     // Check if the requested userId matches the authenticated user's ID
-//     if (userId !== authUserId) {
-//       return res
-//         .status(403)
-//         .json({ message: "You are not authorized to Change this password." });
-//     }
+    // Check if the requested userId matches the authenticated user's ID
+    if (userId !== authUserId) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to Change this password." });
+    }
 
-//     const { oldPassword, newPassword } = req.body; // Get the data from the request body for change User password
+    const { currentPassword, newPassword } = req.body; // Get the data from the request body for change User password
 
-//     //check form data is available in body or not
-//     if (!oldPassword || !newPassword) {
-//       return res
-//         .status(400)
-//         .json({ error: "Both oldPassword and newPassword are required" });
-//     }
+    //check form data is available in body or not
+    if (!currentPassword || !newPassword) {
+      return res
+        .status(400)
+        .json({ message: "Both currentPassword and newPassword are required" });
+    }
 
-//     // Apply validations (errors thrown here are caught below)
-//     const validatedOldPassword = validatePassword(oldPassword);
-//     const validatedNewPassword = validatePassword(newPassword);
+    // Apply validations (errors thrown here are caught below)
+    const validatedOldPassword = validatePassword(currentPassword);
+    const validatedNewPassword = validatePassword(newPassword);
 
-//     // check if oldPassword and newPasswor are same
-//     if (validatedOldPassword === validatedNewPassword) {
-//       return res
-//         .status(400)
-//         .json({ error: "New password must differ from old password" });
-//     }
+    // check if oldPassword and newPasswor are same
+    if (validatedOldPassword === validatedNewPassword) {
+      return res
+        .status(400)
+        .json({ message: "New password must differ from old password" });
+    }
 
-//     // Find the user by id
-//     const user = await User.findById(userId).select("+password");
+    // Find the user by id
+    const user = await User.findById(userId).select("+password");
 
-//     // Returns 404 if no document matches the provided ID
-//     if (!user) {
-//       return res.status(404).json({
-//         error: "User not found in DataBase",
-//       });
-//     }
+    // If user does not exist or password does not matched, return error
+    if (!user || !(await user.comparePassword(validatedOldPassword))) {
+      return res.status(401).json({ message: "Incorrect old password" });
+    }
 
-//     // If password does not matched, return error
-//     if (!(await user.comparePassword(validatedOldPassword))) {
-//       return res.status(401).json({ error: "Incorrect old password" });
-//     }
+    user.password = validatedNewPassword; // Set the new password
+    await user.save(); // Save password after change
 
-//     user.password = validatedNewPassword; // Set the new password
-//     await user.save(); // Save password after change
+    // In passwordChange
+    req.session.passwordChanged = true;
 
-//     // Success response with status 200 and updated User data
-//     res.status(200).json({
-//       message: "User Password changed successfully",
-//       user: user.id,
-//     });
-//   } catch (error) {
-//     console.error("User Password-change error:", error);
+    // Success response with status 200 and updated User data
+    res.status(200).json({
+      message: "User Password changed successfully",
+      user: user._id,
+    });
+  } catch (error) {
+    console.error("User Password-change error:", error);
 
-//     // Handle Mongoose validation errors
-//     if (error.name === "ValidationError") {
-//       const errors = Object.values(error.errors).map((err) => ({
-//         path: err.path,
-//         message: err.message,
-//       }));
-//       return res.status(400).json({
-//         message: "Validation failed",
-//         errors: errors, // Array of specific validation errors
-//       });
-//     }
+    // Handle Mongoose validation errors
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => ({
+        path: err.path,
+        message: err.message,
+      }));
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: errors, // Array of specific validation errors
+      });
+    }
 
-//     // Handle custom validation errors from validators.js
-//     if (error.message.includes("Invalid")) {
-//       return res.status(400).json({ message: error.message });
-//     }
+    // Handle custom validation errors from validators.js
+    if (error.message.includes("Invalid")) {
+      return res.status(400).json({ message: error.message });
+    }
 
-//     // Catch any errors during database operation
-//     res.status(500).json({
-//       error: "Failed to Changed User Password",
-//     });
-//   }
-// };
+    // Catch any errors during database operation
+    return res.status(500).json({
+      message: "Failed to Changed User Password",
+    });
+  }
+};
 
-// ********************** /admin/manage/u **********************
-// export const getAllUsers = async (req, res) => {
-//   try {
-//     // Fetch AllUsers from Database
-//     const users = await User.find({ role: { $ne: "admin" } });
-//     // Respond with the find User
-//     res.status(200).json({
-//       message: "User Data found successfully",
-//       user: users,
-//     });
-//   } catch (error) {
-//     console.error("Error finding User:", error);
-//     res.status(500).json({ message: "Failed to find User" });
-//   }
-// };
+export const profileUpdate = async (req, res) => {
+  try {
+    const userId = req.user.id; // Decoded from token by verifyToken middleware
+
+    const { name, phone, aadharNumber, age, address } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name,
+        phone,
+        aadharNumber,
+        age,
+        address: {
+          state: address.state,
+          city: address.city,
+          pinCode: address.pinCode,
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // In passwordChange
+    req.session.profileUpdate = true;
+
+    res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 // export const deleteUser = async (req, res) => {
 //   try {
