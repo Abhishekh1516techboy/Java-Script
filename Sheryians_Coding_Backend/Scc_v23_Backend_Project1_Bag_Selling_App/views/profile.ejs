@@ -1,676 +1,910 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard</title>
-    <link rel="stylesheet" href="/stylesheets/output.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <style>
-        /* Yo-yo bounce animation for flash messages */
-        @keyframes yoyo-bounce {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            75% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
-        .yoyo-bounce {
-            animation: yoyo-bounce 0.5s ease-in-out forwards;
-        }
-        /* Active tab styling */
-        .active-tab {
-            border-bottom: 3px solid #4f46e5;
-            color: #4f46e5;
-            font-weight: 600;
-        }
-        /* Smooth transitions */
-        .smooth-transition {
-            transition: all 0.3s ease-in-out;
-        }
-        /* Status colors */
-        .status-delivered { background-color: #DCFCE7; color: #15803D; }
-        .status-cancelled { background-color: #FEE2E2; color: #B91C1C; }
-        .status-pending, .status-processing, .status-shipped { background-color: #FEF9C3; color: #A16207; }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <!-- Header Include -->
-    <%- include('partials/header') %>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Dashboard</title>
+        <link rel="stylesheet" href="/stylesheets/output.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Flash Message Include -->
-    <%- include('partials/flashMessage') %>
+        <style>
+            /* Yo-yo bounce animation for flash messages */
+            @keyframes yoyo-bounce {
+                0% {
+                    transform: scale(0);
+                }
 
-    <main>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="flex flex-col lg:flex-row gap-8">
+                50% {
+                    transform: scale(1.1);
+                }
 
-                <!-- Sidebar -->
-                <div class="w-full lg:w-1/4">
-                    <div class="bg-white rounded-xl shadow-sm p-6 sticky top-8">
-                        <div class="flex flex-col items-center pb-6 border-b border-gray-200">
-                            <div class="relative mb-4">
-                                <img id="profileImage" src="<%= user.picture || '/images/author.webp' %>" alt="Profile" 
-                                    class="w-24 h-24 rounded-full object-cover object-top bg-yellow-400 border-4 border-indigo-300">
-                                <label for="imageUpload" 
-                                    class="absolute h-7 w-7 flex justify-center items-center bottom-0 right-0 bg-indigo-600 text-white rounded-full cursor-pointer hover:bg-indigo-700 transform hover:scale-105 transition">
-                                    <i class="fas fa-camera text-sm"></i>
-                                    <input id="imageUpload" type="file" accept="image/*" class="hidden">
-                                </label>
-                            </div>
-                            <h2 class="text-xl font-bold text-gray-800"><%= user.name %></h2>
-                            <p class="text-gray-600 text-sm"><%= user.email %></p>
-                            <p class="text-gray-500 text-xs mt-1">Member since <%= new Date(user.createdAt).toLocaleDateString() %></p>
-                        </div>
-                        <div class="mt-6 space-y-1">
-                            <button onclick="switchTab('profile')" id="profileTab" 
-                                class="active-tab w-full text-left px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700 font-medium">
-                                <i class="fas fa-user-circle mr-2"></i>Profile
-                            </button>
-                            <button onclick="switchTab('orders')" id="ordersTab" 
-                                class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
-                                <i class="fas fa-box-open mr-2"></i>Orders
-                            </button>
-                            <button onclick="switchTab('wishlist')" id="wishlistTab" 
-                                class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
-                                <i class="fas fa-heart mr-2"></i>Wishlist
-                            </button>
-                            <button onclick="switchTab('cart')" id="cartTab" 
-                                class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
-                                <i class="fas fa-shopping-cart mr-2"></i>Cart
-                            </button>
-                            <button onclick="switchTab('settings')" id="settingsTab" 
-                                class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
-                                <i class="fas fa-cog mr-2"></i>Settings
-                            </button>
-                        </div>
-                        <div class="mt-8 pt-6 border-t border-gray-200">
-                            <button id="changePasswordBtn" 
-                                class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
-                                <i class="fas fa-key mr-2"></i>Change Password
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                75% {
+                    transform: scale(0.95);
+                }
 
-                <!-- Main Content -->
-                <div class="w-full lg:w-3/4">
-                    <!-- Profile Tab -->
-                    <div id="profileContent" class="tab-content bg-white rounded-xl shadow-sm p-6">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">My Profile</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Personal Information</h3>
-                                <div class="space-y-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Full Name</p>
-                                        <p class="font-medium"><%= user.name %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Email</p>
-                                        <p class="font-medium"><%= user.email %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Phone</p>
-                                        <p class="font-medium"><%= user.phone %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Age</p>
-                                        <p class="font-medium"><%= user.age %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Gender</p>
-                                        <p class="font-medium capitalize"><%= user.gender %></p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Aadhar Number</p>
-                                        <p class="font-medium"><%= user.aadharNumber || 'Not provided' %></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">Address Information</h3>
-                                <% if (user.address?.state || user.address?.city || user.address?.pinCode) { %>
-                                    <div class="space-y-4">
-                                        <div>
-                                            <p class="text-sm text-gray-500">Address</p>
-                                            <p class="font-medium">
-                                                <%= user.address.city %><%= user.address.city && user.address.state ? ', ' : '' %><%= user.address.state %>
-                                                <%= user.address.pinCode ? ` - ${user.address.pinCode}` : '' %>
-                                            </p>
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .yoyo-bounce {
+                animation: yoyo-bounce 0.5s ease-in-out forwards;
+            }
+
+            /* Active tab styling */
+            .active-tab {
+                border-bottom: 3px solid #4f46e5;
+                color: #4f46e5;
+                font-weight: 600;
+            }
+
+            /* Smooth transitions */
+            .smooth-transition {
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* Status colors */
+            .status-delivered {
+                background-color: #DCFCE7;
+                color: #15803D;
+            }
+
+            .status-cancelled {
+                background-color: #FEE2E2;
+                color: #B91C1C;
+            }
+
+            .status-pending,
+            .status-processing,
+            .status-shipped {
+                background-color: #FEF9C3;
+                color: #A16207;
+            }
+        </style>
+    </head>
+
+    <body class="bg-gray-50">
+        <!-- Header Include -->
+        <%- include('partials/header') %>
+
+            <!-- Flash Message Include -->
+            <%- include('partials/flashMessage') %>
+
+                <main>
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <div class="flex flex-col lg:flex-row gap-8">
+
+                            <!-- Sidebar -->
+                            <div class="w-full lg:w-1/4">
+                                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-8">
+                                    <div class="flex flex-col items-center pb-6 border-b border-gray-200">
+                                        <div class="relative mb-4">
+                                            <img id="profileImage" src="<%= user.picture || '/images/author.webp' %>"
+                                                alt="Profile"
+                                                class="w-24 h-24 rounded-full object-cover object-top bg-yellow-400 border-4 border-indigo-300">
+                                            <label for="imageUpload"
+                                                class="absolute h-7 w-7 flex justify-center items-center bottom-0 right-0 bg-indigo-600 text-white rounded-full cursor-pointer hover:bg-indigo-700 transform hover:scale-105 transition">
+                                                <i class="fas fa-camera text-sm"></i>
+                                                <input id="imageUpload" type="file" accept="image/*" class="hidden">
+                                            </label>
                                         </div>
-                                    </div>
-                                <% } else { %>
-                                    <div class="text-center py-8">
-                                        <i class="fas fa-map-marker-alt text-4xl text-gray-300 mb-2"></i>
-                                        <p class="text-gray-500">No address information saved</p>
-                                    </div>
-                                <% } %>
-                                <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">Quick Stats</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="bg-indigo-50 p-4 rounded-lg">
-                                        <p class="text-sm text-gray-500">Total Orders</p>
-                                        <p class="text-2xl font-bold"><%= user.orders.length %></p>
-                                    </div>
-                                    <div class="bg-indigo-50 p-4 rounded-lg">
-                                        <p class="text-sm text-gray-500">Delivered</p>
-                                        <p class="text-2xl font-bold"><%= user.deliveredProducts.length %></p>
-                                    </div>
-                                    <div class="bg-indigo-50 p-4 rounded-lg">
-                                        <p class="text-sm text-gray-500">Wishlist Items</p>
-                                        <p class="text-2xl font-bold"><%= user.wishlist.length %></p>
-                                    </div>
-                                    <div class="bg-indigo-50 p-4 rounded-lg">
-                                        <p class="text-sm text-gray-500">Cart Items</p>
-                                        <p class="text-2xl font-bold"><%= user.cart.length %></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Orders Tab -->
-                    <div id="ordersContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Order History</h2>
-                        <div class="mb-6 flex space-x-4">
-                            <button class="filter-btn active-tab px-4 py-2 text-sm font-medium text-gray-700" data-filter="all">All</button>
-                            <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700" data-filter="pending">Pending</button>
-                            <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700" data-filter="processing">Processing</button>
-                            <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700" data-filter="shipped">Shipped</button>
-                            <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700" data-filter="delivered">Delivered</button>
-                            <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700" data-filter="cancelled">Cancelled</button>
-                        </div>
-                        <div id="ordersList">
-                            <% if (user.orders.length > 0) { %>
-                                <% user.orders.forEach(order => { %>
-                                    <div class="order-item border border-gray-200 rounded-lg p-5 mb-4 hover:shadow-md smooth-transition" data-status="<%= order.status %>">
-                                        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
-                                            <div>
-                                                <p class="text-sm text-gray-500">Order #<%= order._id.toString().slice(-6).toUpperCase() %></p>
-                                                <p class="font-medium"><%= new Date(order.orderDate).toLocaleDateString() %></p>
-                                            </div>
-                                            <div class="mt-2 md:mt-0">
-                                                <span class="px-3 py-1 rounded-full text-xs font-medium status-<%= order.status %>">
-                                                    <%= order.status.charAt(0).toUpperCase() + order.status.slice(1) %>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center space-x-4 mb-4">
-                                            <img src="<%= order.product?.image || 'https://via.placeholder.com/80' %>" alt="Product" class="w-16 h-16 object-cover rounded">
-                                            <div>
-                                                <p class="font-medium"><%= order.product?.name || 'Unknown Product' %></p>
-                                                <p class="text-gray-600 text-sm">Quantity: <%= order.quantity %></p>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-gray-200">
-                                            <p class="font-bold text-lg">₹<%= order.total.toFixed(2) %></p>
-                                            <div class="space-x-2 mt-2 sm:mt-0">
-                                                <% if (order.status !== 'delivered' && order.status !== 'cancelled') { %>
-                                                    <button class="track-order px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50" data-id="<%= order._id %>">Track Order</button>
-                                                <% } %>
-                                                <button class="buy-again px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700" data-product-id="<%= order.product?._id %>">Buy Again</button>
-                                            </div>
-                                        </div>
-                                        <p class="text-sm text-gray-500 mt-2">
-                                            Payment: <%= order.paymentMethod.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) %>
-                                            | Address: <%= order.shippingAddress.addressLine %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> - <%= order.shippingAddress.pinCode %>
+                                        <h2 class="text-xl font-bold text-gray-800">
+                                            <%= user.name %>
+                                        </h2>
+                                        <p class="text-gray-600 text-sm">
+                                            <%= user.email %>
                                         </p>
-                                        <% if (order.deliveryDate) { %>
-                                            <p class="text-sm text-gray-500 mt-1">Delivered: <%= order.deliveryDate.toLocaleDateString() %></p>
-                                        <% } %>
+                                        <p class="text-gray-500 text-xs mt-1">Member since <%= new
+                                                Date(user.createdAt).toLocaleDateString() %>
+                                        </p>
                                     </div>
-                                <% }) %>
-                            <% } else { %>
-                                <div class="text-center py-12">
-                                    <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
-                                    <h3 class="text-lg font-medium text-gray-700">No orders yet</h3>
-                                    <p class="text-gray-500 mt-2">You haven't placed any orders yet</p>
-                                    <a href="/products" class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Start Shopping</a>
+                                    <div class="mt-6 space-y-1">
+                                        <button onclick="switchTab('profile')" id="profileTab"
+                                            class="active-tab w-full text-left px-4 py-3 rounded-lg bg-indigo-50 text-indigo-700 font-medium">
+                                            <i class="fas fa-user-circle mr-2"></i>Profile
+                                        </button>
+                                        <button onclick="switchTab('orders')" id="ordersTab"
+                                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                                            <i class="fas fa-box-open mr-2"></i>Orders
+                                        </button>
+                                        <button onclick="switchTab('wishlist')" id="wishlistTab"
+                                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                                            <i class="fas fa-heart mr-2"></i>Wishlist
+                                        </button>
+                                        <button onclick="switchTab('cart')" id="cartTab"
+                                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                                            <i class="fas fa-shopping-cart mr-2"></i>Cart
+                                        </button>
+                                        <button onclick="switchTab('settings')" id="settingsTab"
+                                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-gray-100 text-gray-700">
+                                            <i class="fas fa-cog mr-2"></i>Settings
+                                        </button>
+                                    </div>
+                                    <div class="mt-8 pt-6 border-t border-gray-200">
+                                        <button id="changePasswordBtn"
+                                            class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center justify-center">
+                                            <i class="fas fa-key mr-2"></i>Change Password
+                                        </button>
+                                    </div>
                                 </div>
-                            <% } %>
-                        </div>
-                    </div>
+                            </div>
 
-                    <!-- Wishlist Tab -->
-                    <div id="wishlistContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">My Wishlist</h2>
-                            <p class="text-gray-600"><%= user.wishlist.length %> items</p>
-                        </div>
-                        <% if (user.wishlist.length > 0) { %>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <% user.wishlist.forEach(item => { %>
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md smooth-transition">
-                                        <div class="relative">
-                                            <img src="<%= item.product?.image || 'https://via.placeholder.com/300' %>" alt="Product" class="w-full h-48 object-cover">
-                                            <button class="remove-wishlist absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-red-50 text-red-500" data-id="<%= item._id %>">
-                                                <i class="fas fa-heart"></i>
-                                            </button>
-                                        </div>
-                                        <div class="p-4">
-                                            <h3 class="font-medium text-gray-800 mb-1"><%= item.product?.name || 'Unknown Product' %></h3>
-                                            <p class="text-gray-600 text-sm mb-2">Added: <%= item.addedAt.toLocaleDateString() %></p>
-                                            <p class="font-bold text-lg mb-3">₹<%= item.product?.price?.toFixed(2) || '0.00' %></p>
-                                            <div class="flex space-x-2">
-                                                <button class="add-to-cart flex-1 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700" data-product-id="<%= item.product?._id %>">Add to Cart</button>
+                            <!-- Main Content -->
+                            <div class="w-full lg:w-3/4">
+                                <!-- Profile Tab -->
+                                <div id="profileContent" class="tab-content bg-white rounded-xl shadow-sm p-6">
+                                    <h2 class="text-2xl font-bold text-gray-800 mb-6">My Profile</h2>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div>
+                                            <h3
+                                                class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                                                Personal Information</h3>
+                                            <div class="space-y-4">
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Full Name</p>
+                                                    <p class="font-medium">
+                                                        <%= user.name %>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Email</p>
+                                                    <p class="font-medium">
+                                                        <%= user.email %>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Phone</p>
+                                                    <p class="font-medium">
+                                                        <%= user.phone %>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Age</p>
+                                                    <p class="font-medium">
+                                                        <%= user.age %>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Gender</p>
+                                                    <p class="font-medium capitalize">
+                                                        <%= user.gender %>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm text-gray-500">Aadhar Number</p>
+                                                    <p class="font-medium">
+                                                        <%= user.hiddenAadharNumber || 'Not provided' %>
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <% }) %>
-                            </div>
-                        <% } else { %>
-                            <div class="text-center py-12">
-                                <i class="fas fa-heart text-4xl text-gray-300 mb-4"></i>
-                                <h3 class="text-lg font-medium text-gray-700">Your wishlist is empty</h3>
-                                <p class="text-gray-500 mt-2">Save items you love for later</p>
-                                <a href="/products" class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Browse Products</a>
-                            </div>
-                        <% } %>
-                    </div>
-
-                    <!-- Cart Tab -->
-                    <div id="cartContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">Shopping Cart</h2>
-                            <p class="text-gray-600"><%= user.cart.length %> items</p>
-                        </div>
-                        <% if (user.cart.length > 0) { %>
-                            <div class="space-y-6">
-                                <% user.cart.forEach(item => { %>
-                                    <div class="flex flex-col md:flex-row border border-gray-200 rounded-lg p-4 hover:shadow-md smooth-transition">
-                                        <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-                                            <img src="<%= item.product?.image || 'https://via.placeholder.com/120' %>" alt="Product" class="w-24 h-24 object-cover rounded">
-                                        </div>
-                                        <div class="flex-grow">
-                                            <div class="flex justify-between">
-                                                <div>
-                                                    <h3 class="font-medium text-gray-800"><%= item.product?.name || 'Unknown Product' %></h3>
-                                                    <p class="text-gray-600 text-sm">Price: ₹<%= item.product?.price?.toFixed(2) || '0.00' %></p>
+                                        <div>
+                                            <h3
+                                                class="text-lg font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                                                Address Information</h3>
+                                            <% if (user.address?.state || user.address?.city || user.address?.pinCode) {
+                                                %>
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <p class="text-sm text-gray-500">Address</p>
+                                                        <p class="font-medium">
+                                                            <%= user.address.city %>
+                                                                <%= user.address.city && user.address.state ? ', ' : ''
+                                                                    %>
+                                                                    <%= user.address.state %>
+                                                                        <%= user.address.pinCode ? ` -
+                                                                            ${user.address.pinCode}` : '' %>
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <button class="remove-cart text-gray-400 hover:text-red-500" data-id="<%= item._id %>">
-                                                    <i class="fas fa-times"></i>
+                                                <% } else { %>
+                                                    <div class="text-center py-8">
+                                                        <i
+                                                            class="fas fa-map-marker-alt text-4xl text-gray-300 mb-2"></i>
+                                                        <p class="text-gray-500">No address information saved</p>
+                                                    </div>
+                                                    <% } %>
+                                                        <h3
+                                                            class="text-lg font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">
+                                                            Quick Stats</h3>
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                                                <p class="text-sm text-gray-500">Total Orders</p>
+                                                                <p class="text-2xl font-bold">
+                                                                    <%= user.orders.length %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                                                <p class="text-sm text-gray-500">Delivered</p>
+                                                                <p class="text-2xl font-bold">
+                                                                    <%= user.deliveredProducts.length %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                                                <p class="text-sm text-gray-500">Wishlist Items</p>
+                                                                <p class="text-2xl font-bold">
+                                                                    <%= user.wishlist.length %>
+                                                                </p>
+                                                            </div>
+                                                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                                                <p class="text-sm text-gray-500">Cart Items</p>
+                                                                <p class="text-2xl font-bold">
+                                                                    <%= user.cart.length %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Orders Tab -->
+                                <div id="ordersContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
+                                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Order History</h2>
+                                    <div class="mb-6 flex space-x-4">
+                                        <button
+                                            class="filter-btn active-tab px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="all">All</button>
+                                        <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="pending">Pending</button>
+                                        <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="processing">Processing</button>
+                                        <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="shipped">Shipped</button>
+                                        <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="delivered">Delivered</button>
+                                        <button class="filter-btn px-4 py-2 text-sm font-medium text-gray-700"
+                                            data-filter="cancelled">Cancelled</button>
+                                    </div>
+                                    <div id="ordersList">
+                                        <% if (user.orders.length> 0) { %>
+                                            <% user.orders.forEach(order=> { %>
+                                                <div class="order-item border border-gray-200 rounded-lg p-5 mb-4 hover:shadow-md smooth-transition"
+                                                    data-status="<%= order.status %>">
+                                                    <div
+                                                        class="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                                                        <div>
+                                                            <p class="text-sm text-gray-500">Order #<%=
+                                                                    order._id.toString().slice(-6).toUpperCase() %>
+                                                            </p>
+                                                            <p class="font-medium">
+                                                                <%= new Date(order.orderDate).toLocaleDateString() %>
+                                                            </p>
+                                                        </div>
+                                                        <div class="mt-2 md:mt-0">
+                                                            <span
+                                                                class="px-3 py-1 rounded-full text-xs font-medium status-<%= order.status %>">
+                                                                <%= order.status.charAt(0).toUpperCase() +
+                                                                    order.status.slice(1) %>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-4 mb-4">
+                                                        <img src="<%= order.product?.image || 'https://via.placeholder.com/80' %>"
+                                                            alt="Product" class="w-16 h-16 object-cover rounded">
+                                                        <div>
+                                                            <p class="font-medium">
+                                                                <%= order.product?.name || 'Unknown Product' %>
+                                                            </p>
+                                                            <p class="text-gray-600 text-sm">Quantity: <%=
+                                                                    order.quantity %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-gray-200">
+                                                        <p class="font-bold text-lg">₹<%= order.total.toFixed(2) %>
+                                                        </p>
+                                                        <div class="space-x-2 mt-2 sm:mt-0">
+                                                            <% if (order.status !=='delivered' && order.status
+                                                                !=='cancelled' ) { %>
+                                                                <button
+                                                                    class="track-order px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50"
+                                                                    data-id="<%= order._id %>">Track Order</button>
+                                                                <% } %>
+                                                                    <button
+                                                                        class="buy-again px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+                                                                        data-product-id="<%= order.product?._id %>">Buy
+                                                                        Again</button>
+                                                        </div>
+                                                    </div>
+                                                    <p class="text-sm text-gray-500 mt-2">
+                                                        Payment: <%= order.paymentMethod.replace('_', ' '
+                                                            ).replace(/\b\w/g, c=> c.toUpperCase()) %>
+                                                            | Address: <%= order.shippingAddress.addressLine %>, <%=
+                                                                    order.shippingAddress.city %>, <%=
+                                                                        order.shippingAddress.state %> - <%=
+                                                                            order.shippingAddress.pinCode %>
+                                                    </p>
+                                                    <% if (order.deliveryDate) { %>
+                                                        <p class="text-sm text-gray-500 mt-1">Delivered: <%=
+                                                                order.deliveryDate.toLocaleDateString() %>
+                                                        </p>
+                                                        <% } %>
+                                                </div>
+                                                <% }) %>
+                                                    <% } else { %>
+                                                        <div class="text-center py-12">
+                                                            <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
+                                                            <h3 class="text-lg font-medium text-gray-700">No orders yet
+                                                            </h3>
+                                                            <p class="text-gray-500 mt-2">You haven't placed any orders
+                                                                yet</p>
+                                                            <a href="/products"
+                                                                class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Start
+                                                                Shopping</a>
+                                                        </div>
+                                                        <% } %>
+                                    </div>
+                                </div>
+
+                                <!-- Wishlist Tab -->
+                                <div id="wishlistContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
+                                    <div class="flex justify-between items-center mb-6">
+                                        <h2 class="text-2xl font-bold text-gray-800">My Wishlist</h2>
+                                        <p class="text-gray-600">
+                                            <%= user.wishlist.length %> items
+                                        </p>
+                                    </div>
+                                    <% if (user.wishlist.length> 0) { %>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            <% user.wishlist.forEach(item=> { %>
+                                                <div
+                                                    class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md smooth-transition">
+                                                    <div class="relative">
+                                                        <img src="<%= item.product?.image || 'https://via.placeholder.com/300' %>"
+                                                            alt="Product" class="w-full h-48 object-cover">
+                                                        <button
+                                                            class="remove-wishlist absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-red-50 text-red-500"
+                                                            data-id="<%= item._id %>">
+                                                            <i class="fas fa-heart"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="p-4">
+                                                        <h3 class="font-medium text-gray-800 mb-1">
+                                                            <%= item.product?.name || 'Unknown Product' %>
+                                                        </h3>
+                                                        <p class="text-gray-600 text-sm mb-2">Added: <%=
+                                                                item.addedAt.toLocaleDateString() %>
+                                                        </p>
+                                                        <p class="font-bold text-lg mb-3">₹<%=
+                                                                item.product?.price?.toFixed(2) || '0.00' %>
+                                                        </p>
+                                                        <div class="flex space-x-2">
+                                                            <button
+                                                                class="add-to-cart flex-1 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                                                                data-product-id="<%= item.product?._id %>">Add to
+                                                                Cart</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+                                        </div>
+                                        <% } else { %>
+                                            <div class="text-center py-12">
+                                                <i class="fas fa-heart text-4xl text-gray-300 mb-4"></i>
+                                                <h3 class="text-lg font-medium text-gray-700">Your wishlist is empty
+                                                </h3>
+                                                <p class="text-gray-500 mt-2">Save items you love for later</p>
+                                                <a href="/products"
+                                                    class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Browse
+                                                    Products</a>
+                                            </div>
+                                            <% } %>
+                                </div>
+
+                                <!-- Cart Tab -->
+                                <div id="cartContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
+                                    <div class="flex justify-between items-center mb-6">
+                                        <h2 class="text-2xl font-bold text-gray-800">Shopping Cart</h2>
+                                        <p class="text-gray-600">
+                                            <%= user.cart.length %> items
+                                        </p>
+                                    </div>
+                                    <% if (user.cart.length> 0) { %>
+                                        <div class="space-y-6">
+                                            <% user.cart.forEach(item=> { %>
+                                                <div
+                                                    class="flex flex-col md:flex-row border border-gray-200 rounded-lg p-4 hover:shadow-md smooth-transition">
+                                                    <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
+                                                        <img src="<%= item.product?.image || 'https://via.placeholder.com/120' %>"
+                                                            alt="Product" class="w-24 h-24 object-cover rounded">
+                                                    </div>
+                                                    <div class="flex-grow">
+                                                        <div class="flex justify-between">
+                                                            <div>
+                                                                <h3 class="font-medium text-gray-800">
+                                                                    <%= item.product?.name || 'Unknown Product' %>
+                                                                </h3>
+                                                                <p class="text-gray-600 text-sm">Price: ₹<%=
+                                                                        item.product?.price?.toFixed(2) || '0.00' %>
+                                                                </p>
+                                                            </div>
+                                                            <button class="remove-cart text-gray-400 hover:text-red-500"
+                                                                data-id="<%= item._id %>">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div
+                                                            class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                                            <div class="flex items-center mb-3 sm:mb-0">
+                                                                <button
+                                                                    class="update-quantity w-8 h-8 border border-gray-300 rounded-l flex items-center justify-center"
+                                                                    data-id="<%= item._id %>"
+                                                                    data-action="decrease">-</button>
+                                                                <span
+                                                                    class="w-12 h-8 border-t border-b border-gray-300 flex items-center justify-center">
+                                                                    <%= item.quantity %>
+                                                                </span>
+                                                                <button
+                                                                    class="update-quantity w-8 h-8 border border-gray-300 rounded-r flex items-center justify-center"
+                                                                    data-id="<%= item._id %>"
+                                                                    data-action="increase">+</button>
+                                                            </div>
+                                                            <p class="font-bold text-lg">₹<%= (item.product?.price *
+                                                                    item.quantity).toFixed(2) || '0.00' %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+                                                    <div class="bg-gray-50 p-6 rounded-lg mt-8">
+                                                        <div class="flex justify-between mb-4">
+                                                            <p class="text-gray-600">Subtotal</p>
+                                                            <p class="font-medium">₹<%= user.cart.reduce((total, item)=>
+                                                                    total + (item.product?.price * item.quantity || 0),
+                                                                    0).toFixed(2) %></p>
+                                                        </div>
+                                                        <div class="flex justify-between mb-4">
+                                                            <p class="text-gray-600">Shipping</p>
+                                                            <p class="font-medium">₹50.00</p>
+                                                        </div>
+                                                        <div
+                                                            class="flex justify-between mb-6 pt-4 border-t border-gray-200">
+                                                            <p class="text-lg font-bold">Total</p>
+                                                            <p class="text-lg font-bold">₹<%= (user.cart.reduce((total,
+                                                                    item)=> total + (item.product?.price * item.quantity
+                                                                    || 0), 0) + 50).toFixed(2) %></p>
+                                                        </div>
+                                                        <button
+                                                            class="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
+                                                            to Checkout</button>
+                                                    </div>
+                                        </div>
+                                        <% } else { %>
+                                            <div class="text-center py-12">
+                                                <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                                                <h3 class="text-lg font-medium text-gray-700">Your cart is empty</h3>
+                                                <p class="text-gray-500 mt-2">Add some items to get started</p>
+                                                <a href="/products"
+                                                    class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Continue
+                                                    Shopping</a>
+                                            </div>
+                                            <% } %>
+                                </div>
+
+                                <!-- Settings Tab -->
+                                <div id="settingsContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
+                                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Account Settings</h2>
+                                    <form id="settingsForm" class="space-y-6">
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <label for="name"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Full
+                                                    Name</label>
+                                                <input type="text" id="name" name="name" value="<%= user.name %>"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                    required>
+                                            </div>
+                                            <div>
+                                                <label for="email"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                                <input type="email" id="email" name="email" value="<%= user.email %>"
+                                                    disabled
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">
+                                            </div>
+                                            <div>
+                                                <label for="phone"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Phone
+                                                    Number</label>
+                                                <input type="tel" id="phone" name="phone" value="<%= user.phone %>"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                    pattern="[6-9][0-9]{9}" required>
+                                            </div>
+                                            <div class="relative">
+                                                <label for="aadharNumber"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Aadhar
+                                                    Number</label>
+                                                <input type="password" id="aadharNumber" name="aadharNumber"
+                                                    value="<%= user.aadharNumber || '' %>"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                    pattern="[2-9][0-9]{11}">
+                                                <button type="button"
+                                                    class="absolute right-3 top-9 text-gray-500 toggle-password"
+                                                    data-target="aadharNumber">
+                                                    <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                                                <div class="flex items-center mb-3 sm:mb-0">
-                                                    <button class="update-quantity w-8 h-8 border border-gray-300 rounded-l flex items-center justify-center" data-id="<%= item._id %>" data-action="decrease">-</button>
-                                                    <span class="w-12 h-8 border-t border-b border-gray-300 flex items-center justify-center"><%= item.quantity %></span>
-                                                    <button class="update-quantity w-8 h-8 border border-gray-300 rounded-r flex items-center justify-center" data-id="<%= item._id %>" data-action="increase">+</button>
-                                                </div>
-                                                <p class="font-bold text-lg">₹<%= (item.product?.price * item.quantity).toFixed(2) || '0.00' %></p>
+                                            <div>
+                                                <label for="age"
+                                                    class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                                <input type="number" id="age" name="age" value="<%= user.age || '' %>"
+                                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                    min="0" max="120">
                                             </div>
                                         </div>
-                                    </div>
-                                <% }) %>
-                                <div class="bg-gray-50 p-6 rounded-lg mt-8">
-                                    <div class="flex justify-between mb-4">
-                                        <p class="text-gray-600">Subtotal</p>
-                                        <p class="font-medium">₹<%= user.cart.reduce((total, item) => total + (item.product?.price * item.quantity || 0), 0).toFixed(2) %></p>
-                                    </div>
-                                    <div class="flex justify-between mb-4">
-                                        <p class="text-gray-600">Shipping</p>
-                                        <p class="font-medium">₹50.00</p>
-                                    </div>
-                                    <div class="flex justify-between mb-6 pt-4 border-t border-gray-200">
-                                        <p class="text-lg font-bold">Total</p>
-                                        <p class="text-lg font-bold">₹<%= (user.cart.reduce((total, item) => total + (item.product?.price * item.quantity || 0), 0) + 50).toFixed(2) %></p>
-                                    </div>
-                                    <button class="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed to Checkout</button>
+
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-gray-800 mb-3">Address</h3>
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div>
+                                                    <label for="state"
+                                                        class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                                    <select id="state" name="state" required
+                                                        class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                                        <option value="" disabled <%=!user.address.state ? 'selected'
+                                                            : '' %>
+                                                            >Select State</option>
+                                                        <option value="Andhra Pradesh"
+                                                            <%=user.address.state==='Andhra Pradesh' ? 'selected' : ''
+                                                            %>>Andhra Pradesh</option>
+                                                        <option value="Arunachal Pradesh"
+                                                            <%=user.address.state==='Arunachal Pradesh' ? 'selected'
+                                                            : '' %>
+                                                            >Arunachal Pradesh</option>
+                                                        <option value="Assam" <%=user.address.state==='Assam'
+                                                            ? 'selected' : '' %>>Assam</option>
+                                                        <option value="Bihar" <%=user.address.state==='Bihar'
+                                                            ? 'selected' : '' %>>Bihar</option>
+                                                        <option value="Chhattisgarh"
+                                                            <%=user.address.state==='Chhattisgarh' ? 'selected' : '' %>
+                                                            >Chhattisgarh</option>
+                                                        <option value="Goa" <%=user.address.state==='Goa' ? 'selected'
+                                                            : '' %>
+                                                            >Goa</option>
+                                                        <option value="Gujarat" <%=user.address.state==='Gujarat'
+                                                            ? 'selected' : '' %>>Gujarat</option>
+                                                        <option value="Haryana" <%=user.address.state==='Haryana'
+                                                            ? 'selected' : '' %>>Haryana</option>
+                                                        <option value="Himachal Pradesh"
+                                                            <%=user.address.state==='Himachal Pradesh' ? 'selected' : ''
+                                                            %>
+                                                            >Himachal Pradesh</option>
+                                                        <option value="Jharkhand" <%=user.address.state==='Jharkhand'
+                                                            ? 'selected' : '' %>>Jharkhand</option>
+                                                        <option value="Karnataka" <%=user.address.state==='Karnataka'
+                                                            ? 'selected' : '' %>>Karnataka</option>
+                                                        <option value="Kerala" <%=user.address.state==='Kerala'
+                                                            ? 'selected' : '' %>>Kerala</option>
+                                                        <option value="Madhya Pradesh"
+                                                            <%=user.address.state==='Madhya Pradesh' ? 'selected' : ''
+                                                            %>>Madhya Pradesh</option>
+                                                        <option value="Maharashtra"
+                                                            <%=user.address.state==='Maharashtra' ? 'selected' : '' %>
+                                                            >Maharashtra</option>
+                                                        <option value="Manipur" <%=user.address.state==='Manipur'
+                                                            ? 'selected' : '' %>>Manipur</option>
+                                                        <option value="Meghalaya" <%=user.address.state==='Meghalaya'
+                                                            ? 'selected' : '' %>>Meghalaya</option>
+                                                        <option value="Mizoram" <%=user.address.state==='Mizoram'
+                                                            ? 'selected' : '' %>>Mizoram</option>
+                                                        <option value="Nagaland" <%=user.address.state==='Nagaland'
+                                                            ? 'selected' : '' %>>Nagaland</option>
+                                                        <option value="Odisha" <%=user.address.state==='Odisha'
+                                                            ? 'selected' : '' %>>Odisha</option>
+                                                        <option value="Punjab" <%=user.address.state==='Punjab'
+                                                            ? 'selected' : '' %>>Punjab</option>
+                                                        <option value="Rajasthan" <%=user.address.state==='Rajasthan'
+                                                            ? 'selected' : '' %>>Rajasthan</option>
+                                                        <option value="Sikkim" <%=user.address.state==='Sikkim'
+                                                            ? 'selected' : '' %>>Sikkim</option>
+                                                        <option value="Tamil Nadu" <%=user.address.state==='Tamil Nadu'
+                                                            ? 'selected' : '' %>>Tamil Nadu</option>
+                                                        <option value="Telangana" <%=user.address.state==='Telangana'
+                                                            ? 'selected' : '' %>>Telangana</option>
+                                                        <option value="Tripura" <%=user.address.state==='Tripura'
+                                                            ? 'selected' : '' %>>Tripura</option>
+                                                        <option value="Uttar Pradesh"
+                                                            <%=user.address.state==='Uttar Pradesh' ? 'selected' : '' %>
+                                                            >Uttar Pradesh</option>
+                                                        <option value="Uttarakhand"
+                                                            <%=user.address.state==='Uttarakhand' ? 'selected' : '' %>
+                                                            >Uttarakhand</option>
+                                                        <option value="West Bengal"
+                                                            <%=user.address.state==='West Bengal' ? 'selected' : '' %>
+                                                            >West Bengal</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label for="city"
+                                                        class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                                    <input type="text" id="city" name="address.city"
+                                                        value="<%= user.address?.city || '' %>"
+                                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                                </div>
+                                                <div>
+                                                    <label for="pinCode"
+                                                        class="block text-sm font-medium text-gray-700 mb-1">Pin
+                                                        Code</label>
+                                                    <input type="text" id="pinCode" name="address.pinCode"
+                                                        value="<%= user.address?.pinCode || '' %>"
+                                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                                                        pattern="[1-9][0-9]{5}">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex justify-end pt-6 border-t border-gray-200">
+                                            <button type="submit"
+                                                class="px-6 py-2 cursor-pointer bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save
+                                                Changes</button>
+                                        </div>
+                                    </form>
                                 </div>
+
                             </div>
-                        <% } else { %>
-                            <div class="text-center py-12">
-                                <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
-                                <h3 class="text-lg font-medium text-gray-700">Your cart is empty</h3>
-                                <p class="text-gray-500 mt-2">Add some items to get started</p>
-                                <a href="/products" class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Continue Shopping</a>
-                            </div>
-                        <% } %>
+                        </div>
                     </div>
 
-                    <!-- Settings Tab -->
-                    <div id="settingsContent" class="tab-content bg-white rounded-xl shadow-sm p-6 hidden">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Account Settings</h2>
-                        <form id="settingsForm" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                    <input type="text" id="name" name="name" value="<%= user.name %>" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <!-- Change Password Modal -->
+                    <div id="passwordModal" class="fixed inset-0 bg-black/60 items-center justify-center z-50 hidden">
+                        <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
+                            <div class="p-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-xl font-bold text-gray-800">Change Password</h3>
+                                    <button id="closePasswordModal" class="text-gray-400 hover:text-gray-500">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <input type="email" id="email" name="email" value="<%= user.email %>" disabled
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">
-                                </div>
-                                <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                    <input type="tel" id="phone" name="phone" value="<%= user.phone %>" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" pattern="[6-9][0-9]{9}" required>
-                                </div>
-                                <div>
-                                    <label for="aadharNumber" class="block text-sm font-medium text-gray-700 mb-1">Aadhar Number</label>
-                                    <input type="text" id="aadharNumber" name="aadharNumber" value="<%= user.aadharNumber || '' %>" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" pattern="[2-9][0-9]{11}">
-                                </div>
-                                <div>
-                                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age</label>
-                                    <input type="number" id="age" name="age" value="<%= user.age || '' %>" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" min="0" max="120">
-                                </div>
-                            </div>
+                                <form id="passwordForm" class="space-y-4">
+                                    <!-- Current Password -->
+                                    <div class="relative">
+                                        <label for="currentPassword"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Current
+                                            Password</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" required
+                                            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-9 text-gray-500 toggle-password"
+                                            data-target="currentPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
 
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-3">Address</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                        <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
-                                        <input type="text" id="state" name="address.state" value="<%= user.address?.state || '' %>" 
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                    <!-- New Password -->
+                                    <div class="relative">
+                                        <label for="newPassword"
+                                            class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                        <input type="password" id="newPassword" name="newPassword" required
+                                            pattern=".{8,}"
+                                            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-9 text-gray-500 toggle-password"
+                                            data-target="newPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
                                     </div>
-                                    <div>
-                                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                                        <input type="text" id="city" name="address.city" value="<%= user.address?.city || '' %>" 
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                                    </div>
-                                    <div>
-                                        <label for="pinCode" class="block text-sm font-medium text-gray-700 mb-1">Pin Code</label>
-                                        <input type="text" id="pinCode" name="address.pinCode" value="<%= user.address?.pinCode || '' %>" 
-                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" pattern="[1-9][0-9]{5}">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="flex justify-end pt-6 border-t border-gray-200">
-                                <button type="button" id="cancelSettings" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 mr-3">Cancel</button>
-                                <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save Changes</button>
+                                    <!-- Confirm New Password -->
+                                    <div class="relative">
+                                        <label for="confirmPassword"
+                                            class="block text-sm font-medium text-gray-700 mb-1">Confirm New
+                                            Password</label>
+                                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                                            class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-9 text-gray-500 toggle-password"
+                                            data-target="confirmPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- error box -->
+                                    <div id="passwordError" class="text-red-500 text-sm hidden"></div>
+                                    <div class="bg-gray-50 px-6 py-4 rounded-b-xl flex justify-end">
+                                        <button type="button" id="cancelPasswordBtn"
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 mr-3">Cancel</button>
+                                        <button type="submit" id="savePasswordBtn"
+                                            class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save
+                                            Changes</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
 
-                </div>
-            </div>
-        </div>
+                </main>
 
-       <!-- Change Password Modal -->
-        <div id="passwordModal" class="fixed inset-0 bg-black/60 items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Change Password</h3>
-                <button id="closePasswordModal" class="text-gray-400 hover:text-gray-500">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="passwordForm" class="space-y-4">
-                <!-- Current Password -->
-                <div class="relative">
-                    <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                    <input type="password" id="currentPassword" name="currentPassword" required
-                        class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    <button type="button" class="absolute right-3 top-9 text-gray-500 toggle-password" data-target="currentPassword">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
+                <script>
+                    const userId = "<%= user.id %>"; // set userID
 
-                <!-- New Password -->
-                <div class="relative">
-                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                    <input type="password" id="newPassword" name="newPassword" required pattern=".{8,}"
-                        class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    <button type="button" class="absolute right-3 top-9 text-gray-500 toggle-password" data-target="newPassword">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
-                </div>
-
-                <!-- Confirm New Password -->
-                <div class="relative">
-                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required
-                        class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    <button type="button" class="absolute right-3 top-9 text-gray-500 toggle-password" data-target="confirmPassword">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-
-                <div id="passwordError" class="text-red-500 text-sm hidden"></div>
-                <div class="bg-gray-50 px-6 py-4 rounded-b-xl flex justify-end">
-                    <button type="button" id="cancelPasswordBtn" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 mr-3">Cancel</button>
-                    <button type="submit" id="savePasswordBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save Changes</button>
-                </div>
-            </form>
-            </div>
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        const userId = "<%= user.id %>"; // set userID
-        
-        // Tab Switching
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-            document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-                tab.classList.remove('active-tab', 'bg-indigo-50', 'text-indigo-700');
-                tab.classList.add('hover:bg-gray-100', 'text-gray-700');
-            });
-            document.getElementById(tabName + 'Content').classList.remove('hidden');
-            document.getElementById(tabName + 'Tab').classList.add('active-tab', 'bg-indigo-50', 'text-indigo-700');
-            document.getElementById(tabName + 'Tab').classList.remove('hover:bg-gray-100', 'text-gray-700');
-        }
-
-        // Initialize Profile Tab
-        document.addEventListener('DOMContentLoaded', () => {
-            switchTab('profile');
-        });
-
-        // Order Filtering
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const orderItems = document.querySelectorAll('.order-item');
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active-tab'));
-                btn.classList.add('active-tab');
-                const filter = btn.dataset.filter;
-                orderItems.forEach(item => {
-                    item.classList.remove('hidden');
-                    if (filter !== 'all' && item.dataset.status !== filter) {
-                        item.classList.add('hidden');
-                    }
-                });
-            });
-        });
-
-        // Profile Image Upload
-        const imageUpload = document.getElementById('imageUpload');
-        const profileImage = document.getElementById('profileImage');
-        imageUpload.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async (event) => {
-                    profileImage.src = event.target.result;
-                    const formData = new FormData();
-                    formData.append('picture', file);
-                    try {
-                        const response = await fetch('/user/profile/picture', {
-                            method: 'PUT',
-                            body: formData
+                    // Tab Switching
+                    function switchTab (tabName) {
+                        document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+                        document.querySelectorAll('[id$="Tab"]').forEach(tab => {
+                            tab.classList.remove('active-tab', 'bg-indigo-50', 'text-indigo-700');
+                            tab.classList.add('hover:bg-gray-100', 'text-gray-700');
                         });
-                        const data = await response.json();
-                        if (!response.ok) {
-                            alert(data.message || 'Failed to upload image');
+                        document.getElementById(tabName + 'Content').classList.remove('hidden');
+                        document.getElementById(tabName + 'Tab').classList.add('active-tab', 'bg-indigo-50', 'text-indigo-700');
+                        document.getElementById(tabName + 'Tab').classList.remove('hover:bg-gray-100', 'text-gray-700');
+                    }
+
+                    // Initialize Profile Tab
+                    document.addEventListener('DOMContentLoaded', () => {
+                        switchTab('profile');
+                    });
+
+                    // Order Filtering
+                    const filterButtons = document.querySelectorAll('.filter-btn');
+                    const orderItems = document.querySelectorAll('.order-item');
+                    filterButtons.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            filterButtons.forEach(b => b.classList.remove('active-tab'));
+                            btn.classList.add('active-tab');
+                            const filter = btn.dataset.filter;
+                            orderItems.forEach(item => {
+                                item.classList.remove('hidden');
+                                if (filter !== 'all' && item.dataset.status !== filter) {
+                                    item.classList.add('hidden');
+                                }
+                            });
+                        });
+                    });
+
+                    // Profile Image Upload
+                    const imageUpload = document.getElementById('imageUpload');
+                    const profileImage = document.getElementById('profileImage');
+                    imageUpload.addEventListener('change', async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = async (event) => {
+                                profileImage.src = event.target.result;
+                                const formData = new FormData();
+                                formData.append('picture', file);
+                                try {
+                                    const response = await fetch('/user/profile/picture', {
+                                        method: 'PUT',
+                                        body: formData
+                                    });
+                                    const data = await response.json();
+                                    if (!response.ok) {
+                                        alert(data.message || 'Failed to upload image');
+                                    }
+                                } catch (error) {
+                                    alert('An error occurred while uploading the image');
+                                }
+                            };
+                            reader.readAsDataURL(file);
                         }
-                    } catch (error) {
-                        alert('An error occurred while uploading the image');
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Settings Form Submission
-        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = {
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            aadharNumber: document.getElementById('aadharNumber').value,
-            age: document.getElementById('age').value,
-            address: {
-                state: document.getElementById('state').value,
-                city: document.getElementById('city').value,
-                pinCode: document.getElementById('pinCode').value,
-            },
-            };
-
-            try {
-                const response = await fetch(`/users/profile/${userId}/update`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    setTimeout(() => {
-                        window.location.href = `/users/profile/${userId}?profileUpdate=true`;
-                    }, 1000);
-                    setTimeout(() => {
-                    window.location.reload();
-                    }, 1500)
-                    
-                } else {
-                    alert(data.message || 'Failed to update profile');
-                }
-            } catch (error) {
-                alert('An error occurred while updating the profile');
-            }
-        });
-
-        // Cart Actions
-        document.querySelectorAll('.remove-cart').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const itemId = btn.dataset.id;
-                try {
-                    const response = await fetch(`/user/cart/${itemId}`, {
-                        method: 'DELETE'
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Item removed from cart');
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Failed to remove item');
-                    }
-                } catch (error) {
-                    alert('An error occurred while removing the item');
-                }
-            });
-        });
 
-        document.querySelectorAll('.update-quantity').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const itemId = btn.dataset.id;
-                const action = btn.dataset.action;
-                try {
-                    const response = await fetch(`/user/cart/${itemId}/quantity`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ action })
+
+                    // Cart Actions
+                    document.querySelectorAll('.remove-cart').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const itemId = btn.dataset.id;
+                            try {
+                                const response = await fetch(`/user/cart/${itemId}`, {
+                                    method: 'DELETE'
+                                });
+                                const data = await response.json();
+                                if (response.ok) {
+                                    alert('Item removed from cart');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message || 'Failed to remove item');
+                                }
+                            } catch (error) {
+                                alert('An error occurred while removing the item');
+                            }
+                        });
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Failed to update quantity');
-                    }
-                } catch (error) {
-                    alert('An error occurred while updating the quantity');
-                }
-            });
-        });
 
-        // Wishlist Actions
-        document.querySelectorAll('.remove-wishlist').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const itemId = btn.dataset.id;
-                try {
-                    const response = await fetch(`/user/wishlist/${itemId}`, {
-                        method: 'DELETE'
+                    document.querySelectorAll('.update-quantity').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const itemId = btn.dataset.id;
+                            const action = btn.dataset.action;
+                            try {
+                                const response = await fetch(`/user/cart/${itemId}/quantity`, {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ action })
+                                });
+                                const data = await response.json();
+                                if (response.ok) {
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message || 'Failed to update quantity');
+                                }
+                            } catch (error) {
+                                alert('An error occurred while updating the quantity');
+                            }
+                        });
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Item removed from wishlist');
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Failed to remove item');
-                    }
-                } catch (error) {
-                    alert('An error occurred while removing the item');
-                }
-            });
-        });
 
-        document.querySelectorAll('.add-to-cart').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const productId = btn.dataset.productId;
-                try {
-                    const response = await fetch('/user/cart', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ productId })
+                    // Wishlist Actions
+                    document.querySelectorAll('.remove-wishlist').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const itemId = btn.dataset.id;
+                            try {
+                                const response = await fetch(`/user/wishlist/${itemId}`, {
+                                    method: 'DELETE'
+                                });
+                                const data = await response.json();
+                                if (response.ok) {
+                                    alert('Item removed from wishlist');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message || 'Failed to remove item');
+                                }
+                            } catch (error) {
+                                alert('An error occurred while removing the item');
+                            }
+                        });
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Item added to cart');
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Failed to add item to cart');
-                    }
-                } catch (error) {
-                    alert('An error occurred while adding the item to cart');
-                }
-            });
-        });
 
-        // Order Actions (Placeholder)
-        document.querySelectorAll('.track-order').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('Tracking functionality not implemented yet.');
-            });
-        });
-
-        document.querySelectorAll('.buy-again').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const productId = btn.dataset.productId;
-                try {
-                    const response = await fetch('/user/cart', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ productId })
+                    document.querySelectorAll('.add-to-cart').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const productId = btn.dataset.productId;
+                            try {
+                                const response = await fetch('/user/cart', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ productId })
+                                });
+                                const data = await response.json();
+                                if (response.ok) {
+                                    alert('Item added to cart');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message || 'Failed to add item to cart');
+                                }
+                            } catch (error) {
+                                alert('An error occurred while adding the item to cart');
+                            }
+                        });
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Item added to cart');
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Failed to add item to cart');
-                    }
-                } catch (error) {
-                    alert('An error occurred while adding the item to cart');
-                }
-            });
-        });
-    </script>
 
-    <!-- Scripts -->
-    <script src="/javascripts/searchAndMenuToggle.js"></script>
-    <script src="/javascripts/profileToggle.js"></script>
-    <script src="/javascripts/passwordShowToggle.js"></script>
-    <script src="/javascripts/flashMessage.js"></script>
-    <script src="/javascripts/passwordChangeModel.js"></script>
-</body>
+                    // Order Actions (Placeholder)
+                    document.querySelectorAll('.track-order').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            alert('Tracking functionality not implemented yet.');
+                        });
+                    });
+
+                    document.querySelectorAll('.buy-again').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const productId = btn.dataset.productId;
+                            try {
+                                const response = await fetch('/user/cart', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ productId })
+                                });
+                                const data = await response.json();
+                                if (response.ok) {
+                                    alert('Item added to cart');
+                                    window.location.reload();
+                                } else {
+                                    alert(data.message || 'Failed to add item to cart');
+                                }
+                            } catch (error) {
+                                alert('An error occurred while adding the item to cart');
+                            }
+                        });
+                    });
+                </script>
+
+                <!-- Scripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/passwordShowToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+                <script src="/javascripts/passwordChangeModel.js"></script>
+                <script src="/javascripts/profileUpdate.js"></script>
+    </body>
+
 </html>

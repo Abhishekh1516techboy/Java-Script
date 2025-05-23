@@ -1,9 +1,21 @@
-// Helper function to format Aadhar Number for display in UI like "xxxx-xxxx-xxxx-xxxx" format
+// Helper function to format Aadhar Number for display in UI like "xxxx-xxxx-xxxx" format
 export const formatAadharNumber = (aadharNumber) => {
   return `${aadharNumber.slice(0, 4)}-${aadharNumber.slice(
     4,
     8
   )}-${aadharNumber.slice(8)}`;
+};
+
+// hidden Aadhar Number show like "xxxx-xxxx-6194" format
+export const hiddenAadharNumber = (aadharNumber) => {
+  // Ensure the input is a string and has 12 digits
+  if (!aadharNumber || aadharNumber.length !== 12) {
+    return "Invalid Aadhar Number";
+  }
+
+  // Take the last 4 digits and mask the rest
+  const lastFour = aadharNumber.slice(-4);
+  return `xxxx-xxxx-${lastFour}`;
 };
 
 // GSTIN validation
@@ -21,6 +33,21 @@ export const validateGstin = (gstin) => {
       "Invalid GSTIN. Must be 15 characters in format: 2 digits, 5 letters, 4 digits, 1 letter, 1 letter or digit, Z, 1 letter or digit."
     );
   }
+};
+
+// Hidden GSTIN Number show like "xxxx-xxxx-xxx-F1Z5" format
+export const hiddenGstinNumber = (gstinNumber) => {
+  // Ensure the input is a string and has 15 characters
+  if (!gstinNumber || gstinNumber.length !== 15) {
+    return "Invalid GSTIN Number";
+  }
+
+  // Extract first 3 characters and last 4 characters
+  const firstThree = gstinNumber.slice(0, 3);
+  const lastFour = gstinNumber.slice(-4);
+
+  // Return formatted string: first 3, 8 x's, last 4, with dashes
+  return `${firstThree}-xxxx-xxxx-${lastFour}`;
 };
 
 // Aadhar validation

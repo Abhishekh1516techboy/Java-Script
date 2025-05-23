@@ -2,7 +2,8 @@ import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
 import {
   profile,
-  //   passwordChange,
+  passwordChange,
+  profileUpdate,
 } from "../controllers/ownersController.js";
 import {
   signUpPage,
@@ -28,9 +29,11 @@ router.post("/auth/login", login);
 
 // owner Profile Routes
 router.get("/profile", isLoggedIn, profile);
-// router.get("/owner/profile", jwtAuthMiddleware, isAdmin, profile);
 
-// Update route for change owner password in database by Id
-// router.put("/profile/change-password", jwtAuthMiddleware, passwordChange);
+//change-password Routes
+router.put("/profile/change-password", isLoggedIn, passwordChange);
+
+// Owner Profile-Update Routes
+router.put("/profile/update", isLoggedIn, profileUpdate);
 
 export default router;

@@ -4,113 +4,684 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>user Profile</title>
+        <title>Owner Dashboard</title>
         <link href="/stylesheets/output.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+            /* Yo-yo bounce animation for flash messages */
+            @keyframes yoyo-bounce {
+                0% {
+                    transform: scale(0);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+
+                75% {
+                    transform: scale(0.95);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .yoyo-bounce {
+                animation: yoyo-bounce 0.5s ease-in-out forwards;
+            }
+
+            /* Models css */
+            .modal-overlay {
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+            }
+
+            .modal-content {
+                animation: modalSlideIn 0.3s ease-out;
+                max-height: 95vh;
+                overflow-y: auto;
+            }
+
+            @keyframes modalSlideIn {
+                from {
+                    transform: translateY(-20px);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .file-upload input[type='file'] {
+                display: none;
+            }
+        </style>
     </head>
 
-    <body class="bg-gradient-to-br from-gray-50 to-indigo-50 font-sans justify-center">
+    <body class="bg-gray-50 font-sans">
         <%- include('partials/header') %>
 
             <!-- Flash message -->
             <%- include('partials/flashMessage') %>
 
-                    <div class="bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full ">
-                        <h1 class="text-3xl font-bold text-center mb-6">Owner Profile</h1>
+                <div class="container mx-auto px-4 py-6">
+                    <!-- Main Profile Card -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        
+                        <!-- Profile Header -->
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
+                            <div class="flex flex-col md:flex-row items-center">
+                                <div class="relative mb-4 md:mb-0 md:mr-6 bg-yellow-300 rounded-full">
+                                    <img src="<%= user.picture || '/images/author.webp' %>"
+                                        alt="Profile picture of <%= user.name %>"
+                                        class="w-24 h-24 rounded-full object-cover object-top border-3 border-white">
+                                    <span
+                                        class="absolute bottom-0 right-0 bg-green-500 rounded-full w-6 h-6 border-2 border-white"></span>
+                                </div>
+                                <div class="text-center md:text-left">
+                                    <h1 class="text-2xl font-bold">
+                                        <%= user.name %>
+                                    </h1>
+                                    <p class="text-blue-100"><i class="fas fa-envelope mr-2"></i>
+                                        <%= user.email %>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- Profile Picture -->
-                        <div class="flex justify-center mb-6">
-                            <% if (user.picture) { %>
-                                <img src="<%= user.picture %>" alt="Profile Picture"
-                                    class="w-32 h-32 rounded-full object-cover border-2 border-gray-300">
-                                <% } else { %>
-                                    <div
-                                        class="w-32 h-32 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-2xl">
-                                        <%= user.name.charAt(0).toUpperCase() %>
+                        <!-- Main Content -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6">
+                            <!-- Left Column - Personal Info -->
+                            <div class="lg:col-span-1 space-y-6">
+                                <!-- Personal Details Card -->
+                                <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100">
+                                    <h2
+                                        class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                                        <i class="fas fa-user-circle mr-2 text-blue-600"></i>Personal Details
+                                    </h2>
+                                    <div class="space-y-3">
+                                        <p><strong class="w-24 inline-block">Name:</strong>
+                                            <%= user.name %>
+                                        </p>
+                                        <p><strong class="w-24 inline-block">Gender:</strong>
+                                            <%= user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
+                                                : 'N/A' %>
+                                        </p>
+                                        <p><strong class="w-24 inline-block">Phone:</strong>
+                                            <%= user.phone || 'N/A' %>
+                                        </p>
                                     </div>
-                                    <% } %>
-                        </div>
+                                </div>
 
-                        <!-- Personal Information -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <h2 class="text-xl font-semibold mb-2">Personal Details</h2>
-                                <p><strong>Name:</strong>
-                                    <%= user.name %>
-                                </p>
-                                <p><strong>Gender:</strong>
-                                    <%= user.gender.charAt(0).toUpperCase() + user.gender.slice(1) %>
-                                </p>
-                                <p><strong>Email:</strong>
-                                    <%= user.email %>
-                                </p>
+                                <!-- Address Card -->
+                                <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100">
+                                    <h2
+                                        class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                                        <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>Address
+                                    </h2>
+                                    <div class="space-y-3">
+                                        <p><strong class="w-24 inline-block">State:</strong>
+                                            <%= user.address.state || 'N/A' %>
+                                        </p>
+                                        <p><strong class="w-24 inline-block">City:</strong>
+                                            <%= user.address.city || 'N/A' %>
+                                        </p>
+                                        <p><strong class="w-24 inline-block">Pin Code:</strong>
+                                            <%= user.address.pinCode || 'N/A' %>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h2 class="text-xl font-semibold mb-2">Address</h2>
-                                <p><strong>State:</strong>
-                                    <%= user.address.state || 'N/A' %>
-                                </p>
-                                <p><strong>City:</strong>
-                                    <%= user.address.city || 'N/A' %>
-                                </p>
-                                <p><strong>Pin Code:</strong>
-                                    <%= user.address.pinCode || 'N/A' %>
-                                </p>
+
+                            <!-- Middle Column - Business Info -->
+                            <div class="lg:col-span-1 space-y-6">
+                                <!-- Business Details Card -->
+                                <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100">
+                                    <h2
+                                        class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                                        <i class="fas fa-briefcase mr-2 text-blue-600"></i>Business Details
+                                    </h2>
+                                    <div class="space-y-3">
+                                        <p><strong class="w-32 inline-block">GSTIN:</strong>
+                                            <%= user.hiddenGstin %>
+                                        </p>
+                                        <p><strong class="w-32 inline-block">Aadhaar:</strong>
+                                            <%= user.hiddenAadharNumber || 'N/A' %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Bank Details Card -->
+                                <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100">
+                                    <h2
+                                        class="text-lg font-semibold mb-4 pb-2 border-b border-gray-200 flex items-center">
+                                        <i class="fas fa-university mr-2 text-blue-600"></i>Bank Details
+                                    </h2>
+                                    <div class="space-y-3">
+                                        <p><strong class="w-32 inline-block">Bank Name:</strong>
+                                            <%= user.bankDetails.bankName || 'N/A' %>
+                                        </p>
+                                        <p><strong class="w-32 inline-block">Account No:</strong>
+                                            <%= user.bankDetails.accountNumber ? 'xxxx-xxxx-xxxx-' +
+                                                user.bankDetails.accountNumber.slice(-4) : 'N/A' %>
+                                        </p>
+                                        <p><strong class="w-32 inline-block">IFSC Code:</strong>
+                                            <%= user.bankDetails.ifscCode || 'N/A' %>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column - Products -->
+                            <div class="lg:col-span-1">
+                                <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100 h-full">
+                                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+                                        <h2 class="text-lg font-semibold flex items-center">
+                                            <i class="fas fa-boxes mr-2 text-blue-600"></i>Your Products
+                                        </h2>
+                                        <a href="/products/new"
+                                            class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                            <i class="fas fa-plus mr-1"></i>Add
+                                        </a>
+                                    </div>
+                                    <% if (products && products.length> 0) { %>
+                                        <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                                            <% products.forEach(product=> { %>
+                                                <a href="/products/<%= product.id %>" class="block">
+                                                    <div
+                                                        class="bg-white p-3 rounded-lg shadow-xs border border-gray-100 hover:border-blue-200 transition">
+                                                        <div class="flex justify-between items-start">
+                                                            <div>
+                                                                <span
+                                                                    class="font-medium bg-orange-600 text-white rounded-xl p-1 text-xs">
+                                                                    <%= product.category %>
+                                                                </span>
+                                                                <h2 class="text-violet-600 font-semibold">
+                                                                    <%= product.name %>
+                                                                </h2>
+                                                                <p class="text-sm text-gray-500">ID: <%= product.id %>
+                                                                </p>
+                                                            </div>
+                                                            <i
+                                                                class="fas fa-external-link-alt text-blue-500 hover:text-blue-700 text-sm"></i>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <% }) %>
+                                        </div>
+                                        <% } else { %>
+                                            <div class="text-center py-8">
+                                                <i class="fas fa-box-open text-3xl text-violet-400 mb-2"></i>
+                                                <p class="text-gray-500">No products listed yet</p>
+                                                <a href="/products/new"
+                                                    class="mt-3 inline-block text-blue-600 hover:text-blue-800 text-sm font-medium">Add
+                                                    your first product</a>
+                                            </div>
+                                            <% } %>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Business Information -->
-                        <div class="mb-6">
-                            <h2 class="text-xl font-semibold mb-2">Business Details</h2>
-                            <p><strong>GSTIN:</strong>
-                                <%= user.gstin %>
-                            </p>
-                            <p><strong>Is user:</strong>
-                                <%= user.isuser ? 'Yes' : 'No' %>
-                            </p>
-                        </div>
-
-                        <!-- Bank Details -->
-                        <div class="mb-6">
-                            <h2 class="text-xl font-semibold mb-2">Bank Details</h2>
-                            <p><strong>Bank Name:</strong>
-                                <%= user.bankDetails.bankName || 'N/A' %>
-                            </p>
-                            <p><strong>Account Number:</strong>
-                                <%= user.bankDetails.accountNumber || 'N/A' %>
-                            </p>
-                            <p><strong>IFSC Code:</strong>
-                                <%= user.bankDetails.ifscCode || 'N/A' %>
-                            </p>
-                        </div>
-
-                        <!-- Products -->
-                        <div class="mb-6">
-                            <h2 class="text-xl font-semibold mb-2">Products</h2>
-                            <% if (user.products && user.products.length> 0) { %>
-                                <ul class="list-disc pl-5">
-                                    <% user.products.forEach(product=> { %>
-                                        <li>
-                                            <%= product.category %> (Product ID: <%= product.product %>)
-                                        </li>
-                                        <% }) %>
-                                </ul>
-                                <% } else { %>
-                                    <p>No products listed.</p>
-                                    <% } %>
-                        </div>
-
-                        <!-- Edit Profile Button -->
-                        <div class="text-center">
-                            <a href="/user/edit"
-                                class="inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition">
-                                Edit Profile
+                        <!-- Action Buttons -->
+                        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-wrap justify-center gap-4">
+                            <button id="updateProfileBtn"
+                                class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-user-edit mr-2"></i> Edit Profile
+                            </button>
+                            <button id="changePasswordBtn"
+                                class="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-lock mr-2"></i>Change Password
+                            </button>
+                            <a href="/products"
+                                class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-boxes mr-2"></i>Manage Products
+                            </a>
+                            <a href="/sales"
+                                class="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center">
+                                <i class="fas fa-chart-line mr-2"></i>View Sales
                             </a>
                         </div>
                     </div>
-                    <!-- JavaScripts -->
-                    <script src="/javascripts/searchAndMenuToggle.js"></script>
-                    <script src="/javascripts/profileToggle.js"></script>
-                    <script src="/javascripts/passwordShowToggle.js"></script>
+                </div>
+
+                <!-- Edit Profile Modal -->
+                <div id="ProfileUpdateModal" class="fixed inset-0 z-50 hidden">
+                    <div class="modal-overlay absolute inset-0"></div>
+                    <div class="flex items-center justify-center min-h-screen">
+                        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-3xl p-6 relative">
+                            <button id="editProfileCloseBtn"
+                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-2xl"></i>
+                            </button>
+                            <h3 class="text-2xl font-bold mb-2 text-blue-600">
+                                <i class="fas fa-user-edit mr-2"></i>Edit Profile
+                            </h3>
+                            <form id="ProfileUpdateForm" enctype="multipart/form-data" class="space-y-6">
+                                <!-- Personal Information Section -->
+                                <div class="space-y-4">
+                                    <h4 class="text-lg font-semibold text-slate-600 border-b pb-2">Personal Information
+                                    </h4>
+
+                                    <!-- Profile Picture Upload -->
+                                    <div class="flex items-center space-x-4">
+                                        <div class="relative">
+                                            <img id="profilePreview" src="<%= user.picture || '/images/author.webp' %>"
+                                                class="w-20 h-20 rounded-full object-cover object-top border-2 border-gray-200">
+                                            <div class="file-upload mt-2">
+                                                <label
+                                                    class="cursor-pointer text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+                                                    <i class="fas fa-camera mr-2"></i>Change
+                                                    <input type="file" name="picture" accept="image/*"
+                                                        onchange="previewImage(event)">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Name and Gender -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name
+                                                *</label>
+                                            <input type="text" id="name" name="name" value="<%= user.name %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Gender *</label>
+                                            <select id="gender" name="gender"
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                                <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male
+                                                </option>
+                                                <option value="female" <%=user.gender==='female' ? 'selected' : '' %>
+                                                    >Female</option>
+                                                <option value="other" <%=user.gender==='other' ? 'selected' : '' %>
+                                                    >Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Info -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                                            <input type="email" id="email" name="email" value="<%= user.email %>"
+                                                required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
+                                            <input type="tel" id="phone" name="phone" value="<%= user.phone %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Address Section -->
+                                <div class="space-y-4">
+                                    <h4 class="text-lg font-semibold text-slate-600 border-b pb-2">Address Information
+                                    </h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                                            <select id="state" name="state" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                                <option value="" disabled <%=!user.address.state ? 'selected' : '' %>
+                                                    >Select State</option>
+                                                <option value="Andhra Pradesh" <%=user.address.state==='Andhra Pradesh'
+                                                    ? 'selected' : '' %>>Andhra Pradesh</option>
+                                                <option value="Arunachal Pradesh"
+                                                    <%=user.address.state==='Arunachal Pradesh' ? 'selected' : '' %>
+                                                    >Arunachal Pradesh</option>
+                                                <option value="Assam" <%=user.address.state==='Assam' ? 'selected' : ''
+                                                    %>>Assam</option>
+                                                <option value="Bihar" <%=user.address.state==='Bihar' ? 'selected' : ''
+                                                    %>>Bihar</option>
+                                                <option value="Chhattisgarh" <%=user.address.state==='Chhattisgarh'
+                                                    ? 'selected' : '' %>>Chhattisgarh</option>
+                                                <option value="Goa" <%=user.address.state==='Goa' ? 'selected' : '' %>
+                                                    >Goa</option>
+                                                <option value="Gujarat" <%=user.address.state==='Gujarat' ? 'selected'
+                                                    : '' %>>Gujarat</option>
+                                                <option value="Haryana" <%=user.address.state==='Haryana' ? 'selected'
+                                                    : '' %>>Haryana</option>
+                                                <option value="Himachal Pradesh"
+                                                    <%=user.address.state==='Himachal Pradesh' ? 'selected' : '' %>
+                                                    >Himachal Pradesh</option>
+                                                <option value="Jharkhand" <%=user.address.state==='Jharkhand'
+                                                    ? 'selected' : '' %>>Jharkhand</option>
+                                                <option value="Karnataka" <%=user.address.state==='Karnataka'
+                                                    ? 'selected' : '' %>>Karnataka</option>
+                                                <option value="Kerala" <%=user.address.state==='Kerala' ? 'selected'
+                                                    : '' %>>Kerala</option>
+                                                <option value="Madhya Pradesh" <%=user.address.state==='Madhya Pradesh'
+                                                    ? 'selected' : '' %>>Madhya Pradesh</option>
+                                                <option value="Maharashtra" <%=user.address.state==='Maharashtra'
+                                                    ? 'selected' : '' %>>Maharashtra</option>
+                                                <option value="Manipur" <%=user.address.state==='Manipur' ? 'selected'
+                                                    : '' %>>Manipur</option>
+                                                <option value="Meghalaya" <%=user.address.state==='Meghalaya'
+                                                    ? 'selected' : '' %>>Meghalaya</option>
+                                                <option value="Mizoram" <%=user.address.state==='Mizoram' ? 'selected'
+                                                    : '' %>>Mizoram</option>
+                                                <option value="Nagaland" <%=user.address.state==='Nagaland' ? 'selected'
+                                                    : '' %>>Nagaland</option>
+                                                <option value="Odisha" <%=user.address.state==='Odisha' ? 'selected'
+                                                    : '' %>>Odisha</option>
+                                                <option value="Punjab" <%=user.address.state==='Punjab' ? 'selected'
+                                                    : '' %>>Punjab</option>
+                                                <option value="Rajasthan" <%=user.address.state==='Rajasthan'
+                                                    ? 'selected' : '' %>>Rajasthan</option>
+                                                <option value="Sikkim" <%=user.address.state==='Sikkim' ? 'selected'
+                                                    : '' %>>Sikkim</option>
+                                                <option value="Tamil Nadu" <%=user.address.state==='Tamil Nadu'
+                                                    ? 'selected' : '' %>>Tamil Nadu</option>
+                                                <option value="Telangana" <%=user.address.state==='Telangana'
+                                                    ? 'selected' : '' %>>Telangana</option>
+                                                <option value="Tripura" <%=user.address.state==='Tripura' ? 'selected'
+                                                    : '' %>>Tripura</option>
+                                                <option value="Uttar Pradesh" <%=user.address.state==='Uttar Pradesh'
+                                                    ? 'selected' : '' %>>Uttar Pradesh</option>
+                                                <option value="Uttarakhand" <%=user.address.state==='Uttarakhand'
+                                                    ? 'selected' : '' %>>Uttarakhand</option>
+                                                <option value="West Bengal" <%=user.address.state==='West Bengal'
+                                                    ? 'selected' : '' %>>West Bengal</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                                            <input type="text" id="city" name="city" value="<%= user.address.city %>"
+                                                required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code
+                                                *</label>
+                                            <input type="text" id="pinCode" name="pinCode"
+                                                value="<%= user.address.pinCode %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Business Details Section -->
+                                <div class="space-y-4">
+                                    <h4 class="text-lg font-semibold text-slate-600 border-b pb-2">Business Details</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">GSTIN *</label>
+                                            <input type="text" id="gstin" name="gstin" value="<%= user.gstin %>"
+                                                required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Aadhar Number
+                                                *</label>
+                                            <input type="text" id="aadharNumber" name="aadharNumber"
+                                                value="<%= user.aadharNumber %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bank Details Section -->
+                                <div class="space-y-4">
+                                    <h4 class="text-lg font-semibold text-gray-700 border-b pb-2">Bank Details</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name
+                                                *</label>
+                                            <select id="bankName" name="bankName" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                                <option value="" disabled <%=!user.bankDetails.bankName ? 'selected'
+                                                    : '' %>>Select Bank</option>
+
+                                                <option value="Allahabad Bank"
+                                                    <%=user.bankDetails.bankName==='Allahabad Bank' ? 'selected' : '' %>
+                                                    >Allahabad Bank</option>
+                                                <option value="Andhra Bank" <%=user.bankDetails.bankName==='Andhra Bank'
+                                                    ? 'selected' : '' %>>Andhra Bank</option>
+                                                <option value="Bandhan Bank"
+                                                    <%=user.bankDetails.bankName==='Bandhan Bank' ? 'selected' : '' %>
+                                                    >Bandhan Bank</option>
+                                                <option value="Bank of Baroda"
+                                                    <%=user.bankDetails.bankName==='Bank of Baroda' ? 'selected' : '' %>
+                                                    >Bank of Baroda</option>
+                                                <option value="Bank of India"
+                                                    <%=user.bankDetails.bankName==='Bank of India' ? 'selected' : '' %>
+                                                    >Bank of India</option>
+                                                <option value="Bank of Maharashtra"
+                                                    <%=user.bankDetails.bankName==='Bank of Maharashtra' ? 'selected'
+                                                    : '' %>>Bank of Maharashtra</option>
+                                                <option value="Canara Bank" <%=user.bankDetails.bankName==='Canara Bank'
+                                                    ? 'selected' : '' %>>Canara Bank</option>
+                                                <option value="Catholic Syrian Bank"
+                                                    <%=user.bankDetails.bankName==='Catholic Syrian Bank' ? 'selected'
+                                                    : '' %>>Catholic Syrian Bank</option>
+                                                <option value="Central Bank of India"
+                                                    <%=user.bankDetails.bankName==='Central Bank of India' ? 'selected'
+                                                    : '' %>>Central Bank of India</option>
+                                                <option value="City Union Bank"
+                                                    <%=user.bankDetails.bankName==='City Union Bank' ? 'selected' : ''
+                                                    %>>City Union Bank</option>
+                                                <option value="Dena Bank" <%=user.bankDetails.bankName==='Dena Bank'
+                                                    ? 'selected' : '' %>>Dena Bank</option>
+                                                <option value="Dhanlaxmi Bank"
+                                                    <%=user.bankDetails.bankName==='Dhanlaxmi Bank' ? 'selected' : '' %>
+                                                    >Dhanlaxmi Bank</option>
+                                                <option value="Federal Bank"
+                                                    <%=user.bankDetails.bankName==='Federal Bank' ? 'selected' : '' %>
+                                                    >Federal Bank</option>
+                                                <option value="HDFC Bank" <%=user.bankDetails.bankName==='HDFC Bank'
+                                                    ? 'selected' : '' %>>HDFC Bank</option>
+                                                <option value="HSBC India" <%=user.bankDetails.bankName==='HSBC India'
+                                                    ? 'selected' : '' %>>HSBC India</option>
+                                                <option value="ICICI Bank" <%=user.bankDetails.bankName==='ICICI Bank'
+                                                    ? 'selected' : '' %>>ICICI Bank</option>
+                                                <option value="IDBI Bank" <%=user.bankDetails.bankName==='IDBI Bank'
+                                                    ? 'selected' : '' %>>IDBI Bank</option>
+                                                <option value="IDFC First Bank"
+                                                    <%=user.bankDetails.bankName==='IDFC First Bank' ? 'selected' : ''
+                                                    %>>IDFC First Bank</option>
+                                                <option value="Indian Bank" <%=user.bankDetails.bankName==='Indian Bank'
+                                                    ? 'selected' : '' %>>Indian Bank</option>
+                                                <option value="Indian Overseas Bank"
+                                                    <%=user.bankDetails.bankName==='Indian Overseas Bank' ? 'selected'
+                                                    : '' %>>Indian Overseas Bank</option>
+                                                <option value="IndusInd Bank"
+                                                    <%=user.bankDetails.bankName==='IndusInd Bank' ? 'selected' : '' %>
+                                                    >IndusInd Bank</option>
+                                                <option value="Jammu & Kashmir Bank"
+                                                    <%=user.bankDetails.bankName==='Jammu & Kashmir Bank' ? 'selected'
+                                                    : '' %>>Jammu & Kashmir Bank</option>
+                                                <option value="Karnataka Bank"
+                                                    <%=user.bankDetails.bankName==='Karnataka Bank' ? 'selected' : '' %>
+                                                    >Karnataka Bank</option>
+                                                <option value="Karur Vysya Bank"
+                                                    <%=user.bankDetails.bankName==='Karur Vysya Bank' ? 'selected' : ''
+                                                    %>>Karur Vysya Bank</option>
+                                                <option value="Kotak Mahindra Bank"
+                                                    <%=user.bankDetails.bankName==='Kotak Mahindra Bank' ? 'selected'
+                                                    : '' %>>Kotak Mahindra Bank</option>
+                                                <option value="Lakshmi Vilas Bank"
+                                                    <%=user.bankDetails.bankName==='Lakshmi Vilas Bank' ? 'selected'
+                                                    : '' %>>Lakshmi Vilas Bank</option>
+                                                <option value="Nainital Bank"
+                                                    <%=user.bankDetails.bankName==='Nainital Bank' ? 'selected' : '' %>
+                                                    >Nainital Bank</option>
+                                                <option value="Punjab & Sind Bank"
+                                                    <%=user.bankDetails.bankName==='Punjab & Sind Bank' ? 'selected'
+                                                    : '' %>>Punjab & Sind Bank</option>
+                                                <option value="Punjab National Bank"
+                                                    <%=user.bankDetails.bankName==='Punjab National Bank' ? 'selected'
+                                                    : '' %>>Punjab National Bank</option>
+                                                <option value="RBL Bank" <%=user.bankDetails.bankName==='RBL Bank'
+                                                    ? 'selected' : '' %>>RBL Bank</option>
+                                                <option value="South Indian Bank"
+                                                    <%=user.bankDetails.bankName==='South Indian Bank' ? 'selected' : ''
+                                                    %>>South Indian Bank</option>
+                                                <option value="State Bank of India"
+                                                    <%=user.bankDetails.bankName==='State Bank of India' ? 'selected'
+                                                    : '' %>>State Bank of India</option>
+                                                <option value="Syndicate Bank"
+                                                    <%=user.bankDetails.bankName==='Syndicate Bank' ? 'selected' : '' %>
+                                                    >Syndicate Bank</option>
+                                                <option value="Tamilnad Mercantile Bank"
+                                                    <%=user.bankDetails.bankName==='Tamilnad Mercantile Bank'
+                                                    ? 'selected' : '' %>>Tamilnad Mercantile Bank</option>
+                                                <option value="UCO Bank" <%=user.bankDetails.bankName==='UCO Bank'
+                                                    ? 'selected' : '' %>>UCO Bank</option>
+                                                <option value="Union Bank of India"
+                                                    <%=user.bankDetails.bankName==='Union Bank of India' ? 'selected'
+                                                    : '' %>>Union Bank of India</option>
+                                                <option value="United Bank of India"
+                                                    <%=user.bankDetails.bankName==='United Bank of India' ? 'selected'
+                                                    : '' %>>United Bank of India</option>
+                                                <option value="Vijaya Bank" <%=user.bankDetails.bankName==='Vijaya Bank'
+                                                    ? 'selected' : '' %>>Vijaya Bank</option>
+                                                <option value="YES Bank" <%=user.bankDetails.bankName==='YES Bank'
+                                                    ? 'selected' : '' %>>YES Bank</option>
+                                            </select>
+
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Account Number
+                                                *</label>
+                                            <input type="text" id="accountNumber" name="accountNumber"
+                                                value="<%= user.bankDetails.accountNumber %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">IFSC Code
+                                                *</label>
+                                            <input type="text" id="ifscCode" name="ifscCode"
+                                                value="<%= user.bankDetails.ifscCode %>" required
+                                                class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="flex justify-end space-x-4 mt-8">
+                                    <button type="button" id="editProfileCancelBtn"
+                                        class="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium">Cancel</button>
+                                    <button type="submit"
+                                        class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password Modal -->
+                <div id="changePasswordModal" class="fixed inset-0 z-50 hidden">
+                    <div class="modal-overlay absolute inset-0"></div>
+                    <div class="flex items-center justify-center min-h-screen px-4">
+                        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+                            <button id="closePasswordModal"
+                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                            <h3 class="text-xl font-bold mb-6 text-blue-600">
+                                <i class="fas fa-lock mr-2"></i>Change Password
+                            </h3>
+                            <form id="passwordForm" class="space-y-4">
+                                <!-- Current Password -->
+                                <div class="relative">
+                                    <label for="currentPassword"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="currentPassword" name="currentPassword" required
+                                            class="w-full px-4 py-2  outline-0 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-2.5 text-gray-400 toggle-password cursor-pointer"
+                                            data-target="currentPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- New Password -->
+                                <div class="relative">
+                                    <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">New
+                                        Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="newPassword" name="newPassword" required
+                                            class="w-full px-4 py-2  outline-0 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-2.5 text-gray-400 toggle-password cursor-pointer"
+                                            data-target="newPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+                                    </div>
+                                </div>
+
+                                <!-- Confirm New Password -->
+                                <div class="relative">
+                                    <label for="confirmPassword"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Confirm New
+                                        Password</label>
+                                    <div class="relative">
+                                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                                            class="w-full px-4 py-2  outline-0 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <button type="button"
+                                            class="absolute right-3 top-2.5 text-gray-400 toggle-password cursor-pointer"
+                                            data-target="confirmPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- error box -->
+                                <div id="passwordError" class="text-red-500 text-sm hidden"></div>
+                                <div class="flex justify-end space-x-3 mt-6">
+                                    <button type="button" id="cancelPasswordBtn"
+                                        class="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg">Cancel</button>
+                                    <button type="submit" id="savePasswordBtn"
+                                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">Update
+                                        Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+
+                    // Close modal when clicking outside
+                    window.onclick = function (event) {
+                        if (event.target.classList.contains('modal-overlay')) {
+                            event.target.closest('.fixed').classList.add('hidden');
+                            passwordForm.reset();
+                            document.body.style.overflow = "auto";
+                            passwordError.classList.add("hidden");
+                        }
+                    }
+
+                    // Image preview function
+                    function previewImage (event) {
+                        const reader = new FileReader();
+                        reader.onload = function () {
+                            const output = document.getElementById('profilePreview');
+                            output.src = reader.result;
+                        };
+                        reader.readAsDataURL(event.target.files[0]);
+                    }
+
+                </script>
+
+                <!-- JavaScripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/passwordShowToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+                <script src="/javascripts/ownerPasswordChangeModel.js"></script>
+                <script src="/javascripts/ownerProfileUpdate.js"></script>
     </body>
 
 </html>

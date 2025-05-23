@@ -3,6 +3,8 @@ import generateToken from "../utils/generateToken.js";
 import jwt from "jsonwebtoken";
 
 import {
+  formatAadharNumber,
+  hiddenAadharNumber,
   validateAadhar,
   validateEmail,
   validateAge,
@@ -37,6 +39,9 @@ export const profilePage = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Formated Aadhar Number show like "xxxx-xxxx-6194" format
+    user.hiddenAadharNumber = hiddenAadharNumber(user.aadharNumber);
 
     // set user is login
     let isLogin = false;
@@ -154,9 +159,20 @@ export const passwordChange = async (req, res) => {
 
 export const profileUpdate = async (req, res) => {
   try {
-    const userId = req.user.id; // Decoded from token by verifyToken middleware
+    const userId = req.params.id; // Extract the User ID from URL parameters
+    const authUserId = req.user.id; // Get the authenticated user's ID from JWT
+
+    // Check if the requested userId matches the authenticated user's ID
+    if (userId !== authUserId) {
+      return res.status(403).json({ message: "Unauthorized!" });
+    }
 
     const { name, phone, aadharNumber, age, address } = req.body;
+
+    // Apply validations (errors thrown here are caught below)
+    validatePhone(phone);
+    validateAadhar(aadharNumber);
+    validatePinCode(address.pinCode);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
