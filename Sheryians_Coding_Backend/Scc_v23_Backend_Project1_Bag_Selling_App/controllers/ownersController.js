@@ -117,7 +117,9 @@ export const profile = async (req, res) => {
     const authOwnerId = req.user.id;
 
     //find owner by userId
-    const owner = await Owner.findById(authOwnerId).select("+aadharNumber +phone");
+    const owner = await Owner.findById(authOwnerId).select(
+      "+aadharNumber +phone"
+    );
 
     // if owner not found
     if (!owner) {
@@ -142,7 +144,7 @@ export const profile = async (req, res) => {
       delete req.session.passwordChanged;
     }
 
-    // if Profile-Update show message
+    // // if Profile-Update show message
     if (req.session.profileUpdate) {
       success = ["Profile-Update successfully"];
       delete req.session.profileUpdate;
@@ -249,7 +251,7 @@ export const profileUpdate = async (req, res) => {
     if (!authUserId) {
       return res.status(403).json({ message: "Unauthorized!" });
     }
-    
+
     const {
       name,
       gender,
@@ -289,7 +291,7 @@ export const profileUpdate = async (req, res) => {
           ifscCode: bankDetails.ifscCode,
         },
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!updatedUser) {

@@ -50,11 +50,6 @@ app.use("/owners", ownersRoutes);
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
 
-// logout method (POST)
-// app.get("/logout", async (req, res) => {
-//   res.cookie("token", "");
-//   return res.redirect("/users/auth/login");
-// });
 
 // Logout (POST for security)
 app.post("/logout", async (req, res) => {

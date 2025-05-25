@@ -1,6 +1,10 @@
 import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
-import { profilePage, passwordChange, profileUpdate } from "../controllers/usersController.js";
+import {
+  profilePage,
+  passwordChange,
+  profileUpdate,
+} from "../controllers/usersController.js";
 
 import {
   signUpPage,

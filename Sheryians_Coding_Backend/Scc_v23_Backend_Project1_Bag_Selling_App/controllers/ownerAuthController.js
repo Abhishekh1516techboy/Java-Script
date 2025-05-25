@@ -176,7 +176,7 @@ export const login = async (req, res) => {
 
     // If user does not exist or password does not matched, return error
     if (!owner || !(await owner.comparePassword(validatedPassword))) {
-      req.flash("error", "Invalid Email, Aadhar number OR password");
+      req.flash("error", "Invalid Credentials!");
       return res.redirect("/owners/auth/login");
     }
 

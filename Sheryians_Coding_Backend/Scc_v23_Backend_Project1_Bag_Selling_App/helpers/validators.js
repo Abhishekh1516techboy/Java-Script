@@ -14,7 +14,7 @@ export const hiddenAadharNumber = (aadharNumber) => {
   }
 
   // Take the last 4 digits and mask the rest
-  const lastFour = aadharNumber.slice(-4);
+  const lastFour = aadharNumber?.slice(-4);
   return `xxxx-xxxx-${lastFour}`;
 };
 
@@ -24,7 +24,7 @@ export const validateGstin = (gstin) => {
     throw new Error("GSTIN is required.");
   }
 
-  const trimmedGstin = gstin.trim().toUpperCase();
+  const trimmedGstin = gstin?.trim().toUpperCase();
   const gstinRegex =
     /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9A-Z]{1}Z[0-9A-Z]{1}$/;
 

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Product</title>
+        <link href="/stylesheets/output.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script>
+            function previewImage (event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const output = document.getElementById('imgPreview');
+                    output.src = reader.result;
+                    output.classList.remove('hidden');
+                    document.getElementById('uploadText').classList.add('hidden');
+                    document.getElementById('changeImageBtn').classList.remove('hidden');
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+            function handleDragOver (e) {
+                e.preventDefault();
+                document.getElementById('uploadContainer').classList.add('border-blue-500', 'bg-blue-50');
+            }
+            function handleDragLeave (e) {
+                e.preventDefault();
+                document.getElementById('uploadContainer').classList.remove('border-blue-500', 'bg-blue-50');
+            }
+            function handleDrop (e) {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = document.getElementById('productImage');
+                    input.files = files;
+                    previewImage({ target: input });
+                }
+                document.getElementById('uploadContainer').classList.remove('border-blue-500', 'bg-blue-50');
+            }
+            function handleSubmit (e) {
+                e.preventDefault();
+                const btn = e.target.querySelector('.submit-btn');
+                btn.disabled = true;
+                btn.querySelector('.submit-text').classList.add('hidden');
+                setTimeout(() => {
+                    e.target.submit();
+                }, 1000);
+            }
+            function resetImageInput () {
+                const input = document.getElementById('productImage');
+                input.value = '';
+                document.getElementById('imgPreview').classList.add('hidden');
+                document.getElementById('uploadText').classList.remove('hidden');
+                document.getElementById('changeImageBtn').classList.add('hidden');
+            }
+            document.addEventListener('DOMContentLoaded', () => {
+                const select = document.querySelector('select[name="category"]');
+                select.addEventListener('change', () => {
+                    if (select.value) {
+                        select.classList.add('has-value');
+                    } else {
+                        select.classList.remove('has-value');
+                    }
+                });
+            });
+        </script>
+    </head>
+
+    <body class="bg-gray-50 font-sans">
+        <%- include('partials/header') %>
+            <!-- Flash message -->
+            <%- include('partials/flashMessage') %>
+                <main class="p-4">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-100 max-w-3xl w-full mx-auto">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-t-xl">
+                            <h1 class="text-2xl font-bold text-white text-center">
+                                <i class="fas fa-box-open mr-2"></i>Create New Product
+                            </h1>
+                        </div>
+                        <div class="p-8">
+                            <form action="/products/create" method="POST" enctype="multipart/form-data"
+                                class="space-y-6" onsubmit="handleSubmit(event)">
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="relative">
+                                        <input type="text" name="productName" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <span
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Product
+                                            Name</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" name="brandName" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <span
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Brand
+                                            Name</span>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="relative">
+                                        <select name="category" required
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg">
+                                            <option value="" disabled selected>Select Category</option>
+                                            <option>Backpack</option>
+                                            <option>Handbag</option>
+                                            <option>School bag</option>
+                                            <option>Laptop bag</option>
+                                            <option>Wallet</option>
+                                            <option>Camera bag</option>
+                                            <option>Gym bag</option>
+                                        </select>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" name="model" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <span
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Model</span>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="relative">
+                                        <input type="number" name="price" min="0" step="0.01" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <span
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Price
+                                            (₹)</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="number" name="discount" min="0" max="100" placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <span
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Discount
+                                            (%)</span>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="flex items-center gap-4 ">
+                                        <input type="color" name="bgColor" value="#ffffff"
+                                            class="w-24 h-10 rounded-lg border border-gray-300 cursor-pointer " />
+                                        <span class="text-gray-600 font-medium">Background Color</span>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <input type="color" name="panelColor" value="#dadada"
+                                            class="w-24 h-10 rounded-lg border border-gray-300 cursor-pointer" />
+                                        <span class="text-gray-600 font-medium">Panel Color</span>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea name="description" required minlength="10" maxlength="500" placeholder=" "
+                                        class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg h-32 resize-none"
+                                        oninput="document.getElementById('charCount').textContent = this.value.length"></textarea>
+                                    <span
+                                        class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Product
+                                        Description</span>
+                                    <div
+                                        class="absolute bottom-2 right-3 text-sm text-gray-500 bg-blue-50 px-2 py-1 rounded-md">
+                                        <span id="charCount">0</span>/500
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-image mr-2"></i>Product Image
+                                    </label>
+                                    <div id="uploadContainer"
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300"
+                                        ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"
+                                        ondrop="handleDrop(event)">
+                                        <div class="space-y-4">
+                                            <img id="imgPreview" src="#" alt="Preview"
+                                                class="hidden w-20 h-20 object-cover rounded-lg border border-gray-300 mx-auto" />
+                                            <div id="uploadText">
+                                                <label
+                                                    class="cursor-pointer text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-200">
+                                                    <i class="fas fa-camera mr-2"></i>Upload Image
+                                                    <input type="file" name="productImage" accept="image/*" required
+                                                        onchange="previewImage(event)" class="hidden"
+                                                        id="productImage" />
+                                                </label>
+                                                <p class="text-sm text-gray-500 mt-2">or drag and drop here</p>
+                                            </div>
+                                            <button type="button" id="changeImageBtn"
+                                                class="hidden text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-200"
+                                                onclick="resetImageInput()">
+                                                <i class="fas fa-camera mr-2"></i>Change Image
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="submit-btn w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                    <span class="submit-text">
+                                        <i class="fas fa-plus mr-2"></i>Create Product
+                                    </span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+                <!-- JavaScripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+    </body>
+
+</html>
