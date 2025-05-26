@@ -37,6 +37,7 @@ const productSchema = new Schema(
     model: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
     },
     price: {
@@ -47,6 +48,8 @@ const productSchema = new Schema(
     },
     discount: {
       type: Number,
+      min: 0,
+      max: 100,
       default: 0,
     },
     stock: {
@@ -78,7 +81,6 @@ const productSchema = new Schema(
       type: Number,
       min: 1,
       max: 5,
-      default: 0,
     },
     reviews: [
       {

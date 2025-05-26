@@ -37,12 +37,6 @@ app.use(
 );
 app.use(flash()); // Initialize connect-flash
 
-// Make flash messages available to templates
-// app.use((req, res, next) => {
-//   res.locals.error = req.flash("error");
-//   res.locals.success = req.flash("success");
-//   next();
-// });
 
 // Routes
 app.use("/", indexRoutes);

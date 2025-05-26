@@ -67,7 +67,7 @@
             <!-- Flash message -->
             <%- include('partials/flashMessage') %>
 
-                <div class="container mx-auto px-4 py-6">
+                <div class="container mx-auto px-4 py-4">
                     <!-- Main Profile Card -->
                     <div class="bg-white rounded-xl shadow-md overflow-hidden">
 
@@ -180,34 +180,42 @@
                                 <div class="bg-gray-50 rounded-lg p-5 shadow-sm border border-gray-100 h-full">
                                     <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
                                         <h2 class="text-lg font-semibold flex items-center">
-                                            <i class="fas fa-boxes mr-2 text-blue-600"></i>Your Products
+                                            <i class="fas fa-boxes mr-2 text-blue-600"></i>All Products
                                         </h2>
                                         <a href="/products/create"
                                             class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                            <i class="fas fa-plus mr-1"></i>Add
+                                            <i class="fas fa-plus mr-1"></i>Add Product
                                         </a>
                                     </div>
                                     <% if (products && products.length> 0) { %>
-                                        <div class="space-y-3 max-h-96 overflow-y-auto pr-2">
+                                        <div class="space-y-3 max-h-98 overflow-y-auto pr-2">
                                             <% products.forEach(product=> { %>
-                                                <a href="/products/<%= product.id %>" class="block">
-                                                    <div
-                                                        class="bg-white p-3 rounded-lg shadow-xs border border-gray-100 hover:border-blue-200 transition">
-                                                        <div class="flex justify-between items-start">
-                                                            <div>
-                                                                <span
-                                                                    class="font-medium bg-orange-600 text-white rounded-xl p-1 text-xs">
-                                                                    <%= product.category %>
-                                                                </span>
-                                                                <h2 class="text-violet-600 font-semibold">
-                                                                    <%= product.name %>
-                                                                </h2>
-                                                                <p class="text-sm text-gray-500">ID: <%= product.id %>
-                                                                </p>
-                                                            </div>
-                                                            <i
-                                                                class="fas fa-external-link-alt text-blue-500 hover:text-blue-700 text-sm"></i>
-                                                        </div>
+                                                <a href="/products/<%= product._id %>" class="block"
+                                                    aria-label="View details for <%= product.productName %>">
+                                                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 transition product-card flex items-center space-x-4"
+                                                        data-category="<%= product.category %>">
+                                                        <% if (product.productImage) { %>
+                                                            <img src="<%= product.productImage %>"
+                                                                alt="<%= product.productName %>"
+                                                                class="w-16 h-16 rounded object-cover">
+                                                            <% } %>
+                                                                <div class="flex-1">
+                                                                    <span
+                                                                        class="font-medium bg-orange-600 text-white rounded-xl p-1 text-xs">
+                                                                        <%= product.category %>
+                                                                    </span>
+                                                                    <h2 class="text-violet-600 font-semibold text-lg">
+                                                                        <%= product.productName %>
+                                                                    </h2>
+                                                                    <p class="text-sm text-gray-500">Model: <%=
+                                                                            product.model || 'N/A' %>
+                                                                    </p>
+                                                                    <p class="text-sm text-gray-600">Price: ₹<%=
+                                                                            product.price || 'N/A' %>
+                                                                    </p>
+                                                                </div>
+                                                                <i
+                                                                    class="fas fa-external-link-alt text-blue-500 hover:text-blue-700"></i>
                                                     </div>
                                                 </a>
                                                 <% }) %>
@@ -223,6 +231,7 @@
                                             <% } %>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Action Buttons -->

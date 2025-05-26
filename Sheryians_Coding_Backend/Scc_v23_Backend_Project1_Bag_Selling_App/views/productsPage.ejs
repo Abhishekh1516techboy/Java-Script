@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modern Product Marketplace</title>
+        <link rel="stylesheet" href="/stylesheets/output.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <style>
+            .product-card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .quick-view-btn {
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .product-card:hover .quick-view-btn {
+                opacity: 1;
+            }
+        </style>
+    </head>
+
+    <body class="bg-gray-50">
+        <!-- Header -->
+        <%- include('partials/header') %>
+
+            <!-- Flash Message Include -->
+            <%- include('partials/flashMessage') %>
+
+
+                <!-- Product Grid -->
+                <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <% products.forEach(product=> { %>
+                            <div class="product-card bg-white rounded-xl shadow-md overflow-hidden relative">
+                                <!-- Product Image -->
+                                <div class="relative aspect-square">
+                                    <img src="<%= product.productImage %>" alt="<%= product.productName %>"
+                                        class="w-full h-full object-cover cursor-pointer">
+
+                                    <!-- Quick Actions -->
+                                    <div class="absolute top-2 right-2 flex flex-col space-y-2">
+                                        <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
+                                   hover:bg-indigo-600 hover:text-white transition-colors"
+                                            onclick="openQuickView('<%= product._id %>')">
+                                            <i class="fas fa-eye text-sm"></i>
+                                        </button>
+                                        <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
+                                   hover:bg-indigo-600 hover:text-white transition-colors">
+                                            <i class="far fa-heart text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Product Info -->
+                                <div class="p-4">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 class="font-semibold text-gray-900">
+                                                <%= product.productName %>
+                                            </h3>
+                                            <p class="text-sm text-gray-500">
+                                                <%= product.brandName %>
+                                            </p>
+                                        </div>
+                                        <% if(product.discount> 0) { %>
+                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                                                <%= product.discount %>% OFF
+                                            </span>
+                                            <% } %>
+                                    </div>
+
+                                    <!-- Price -->
+                                    <div class="mb-3">
+                                        <% if(product.discount> 0) { %>
+                                            <span class="text-xl font-bold text-gray-900">
+                                                $<%= (product.price * (1 - product.discount/100)).toFixed(2) %>
+                                            </span>
+                                            <span class="text-gray-400 line-through text-sm ml-2">
+                                                $<%= product.price.toFixed(2) %>
+                                            </span>
+                                            <% } else { %>
+                                                <span class="text-xl font-bold text-gray-900">
+                                                    $<%= product.price.toFixed(2) %>
+                                                </span>
+                                                <% } %>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="flex gap-2">
+                                        <a href="/products/<%= product._id %>" class="flex-1 text-center py-2 px-4 border border-gray-300 rounded-lg 
+                                  hover:border-indigo-600 hover:text-indigo-600 transition-colors">
+                                            View Details
+                                        </a>
+                                        <% if(product.stock> 0) { %>
+                                            <button onclick="addToCart('<%= product._id %>')" class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg 
+                                           hover:bg-indigo-700 transition-colors">
+                                                Add to Cart
+                                            </button>
+                                            <% } else { %>
+                                                <button
+                                                    class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
+                                                    Sold Out
+                                                </button>
+                                                <% } %>
+                                    </div>
+                                </div>
+
+                                <!-- Stock Badge -->
+                                <% if(product.stock> 0 && product.stock < 10) { %>
+                                        <div
+                                            class="absolute top-2 left-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
+                                            Only <%= product.stock %> left
+                                        </div>
+                                        <% } %>
+                            </div>
+                            <% }) %>
+                    </div>
+                </main>
+
+                <!-- Quick View Modal (Hidden by default) -->
+                <div id="quickViewModal" class="hidden fixed inset-0 bg-black/50 z-50">
+                    <div class="flex items-center justify-center min-h-screen">
+                        <div class="bg-white rounded-xl max-w-2xl w-full mx-4 p-6 relative">
+                            <!-- Modal content will be loaded via AJAX -->
+                            <button onclick="closeQuickView()"
+                                class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                            <div id="quickViewContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    // Quick View Functions
+                    function openQuickView (productId) {
+                        fetch(`/products/${productId}/quick-view`)
+                            .then(response => response.text())
+                            .then(html => {
+                                document.getElementById('quickViewContent').innerHTML = html;
+                                document.getElementById('quickViewModal').style.display = 'block';
+                            });
+                    }
+
+                    function closeQuickView () {
+                        document.getElementById('quickViewModal').style.display = 'none';
+                    }
+
+                    // Cart Functions
+                    async function addToCart (productId) {
+                        try {
+                            const response = await fetch('/cart/add', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ productId })
+                            });
+
+                            if (response.ok) {
+                                // Update cart count
+                                const cartCount = document.querySelector('[data-cart-count]');
+                                cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                            }
+                        } catch (error) {
+                            console.error('Error adding to cart:', error);
+                        }
+                    }
+                </script>
+
+                <!-- Scripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+    </body>
+
+</html>

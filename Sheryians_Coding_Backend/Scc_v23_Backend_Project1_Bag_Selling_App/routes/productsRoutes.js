@@ -1,11 +1,21 @@
 import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
-import { createProductPage } from "../controllers/productsController.js";
+import {
+  createProductPage,
+  createProduct,
+  productsPage,
+} from "../controllers/productsController.js";
 const router = express.Router();
 
 // ********************** /user Routes **********************
-// User Profile Routes
+// Prosuct Create Page Routes
 router.get("/create", isLoggedIn, createProductPage);
+
+// Create New Product Routes
+router.post("/create", isLoggedIn, createProduct);
+
+// All Products Show Page Routes
+router.get("/", isLoggedIn, productsPage);
 
 // Update route for change User password in database by Id
 // router.put("/profile/change-password/:id", jwtAuthMiddleware, passwordChange);
