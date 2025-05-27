@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   editProfileCloseBtn.addEventListener("click", hideUpdateModal);
 
   // Settings Form Submission
-
   profileUpdateForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 

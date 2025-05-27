@@ -1,9 +1,12 @@
 import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
+import upload from "../config/multer-config.js";
 import {
   profile,
   passwordChange,
   profileUpdate,
+  createProductPage,
+  createProduct,
 } from "../controllers/ownersController.js";
 import {
   signUpPage,
@@ -34,6 +37,22 @@ router.get("/profile", isLoggedIn, profile);
 router.put("/profile/change-password", isLoggedIn, passwordChange);
 
 // Owner Profile-Update Routes
-router.put("/profile/update", isLoggedIn, profileUpdate);
+router.put(
+  "/profile/update",
+  // upload.single("picture"), // Multer middleware to parse single file
+  isLoggedIn,
+  profileUpdate
+);
+
+// Product Create Page Routes
+router.get("/createProduct", isLoggedIn, createProductPage);
+
+// Create New Product Route
+router.post(
+  "/createProduct",
+  upload.single("productImage"), // Multer middleware to parse single file
+  isLoggedIn,
+  createProduct
+);
 
 export default router;

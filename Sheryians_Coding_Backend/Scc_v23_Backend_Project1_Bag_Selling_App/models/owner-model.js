@@ -83,17 +83,9 @@ const ownerSchema = new Schema(
     },
     products: [
       {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        category: {
-          type: String,
-          required: true,
-          trim: true,
-        },
-        _id: false, // Disable auto-generated _id
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
       },
     ],
   },

@@ -11,9 +11,8 @@ const productSchema = new Schema(
       trim: true,
     },
     productImage: {
-      type: String,
+      type: Buffer,
       required: true,
-      trim: true,
     },
     brandName: {
       type: String,
@@ -105,6 +104,7 @@ const productSchema = new Schema(
           type: Date,
           default: Date.now,
         },
+        _id: false, // Disable auto-generated _id
       },
     ],
     ownerId: {

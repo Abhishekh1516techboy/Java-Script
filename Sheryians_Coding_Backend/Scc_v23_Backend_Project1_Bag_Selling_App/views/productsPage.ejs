@@ -42,7 +42,9 @@
                             <div class="product-card bg-white rounded-xl shadow-md overflow-hidden relative">
                                 <!-- Product Image -->
                                 <div class="relative aspect-square">
-                                    <img src="<%= product.productImage %>" alt="<%= product.productName %>"
+
+                                    <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
+                                        alt="<%= product.productName %>"
                                         class="w-full h-full object-cover cursor-pointer">
 
                                     <!-- Quick Actions -->
@@ -81,14 +83,14 @@
                                     <div class="mb-3">
                                         <% if(product.discount> 0) { %>
                                             <span class="text-xl font-bold text-gray-900">
-                                                $<%= (product.price * (1 - product.discount/100)).toFixed(2) %>
+                                                ₹<%= (product.price * (1 - product.discount/100)).toFixed(2) %>
                                             </span>
                                             <span class="text-gray-400 line-through text-sm ml-2">
-                                                $<%= product.price.toFixed(2) %>
+                                                ₹<%= product.price.toFixed(2) %>
                                             </span>
                                             <% } else { %>
                                                 <span class="text-xl font-bold text-gray-900">
-                                                    $<%= product.price.toFixed(2) %>
+                                                    ₹<%= product.price.toFixed(2) %>
                                                 </span>
                                                 <% } %>
                                     </div>

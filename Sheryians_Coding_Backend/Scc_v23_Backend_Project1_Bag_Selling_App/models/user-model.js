@@ -62,8 +62,8 @@ const userSchema = new Schema(
       select: false, // Prevent password from being returned in queries
     },
     picture: {
-      type: String,
-      trim: true,
+      type: Buffer,
+      required: true,
       default: "",
     },
     wishlist: [
