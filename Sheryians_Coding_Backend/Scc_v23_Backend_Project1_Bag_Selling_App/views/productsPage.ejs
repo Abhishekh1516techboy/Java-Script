@@ -45,7 +45,8 @@
 
                                     <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
                                         alt="<%= product.productName %>"
-                                        class="w-full h-full object-cover cursor-pointer">
+                                        class="w-full h-full object-cover  cursor-pointer"
+                                        style="background-color: <%=product.bgColor%>;">
 
                                     <!-- Quick Actions -->
                                     <div class="absolute top-2 right-2 flex flex-col space-y-2">
@@ -72,6 +73,7 @@
                                                 <%= product.brandName %>
                                             </p>
                                         </div>
+                                        <!-- discount offers -->
                                         <% if(product.discount> 0) { %>
                                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                                                 <%= product.discount %>% OFF
@@ -83,14 +85,18 @@
                                     <div class="mb-3">
                                         <% if(product.discount> 0) { %>
                                             <span class="text-xl font-bold text-gray-900">
-                                                ₹<%= (product.price * (1 - product.discount/100)).toFixed(2) %>
+                                                ₹<%= (product.price * (1 -
+                                                    product.discount/100)).toLocaleString('en-IN', {
+                                                    minimumFractionDigits: 0, maximumFractionDigits: 2 }) %>
                                             </span>
                                             <span class="text-gray-400 line-through text-sm ml-2">
-                                                ₹<%= product.price.toFixed(2) %>
+                                                ₹<%= product.price.toLocaleString('en-IN', { minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 2 }) %>
                                             </span>
                                             <% } else { %>
                                                 <span class="text-xl font-bold text-gray-900">
-                                                    ₹<%= product.price.toFixed(2) %>
+                                                    ₹<%= product.price.toLocaleString('en-IN', { minimumFractionDigits:
+                                                        0, maximumFractionDigits: 2 }) %>
                                                 </span>
                                                 <% } %>
                                     </div>

@@ -63,8 +63,7 @@ const userSchema = new Schema(
     },
     picture: {
       type: Buffer,
-      required: true,
-      default: "",
+      default: null,
     },
     wishlist: [
       {

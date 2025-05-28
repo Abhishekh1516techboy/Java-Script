@@ -25,7 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
   profileUpdateForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = {
+    // Create FormData object
+    const formData = new FormData();
+
+    const allData = {
       // Personal Info
       name: document.getElementById("name").value,
       gender: document.getElementById("gender").value,
@@ -51,11 +54,19 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     };
 
+    // Append textual data as a JSON string
+    formData.append("data", JSON.stringify(allData));
+
+    // Append file (if selected)
+    const fileInput = document.getElementById("picture");
+    if (fileInput.files[0]) {
+      formData.append("picture", fileInput.files[0]); // append file data
+    }
+
     try {
       const response = await fetch("/owners/profile/update", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: formData,
       });
       const data = await response.json();
       if (response.ok) {

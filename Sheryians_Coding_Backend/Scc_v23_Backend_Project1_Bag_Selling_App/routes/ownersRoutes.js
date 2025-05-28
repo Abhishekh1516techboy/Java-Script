@@ -39,7 +39,7 @@ router.put("/profile/change-password", isLoggedIn, passwordChange);
 // Owner Profile-Update Routes
 router.put(
   "/profile/update",
-  // upload.single("picture"), // Multer middleware to parse single file
+  upload.single("picture"), // Multer middleware to parse single file
   isLoggedIn,
   profileUpdate
 );

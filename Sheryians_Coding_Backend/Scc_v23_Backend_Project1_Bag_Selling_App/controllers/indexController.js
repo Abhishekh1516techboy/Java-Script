@@ -1,4 +1,5 @@
 import User from "../models/user-model.js";
+import Product from "../models/product-model.js";
 import jwt from "jsonwebtoken";
 
 import {
@@ -18,7 +19,7 @@ import {
 // });
 
 // Example bag data (replace with database query in production)
-const bags = [
+const carouselData = [
   {
     id: 1,
     name: "Urban Explorer Backpack",
@@ -147,26 +148,44 @@ const reviews = [
   },
 ];
 
-export const indexPage = (req, res) => {
+export const indexPage = async (req, res) => {
   let error = req.flash("error"); // Retrieve error flash messages
   let success = req.flash("success"); // Retrieve success flash messages
 
-  let isLogin = false;
-  let user;
-  if (req.cookies?.token) {
-    isLogin = true;
-    const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-    user = decoded;
+  try {
+    let isLogin = false;
+    let user;
+    if (req.cookies?.token) {
+      isLogin = true;
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      user = decoded;
+    }
+
+    // set carouselData in user
+    user.carouselData = carouselData;
+
+    // Check if product already exists by model
+    const products = await Product.find().limit("12").sort({ createdAt: -1 });
+
+    if (!products) {
+      req.flash("error", "Not Products Lists");
+      return res.redirect("/");
+    }
+
+    res.render("index", {
+      authPage: false,
+      error,
+      success,
+      user,
+      isLogin,
+      bags: products, // Pass the enhanced array of bags
+      reviews: reviews,
+      cartCount: 2,
+      wishlistCount: 5,
+    });
+  } catch (error) {
+    console.error("Index Page error:", error);
+    req.flash("error", "Server error in Index page");
+    return res.redirect("/");
   }
-  res.render("index", {
-    authPage: false,
-    error,
-    success,
-    user,
-    isLogin,
-    bags: bags, // Pass the enhanced array of bags
-    reviews: reviews,
-    cartCount: 2,
-    wishlistCount: 5,
-  });
 };

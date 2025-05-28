@@ -16,7 +16,7 @@ export const productsPage = async (req, res) => {
     }
 
     // Check if product already exists by model
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
 
     if (!products) {
       req.flash("error", "Not Products Lists");

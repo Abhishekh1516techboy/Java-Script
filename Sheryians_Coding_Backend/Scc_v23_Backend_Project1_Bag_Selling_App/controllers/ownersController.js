@@ -164,6 +164,15 @@ export const profileUpdate = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized!" });
     }
 
+    // Parse textual data from req.body.data
+    if (!req.body.data) {
+      return res.status(400).json({ message: "No profile data provided" });
+    }
+
+
+    // Parse json data
+    const updateData = JSON.parse(req.body.data);
+
     const {
       name,
       gender,
@@ -173,12 +182,7 @@ export const profileUpdate = async (req, res) => {
       aadharNumber,
       address,
       bankDetails,
-    } = req.body;
-
-
-    // if (!req.file) {
-    //   return res.status(404).json({ message: "Image is required" });
-    // }
+    } = updateData;
 
     // Apply validations (errors thrown here are caught below)
     validateEmail(email);

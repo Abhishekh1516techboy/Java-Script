@@ -47,9 +47,8 @@ const ownerSchema = new Schema(
       select: false, // Prevent password from being returned in queries
     },
     picture: {
-      type: String,
-      trim: true,
-      default: "",
+      type: Buffer,
+      default: null,
     },
     isOwner: {
       type: Boolean,

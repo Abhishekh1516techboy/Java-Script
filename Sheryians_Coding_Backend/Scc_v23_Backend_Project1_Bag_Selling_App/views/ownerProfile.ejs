@@ -75,18 +75,18 @@
                         <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
                             <div class="flex flex-col md:flex-row items-center">
                                 <div class="relative mb-4 md:mb-0 md:mr-6 bg-yellow-300 rounded-full">
-                                    <img src="<%= user.picture || '/images/author.webp' %>"
-                                        alt="Profile picture of <%= user.name %>"
+                                    <img src="data:<%= user.picture?.productImageType %>;base64,<%= user.picture?.toString('base64') || '/images/author.webp'%>"
+                                        alt="Profile picture of <%= user?.name %>"
                                         class="w-24 h-24 rounded-full object-cover object-top border-3 border-white">
                                     <span
                                         class="absolute bottom-0 right-0 bg-green-500 rounded-full w-6 h-6 border-2 border-white"></span>
                                 </div>
                                 <div class="text-center md:text-left">
                                     <h1 class="text-2xl font-bold">
-                                        <%= user.name %>
+                                        <%= user?.name %>
                                     </h1>
                                     <p class="text-blue-100"><i class="fas fa-envelope mr-2"></i>
-                                        <%= user.email %>
+                                        <%= user?.email %>
                                     </p>
                                 </div>
                             </div>
@@ -104,14 +104,14 @@
                                     </h2>
                                     <div class="space-y-3">
                                         <p><strong class="w-24 inline-block">Name:</strong>
-                                            <%= user.name %>
+                                            <%= user?.name %>
                                         </p>
                                         <p><strong class="w-24 inline-block">Gender:</strong>
-                                            <%= user.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
-                                                : 'N/A' %>
+                                            <%= user?.gender ? user?.gender.charAt(0).toUpperCase() +
+                                                user?.gender.slice(1) : 'N/A' %>
                                         </p>
                                         <p><strong class="w-24 inline-block">Phone:</strong>
-                                            <%= user.phone || 'N/A' %>
+                                            <%= user?.phone || 'N/A' %>
                                         </p>
                                     </div>
                                 </div>
@@ -124,13 +124,13 @@
                                     </h2>
                                     <div class="space-y-3">
                                         <p><strong class="w-24 inline-block">State:</strong>
-                                            <%= user.address.state || 'N/A' %>
+                                            <%= user?.address?.state || 'N/A' %>
                                         </p>
                                         <p><strong class="w-24 inline-block">City:</strong>
-                                            <%= user.address.city || 'N/A' %>
+                                            <%= user?.address?.city || 'N/A' %>
                                         </p>
                                         <p><strong class="w-24 inline-block">Pin Code:</strong>
-                                            <%= user.address.pinCode || 'N/A' %>
+                                            <%= user?.address?.pinCode || 'N/A' %>
                                         </p>
                                     </div>
                                 </div>
@@ -146,10 +146,10 @@
                                     </h2>
                                     <div class="space-y-3">
                                         <p><strong class="w-32 inline-block">GSTIN:</strong>
-                                            <%= user.hiddenGstin %>
+                                            <%= user?.hiddenGstin %>
                                         </p>
                                         <p><strong class="w-32 inline-block">Aadhaar:</strong>
-                                            <%= user.hiddenAadharNumber || 'N/A' %>
+                                            <%= user?.hiddenAadharNumber || 'N/A' %>
                                         </p>
                                     </div>
                                 </div>
@@ -162,14 +162,14 @@
                                     </h2>
                                     <div class="space-y-3">
                                         <p><strong class="w-32 inline-block">Bank Name:</strong>
-                                            <%= user.bankDetails.bankName || 'N/A' %>
+                                            <%= user?.bankDetails?.bankName || 'N/A' %>
                                         </p>
                                         <p><strong class="w-32 inline-block">Account No:</strong>
-                                            <%= user.bankDetails.accountNumber ? 'xxxx-xxxx-xxxx-' +
-                                                user.bankDetails.accountNumber.slice(-4) : 'N/A' %>
+                                            <%= user?.bankDetails?.accountNumber ? 'xxxx-xxxx-xxxx-' +
+                                                user?.bankDetails?.accountNumber.slice(-4) : 'N/A' %>
                                         </p>
                                         <p><strong class="w-32 inline-block">IFSC Code:</strong>
-                                            <%= user.bankDetails.ifscCode || 'N/A' %>
+                                            <%= user?.bankDetails?.ifscCode || 'N/A' %>
                                         </p>
                                     </div>
                                 </div>
@@ -187,35 +187,74 @@
                                             <i class="fas fa-plus mr-1"></i>Add Product
                                         </a>
                                     </div>
-                                    <% if (user.products && user.products.length> 0) { %>
+                                    <% if (user?.products && user.products?.length> 0) { %>
                                         <div class="space-y-3 max-h-98 overflow-y-auto pr-2">
-                                            <% user.products.forEach(product=> { %>
+                                            <% user?.products.forEach(product=> { %>
                                                 <a href="/products/<%= product._id %>" class="block"
                                                     aria-label="View details for <%= product.productName %>">
-                                                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:border-blue-200 transition product-card flex items-center space-x-4"
+                                                    <div class="relative p-4 rounded-lg shadow-sm border border-gray-300 hover:border-blue-300 hover:bg-gray-100 transition product-card flex items-center space-x-4"
                                                         data-category="<%= product.category %>">
                                                         <% if (product.productImage) { %>
                                                             <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
                                                                 alt="<%= product.productName %>"
-                                                                class="w-16 h-16 rounded object-cover">
+                                                                class="w-16 h-16 rounded object-cover"
+                                                                style="background-color: <%=product.bgColor%>;">
                                                             <% } %>
                                                                 <div class="flex-1">
                                                                     <span
-                                                                        class="font-medium bg-orange-600 text-white rounded-xl p-1 text-xs">
+                                                                        class="absolute top-1 bg-orange-500 text-white rounded-sm px-1  text-xs">
                                                                         <%= product.category %>
                                                                     </span>
-                                                                    <h2 class="text-violet-600 font-semibold text-lg">
+                                                                    <h2
+                                                                        class="text-violet-600 font-semibold text-lg mt-1">
                                                                         <%= product.productName %>
                                                                     </h2>
-                                                                    <p class="text-sm text-gray-500">Model: <%=
-                                                                            product.model || 'N/A' %>
+                                                                    <p class="text-xs text-gray-500 font-semibold">
+                                                                        Model: <%= product.model || 'N/A' %>
                                                                     </p>
-                                                                    <p class="text-sm text-gray-600">Price: ₹<%=
-                                                                            product.price || 'N/A' %>
-                                                                    </p>
+                                                                    <!-- Price -->
+                                                                    <div>
+                                                                        <% if(product.discount> 0) { %>
+                                                                            <span
+                                                                                class="text-xs font-bold text-gray-900">
+                                                                                ₹<%= (product.price * (1 -
+                                                                                    product.discount/100)).toLocaleString('en-IN',
+                                                                                    { minimumFractionDigits: 0,
+                                                                                    maximumFractionDigits: 2 }) %>
+                                                                            </span>
+                                                                            <span
+                                                                                class="text-gray-500 line-through text-xs ml-2">
+                                                                                ₹<%= product.price.toLocaleString('en-IN',
+                                                                                    { minimumFractionDigits: 0,
+                                                                                    maximumFractionDigits: 2 }) %>
+                                                                            </span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="text-xs font-bold text-gray-900">
+                                                                                    ₹<%= product.price.toLocaleString('en-IN',
+                                                                                        { minimumFractionDigits: 0,
+                                                                                        maximumFractionDigits: 2 }) %>
+                                                                                </span>
+                                                                                <% } %>
+                                                                                    <!-- Discount OFF -->
+                                                                                    <% if(product.discount> 0) { %>
+                                                                                        <span
+                                                                                            class="bg-green-200 text-green-800 px-1 rounded-full text-xs ml-1">
+                                                                                            <%= product.discount %>% OFF
+                                                                                        </span>
+                                                                                        <% } %>
+                                                                    </div>
                                                                 </div>
                                                                 <i
                                                                     class="fas fa-external-link-alt text-blue-500 hover:text-blue-700"></i>
+
+                                                                <!-- Stock Badge -->
+                                                                <% if(product.stock> 0 && product.stock < 10) { %>
+                                                                        <div
+                                                                            class="absolute top-1 right-2 bg-orange-100 text-orange-800 px-2 rounded-full text-xs">
+                                                                            Only <%= product.stock %> left
+                                                                        </div>
+                                                                        <% } %>
                                                     </div>
                                                 </a>
                                                 <% }) %>
@@ -277,10 +316,11 @@
                                     <!-- Profile Picture Upload -->
                                     <div class="flex items-center space-x-4">
                                         <div class="relative">
-                                            <img id="profilePreview" src="<%= user.picture || '/images/author.webp' %>"
-                                                class="w-20 h-20 rounded-full object-cover object-top border-2 border-gray-200">
+                                            <img id="profilePreview"
+                                                src="data:<%= user.picture?.productImageType %>;base64,<%= user.picture?.toString('base64')|| '/images/author.webp' %>"
+                                                class="w-20 h-20 rounded-full object-cover object-top border-2 border-gray-200 bg-yellow-300">
                                             <div class="file-upload mt-2">
-                                                <label
+                                                <label for="picture"
                                                     class="cursor-pointer text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
                                                     <i class="fas fa-camera mr-2"></i>Change
                                                     <input type="file" id="picture" name="picture" accept="image/*"
@@ -295,18 +335,18 @@
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Full Name
                                                 *</label>
-                                            <input type="text" id="name" name="name" value="<%= user.name %>" required
+                                            <input type="text" id="name" name="name" value="<%= user?.name %>" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Gender *</label>
                                             <select id="gender" name="gender"
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
-                                                <option value="male" <%=user.gender==='male' ? 'selected' : '' %>>Male
+                                                <option value="male" <%=user?.gender==='male' ? 'selected' : '' %>>Male
                                                 </option>
-                                                <option value="female" <%=user.gender==='female' ? 'selected' : '' %>
+                                                <option value="female" <%=user?.gender==='female' ? 'selected' : '' %>
                                                     >Female</option>
-                                                <option value="other" <%=user.gender==='other' ? 'selected' : '' %>
+                                                <option value="other" <%=user?.gender==='other' ? 'selected' : '' %>
                                                     >Other</option>
                                             </select>
                                         </div>
@@ -316,13 +356,14 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                                            <input type="email" id="email" name="email" value="<%= user.email %>"
+                                            <input type="email" id="email" name="email" value="<%= user?.email %>"
                                                 required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                                            <input type="tel" id="phone" name="phone" value="<%= user.phone %>" required
+                                            <input type="tel" id="phone" name="phone" value="<%= user?.phone %>"
+                                                required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500">
                                         </div>
                                     </div>
@@ -337,71 +378,73 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">State *</label>
                                             <select id="state" name="state" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
-                                                <option value="" disabled <%=!user.address.state ? 'selected' : '' %>
+                                                <option value="" disabled <%=!user.address?.state ? 'selected' : '' %>
                                                     >Select State</option>
-                                                <option value="Andhra Pradesh" <%=user.address.state==='Andhra Pradesh'
-                                                    ? 'selected' : '' %>>Andhra Pradesh</option>
+                                                <option value="Andhra Pradesh" <%=user.address?.state==='Andhra Pradesh'
+                                                    ? 'selected' : '' %>
+                                                    >Andhra Pradesh</option>
                                                 <option value="Arunachal Pradesh"
-                                                    <%=user.address.state==='Arunachal Pradesh' ? 'selected' : '' %>
+                                                    <%=user.address?.state==='Arunachal Pradesh' ? 'selected' : '' %>
                                                     >Arunachal Pradesh</option>
-                                                <option value="Assam" <%=user.address.state==='Assam' ? 'selected' : ''
+                                                <option value="Assam" <%=user.address?.state==='Assam' ? 'selected' : ''
                                                     %>>Assam</option>
-                                                <option value="Bihar" <%=user.address.state==='Bihar' ? 'selected' : ''
+                                                <option value="Bihar" <%=user.address?.state==='Bihar' ? 'selected' : ''
                                                     %>>Bihar</option>
-                                                <option value="Chhattisgarh" <%=user.address.state==='Chhattisgarh'
+                                                <option value="Chhattisgarh" <%=user.address?.state==='Chhattisgarh'
                                                     ? 'selected' : '' %>>Chhattisgarh</option>
-                                                <option value="Goa" <%=user.address.state==='Goa' ? 'selected' : '' %>
+                                                <option value="Goa" <%=user.address?.state==='Goa' ? 'selected' : '' %>
                                                     >Goa</option>
-                                                <option value="Gujarat" <%=user.address.state==='Gujarat' ? 'selected'
+                                                <option value="Gujarat" <%=user.address?.state==='Gujarat' ? 'selected'
                                                     : '' %>>Gujarat</option>
-                                                <option value="Haryana" <%=user.address.state==='Haryana' ? 'selected'
+                                                <option value="Haryana" <%=user.address?.state==='Haryana' ? 'selected'
                                                     : '' %>>Haryana</option>
                                                 <option value="Himachal Pradesh"
-                                                    <%=user.address.state==='Himachal Pradesh' ? 'selected' : '' %>
+                                                    <%=user.address?.state==='Himachal Pradesh' ? 'selected' : '' %>
                                                     >Himachal Pradesh</option>
-                                                <option value="Jharkhand" <%=user.address.state==='Jharkhand'
+                                                <option value="Jharkhand" <%=user.address?.state==='Jharkhand'
                                                     ? 'selected' : '' %>>Jharkhand</option>
-                                                <option value="Karnataka" <%=user.address.state==='Karnataka'
+                                                <option value="Karnataka" <%=user.address?.state==='Karnataka'
                                                     ? 'selected' : '' %>>Karnataka</option>
-                                                <option value="Kerala" <%=user.address.state==='Kerala' ? 'selected'
+                                                <option value="Kerala" <%=user.address?.state==='Kerala' ? 'selected'
                                                     : '' %>>Kerala</option>
-                                                <option value="Madhya Pradesh" <%=user.address.state==='Madhya Pradesh'
-                                                    ? 'selected' : '' %>>Madhya Pradesh</option>
-                                                <option value="Maharashtra" <%=user.address.state==='Maharashtra'
+                                                <option value="Madhya Pradesh" <%=user.address?.state==='Madhya Pradesh'
+                                                    ? 'selected' : '' %>
+                                                    >Madhya Pradesh</option>
+                                                <option value="Maharashtra" <%=user.address?.state==='Maharashtra'
                                                     ? 'selected' : '' %>>Maharashtra</option>
-                                                <option value="Manipur" <%=user.address.state==='Manipur' ? 'selected'
+                                                <option value="Manipur" <%=user.address?.state==='Manipur' ? 'selected'
                                                     : '' %>>Manipur</option>
-                                                <option value="Meghalaya" <%=user.address.state==='Meghalaya'
+                                                <option value="Meghalaya" <%=user.address?.state==='Meghalaya'
                                                     ? 'selected' : '' %>>Meghalaya</option>
-                                                <option value="Mizoram" <%=user.address.state==='Mizoram' ? 'selected'
+                                                <option value="Mizoram" <%=user.address?.state==='Mizoram' ? 'selected'
                                                     : '' %>>Mizoram</option>
-                                                <option value="Nagaland" <%=user.address.state==='Nagaland' ? 'selected'
-                                                    : '' %>>Nagaland</option>
-                                                <option value="Odisha" <%=user.address.state==='Odisha' ? 'selected'
+                                                <option value="Nagaland" <%=user.address?.state==='Nagaland'
+                                                    ? 'selected' : '' %>>Nagaland</option>
+                                                <option value="Odisha" <%=user.address?.state==='Odisha' ? 'selected'
                                                     : '' %>>Odisha</option>
-                                                <option value="Punjab" <%=user.address.state==='Punjab' ? 'selected'
+                                                <option value="Punjab" <%=user.address?.state==='Punjab' ? 'selected'
                                                     : '' %>>Punjab</option>
-                                                <option value="Rajasthan" <%=user.address.state==='Rajasthan'
+                                                <option value="Rajasthan" <%=user.address?.state==='Rajasthan'
                                                     ? 'selected' : '' %>>Rajasthan</option>
-                                                <option value="Sikkim" <%=user.address.state==='Sikkim' ? 'selected'
+                                                <option value="Sikkim" <%=user.address?.state==='Sikkim' ? 'selected'
                                                     : '' %>>Sikkim</option>
-                                                <option value="Tamil Nadu" <%=user.address.state==='Tamil Nadu'
+                                                <option value="Tamil Nadu" <%=user.address?.state==='Tamil Nadu'
                                                     ? 'selected' : '' %>>Tamil Nadu</option>
-                                                <option value="Telangana" <%=user.address.state==='Telangana'
+                                                <option value="Telangana" <%=user.address?.state==='Telangana'
                                                     ? 'selected' : '' %>>Telangana</option>
-                                                <option value="Tripura" <%=user.address.state==='Tripura' ? 'selected'
+                                                <option value="Tripura" <%=user.address?.state==='Tripura' ? 'selected'
                                                     : '' %>>Tripura</option>
-                                                <option value="Uttar Pradesh" <%=user.address.state==='Uttar Pradesh'
+                                                <option value="Uttar Pradesh" <%=user.address?.state==='Uttar Pradesh'
                                                     ? 'selected' : '' %>>Uttar Pradesh</option>
-                                                <option value="Uttarakhand" <%=user.address.state==='Uttarakhand'
+                                                <option value="Uttarakhand" <%=user.address?.state==='Uttarakhand'
                                                     ? 'selected' : '' %>>Uttarakhand</option>
-                                                <option value="West Bengal" <%=user.address.state==='West Bengal'
+                                                <option value="West Bengal" <%=user.address?.state==='West Bengal'
                                                     ? 'selected' : '' %>>West Bengal</option>
                                             </select>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-700 mb-1">City *</label>
-                                            <input type="text" id="city" name="city" value="<%= user.address.city %>"
+                                            <input type="text" id="city" name="city" value="<%= user.address?.city %>"
                                                 required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
                                         </div>
@@ -409,7 +452,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Pin Code
                                                 *</label>
                                             <input type="text" id="pinCode" name="pinCode"
-                                                value="<%= user.address.pinCode %>" required
+                                                value="<%= user.address?.pinCode %>" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500">
                                         </div>
                                     </div>
@@ -421,7 +464,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="relative">
                                             <label class="block text-sm font-medium text-gray-700 mb-1">GSTIN *</label>
-                                            <input type="password" id="gstin" name="gstin" value="<%= user.gstin %>"
+                                            <input type="password" id="gstin" name="gstin" value="<%= user?.gstin %>"
                                                 required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" />
                                             <button type="button"
@@ -434,7 +477,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Aadhar Number
                                                 *</label>
                                             <input type="password" id="aadharNumber" name="aadharNumber"
-                                                value="<%= user.aadharNumber %>" required
+                                                value="<%= user?.aadharNumber %>" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300  focus:ring-2 focus:ring-blue-500" />
                                             <button type="button"
                                                 class="absolute right-3 top-8 text-gray-500 toggle-password"
@@ -454,113 +497,122 @@
                                                 *</label>
                                             <select id="bankName" name="bankName" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500">
-                                                <option value="" disabled <%=!user.bankDetails.bankName ? 'selected'
+                                                <option value="" disabled <%=!user.bankDetails?.bankName ? 'selected'
                                                     : '' %>>Select Bank</option>
 
                                                 <option value="Allahabad Bank"
-                                                    <%=user.bankDetails.bankName==='Allahabad Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Allahabad Bank' ? 'selected' : ''
+                                                    %>
                                                     >Allahabad Bank</option>
-                                                <option value="Andhra Bank" <%=user.bankDetails.bankName==='Andhra Bank'
-                                                    ? 'selected' : '' %>>Andhra Bank</option>
+                                                <option value="Andhra Bank"
+                                                    <%=user.bankDetails?.bankName==='Andhra Bank' ? 'selected' : '' %>
+                                                    >Andhra Bank</option>
                                                 <option value="Bandhan Bank"
-                                                    <%=user.bankDetails.bankName==='Bandhan Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Bandhan Bank' ? 'selected' : '' %>
                                                     >Bandhan Bank</option>
                                                 <option value="Bank of Baroda"
-                                                    <%=user.bankDetails.bankName==='Bank of Baroda' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Bank of Baroda' ? 'selected' : ''
+                                                    %>
                                                     >Bank of Baroda</option>
                                                 <option value="Bank of India"
-                                                    <%=user.bankDetails.bankName==='Bank of India' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Bank of India' ? 'selected' : '' %>
                                                     >Bank of India</option>
                                                 <option value="Bank of Maharashtra"
-                                                    <%=user.bankDetails.bankName==='Bank of Maharashtra' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Bank of Maharashtra' ? 'selected'
                                                     : '' %>>Bank of Maharashtra</option>
-                                                <option value="Canara Bank" <%=user.bankDetails.bankName==='Canara Bank'
-                                                    ? 'selected' : '' %>>Canara Bank</option>
+                                                <option value="Canara Bank"
+                                                    <%=user.bankDetails?.bankName==='Canara Bank' ? 'selected' : '' %>
+                                                    >Canara Bank</option>
                                                 <option value="Catholic Syrian Bank"
-                                                    <%=user.bankDetails.bankName==='Catholic Syrian Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Catholic Syrian Bank' ? 'selected'
                                                     : '' %>>Catholic Syrian Bank</option>
                                                 <option value="Central Bank of India"
-                                                    <%=user.bankDetails.bankName==='Central Bank of India' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Central Bank of India' ? 'selected'
                                                     : '' %>>Central Bank of India</option>
                                                 <option value="City Union Bank"
-                                                    <%=user.bankDetails.bankName==='City Union Bank' ? 'selected' : ''
+                                                    <%=user.bankDetails?.bankName==='City Union Bank' ? 'selected' : ''
                                                     %>>City Union Bank</option>
-                                                <option value="Dena Bank" <%=user.bankDetails.bankName==='Dena Bank'
+                                                <option value="Dena Bank" <%=user.bankDetails?.bankName==='Dena Bank'
                                                     ? 'selected' : '' %>>Dena Bank</option>
                                                 <option value="Dhanlaxmi Bank"
-                                                    <%=user.bankDetails.bankName==='Dhanlaxmi Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Dhanlaxmi Bank' ? 'selected' : ''
+                                                    %>
                                                     >Dhanlaxmi Bank</option>
                                                 <option value="Federal Bank"
-                                                    <%=user.bankDetails.bankName==='Federal Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Federal Bank' ? 'selected' : '' %>
                                                     >Federal Bank</option>
-                                                <option value="HDFC Bank" <%=user.bankDetails.bankName==='HDFC Bank'
+                                                <option value="HDFC Bank" <%=user.bankDetails?.bankName==='HDFC Bank'
                                                     ? 'selected' : '' %>>HDFC Bank</option>
-                                                <option value="HSBC India" <%=user.bankDetails.bankName==='HSBC India'
+                                                <option value="HSBC India" <%=user.bankDetails?.bankName==='HSBC India'
                                                     ? 'selected' : '' %>>HSBC India</option>
-                                                <option value="ICICI Bank" <%=user.bankDetails.bankName==='ICICI Bank'
+                                                <option value="ICICI Bank" <%=user.bankDetails?.bankName==='ICICI Bank'
                                                     ? 'selected' : '' %>>ICICI Bank</option>
-                                                <option value="IDBI Bank" <%=user.bankDetails.bankName==='IDBI Bank'
+                                                <option value="IDBI Bank" <%=user.bankDetails?.bankName==='IDBI Bank'
                                                     ? 'selected' : '' %>>IDBI Bank</option>
                                                 <option value="IDFC First Bank"
-                                                    <%=user.bankDetails.bankName==='IDFC First Bank' ? 'selected' : ''
+                                                    <%=user.bankDetails?.bankName==='IDFC First Bank' ? 'selected' : ''
                                                     %>>IDFC First Bank</option>
-                                                <option value="Indian Bank" <%=user.bankDetails.bankName==='Indian Bank'
-                                                    ? 'selected' : '' %>>Indian Bank</option>
+                                                <option value="Indian Bank"
+                                                    <%=user.bankDetails?.bankName==='Indian Bank' ? 'selected' : '' %>
+                                                    >Indian Bank</option>
                                                 <option value="Indian Overseas Bank"
-                                                    <%=user.bankDetails.bankName==='Indian Overseas Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Indian Overseas Bank' ? 'selected'
                                                     : '' %>>Indian Overseas Bank</option>
                                                 <option value="IndusInd Bank"
-                                                    <%=user.bankDetails.bankName==='IndusInd Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='IndusInd Bank' ? 'selected' : '' %>
                                                     >IndusInd Bank</option>
                                                 <option value="Jammu & Kashmir Bank"
-                                                    <%=user.bankDetails.bankName==='Jammu & Kashmir Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Jammu & Kashmir Bank' ? 'selected'
                                                     : '' %>>Jammu & Kashmir Bank</option>
                                                 <option value="Karnataka Bank"
-                                                    <%=user.bankDetails.bankName==='Karnataka Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Karnataka Bank' ? 'selected' : ''
+                                                    %>
                                                     >Karnataka Bank</option>
                                                 <option value="Karur Vysya Bank"
-                                                    <%=user.bankDetails.bankName==='Karur Vysya Bank' ? 'selected' : ''
+                                                    <%=user.bankDetails?.bankName==='Karur Vysya Bank' ? 'selected' : ''
                                                     %>>Karur Vysya Bank</option>
                                                 <option value="Kotak Mahindra Bank"
-                                                    <%=user.bankDetails.bankName==='Kotak Mahindra Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Kotak Mahindra Bank' ? 'selected'
                                                     : '' %>>Kotak Mahindra Bank</option>
                                                 <option value="Lakshmi Vilas Bank"
-                                                    <%=user.bankDetails.bankName==='Lakshmi Vilas Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Lakshmi Vilas Bank' ? 'selected'
                                                     : '' %>>Lakshmi Vilas Bank</option>
                                                 <option value="Nainital Bank"
-                                                    <%=user.bankDetails.bankName==='Nainital Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Nainital Bank' ? 'selected' : '' %>
                                                     >Nainital Bank</option>
                                                 <option value="Punjab & Sind Bank"
-                                                    <%=user.bankDetails.bankName==='Punjab & Sind Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Punjab & Sind Bank' ? 'selected'
                                                     : '' %>>Punjab & Sind Bank</option>
                                                 <option value="Punjab National Bank"
-                                                    <%=user.bankDetails.bankName==='Punjab National Bank' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Punjab National Bank' ? 'selected'
                                                     : '' %>>Punjab National Bank</option>
-                                                <option value="RBL Bank" <%=user.bankDetails.bankName==='RBL Bank'
+                                                <option value="RBL Bank" <%=user.bankDetails?.bankName==='RBL Bank'
                                                     ? 'selected' : '' %>>RBL Bank</option>
                                                 <option value="South Indian Bank"
-                                                    <%=user.bankDetails.bankName==='South Indian Bank' ? 'selected' : ''
-                                                    %>>South Indian Bank</option>
+                                                    <%=user.bankDetails?.bankName==='South Indian Bank' ? 'selected'
+                                                    : '' %>>South Indian Bank</option>
                                                 <option value="State Bank of India"
-                                                    <%=user.bankDetails.bankName==='State Bank of India' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='State Bank of India' ? 'selected'
                                                     : '' %>>State Bank of India</option>
                                                 <option value="Syndicate Bank"
-                                                    <%=user.bankDetails.bankName==='Syndicate Bank' ? 'selected' : '' %>
+                                                    <%=user.bankDetails?.bankName==='Syndicate Bank' ? 'selected' : ''
+                                                    %>
                                                     >Syndicate Bank</option>
                                                 <option value="Tamilnad Mercantile Bank"
-                                                    <%=user.bankDetails.bankName==='Tamilnad Mercantile Bank'
+                                                    <%=user.bankDetails?.bankName==='Tamilnad Mercantile Bank'
                                                     ? 'selected' : '' %>>Tamilnad Mercantile Bank</option>
-                                                <option value="UCO Bank" <%=user.bankDetails.bankName==='UCO Bank'
+                                                <option value="UCO Bank" <%=user.bankDetails?.bankName==='UCO Bank'
                                                     ? 'selected' : '' %>>UCO Bank</option>
                                                 <option value="Union Bank of India"
-                                                    <%=user.bankDetails.bankName==='Union Bank of India' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='Union Bank of India' ? 'selected'
                                                     : '' %>>Union Bank of India</option>
                                                 <option value="United Bank of India"
-                                                    <%=user.bankDetails.bankName==='United Bank of India' ? 'selected'
+                                                    <%=user.bankDetails?.bankName==='United Bank of India' ? 'selected'
                                                     : '' %>>United Bank of India</option>
-                                                <option value="Vijaya Bank" <%=user.bankDetails.bankName==='Vijaya Bank'
-                                                    ? 'selected' : '' %>>Vijaya Bank</option>
-                                                <option value="YES Bank" <%=user.bankDetails.bankName==='YES Bank'
+                                                <option value="Vijaya Bank"
+                                                    <%=user.bankDetails?.bankName==='Vijaya Bank' ? 'selected' : '' %>
+                                                    >Vijaya Bank</option>
+                                                <option value="YES Bank" <%=user.bankDetails?.bankName==='YES Bank'
                                                     ? 'selected' : '' %>>YES Bank</option>
                                             </select>
 
@@ -569,7 +621,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">Account Number
                                                 *</label>
                                             <input type="password" id="accountNumber" name="accountNumber"
-                                                value="<%= user.bankDetails.accountNumber %>" required
+                                                value="<%= user.bankDetails?.accountNumber %>" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" />
                                             <button type="button"
                                                 class="absolute right-3 top-8 text-gray-500 toggle-password"
@@ -581,7 +633,7 @@
                                             <label class="block text-sm font-medium text-gray-700 mb-1">IFSC Code
                                                 *</label>
                                             <input type="text" id="ifscCode" name="ifscCode"
-                                                value="<%= user.bankDetails.ifscCode %>" required
+                                                value="<%= user.bankDetails?.ifscCode %>" required
                                                 class="w-full outline-0 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500" />
                                         </div>
                                     </div>
