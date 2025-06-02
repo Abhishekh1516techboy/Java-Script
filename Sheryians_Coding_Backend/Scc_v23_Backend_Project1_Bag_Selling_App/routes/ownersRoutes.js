@@ -7,6 +7,9 @@ import {
   profileUpdate,
   createProductPage,
   createProduct,
+  updateProductPage,
+  updateProduct,
+  deleteProduct,
 } from "../controllers/ownersController.js";
 import {
   signUpPage,
@@ -54,5 +57,19 @@ router.post(
   isLoggedIn,
   createProduct
 );
+
+// Product Update Page Routes
+router.get("/updateProduct/:id", isLoggedIn, updateProductPage);
+
+// Update Product Route
+router.post(
+  "/updateProduct/:id",
+  upload.single("productImage"), // Multer middleware to parse single file
+  isLoggedIn,
+  updateProduct
+);
+
+// Delete Product Route
+router.post("/deleteProduct/:id", isLoggedIn, deleteProduct);
 
 export default router;

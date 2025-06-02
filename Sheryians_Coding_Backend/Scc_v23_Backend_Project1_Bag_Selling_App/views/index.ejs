@@ -49,6 +49,7 @@
             }
         </style>
         <link href="/stylesheets/output.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     </head>
     </head>
 
@@ -68,21 +69,21 @@
                             <div id="carousel" class="flex h-full w-full transition-transform duration-700 ease-in-out">
                                 <!-- Cloned last slide -->
                                 <div class="min-w-full flex-shrink-0 h-full w-full flex-none overflow-hidden">
-                                    <a href="/bag/<%= user.carouselData[user.carouselData.length - 1].id %>"
+                                    <a href="/bag/<%= carouselData[carouselData.length - 1].id %>"
                                         class="block h-full w-full">
                                         <div
                                             class="relative w-full h-full bg-gradient-to-b from-indigo-50 to-orange-50">
-                                            <img src="<%= user.carouselData[user.carouselData.length - 1].image %>"
-                                                alt="<%= user.carouselData[user.carouselData.length - 1].name %>"
+                                            <img src="<%= carouselData[carouselData.length - 1].image %>"
+                                                alt="<%= carouselData[carouselData.length - 1].name %>"
                                                 class="w-full h-full object-fill lg:object-cover object-center" />
                                             <div
                                                 class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-8 carousel-text">
                                                 <h3 class="carousel-title text-2xl md:text-4xl font-bold text-white">
-                                                    <%= user.carouselData[user.carouselData.length - 1].name %>
+                                                    <%= carouselData[carouselData.length - 1].name %>
                                                 </h3>
                                                 <p class="carousel-price text-xl md:text-2xl text-orange-300">
                                                     ₹
-                                                    <%= user.carouselData[user.carouselData.length - 1].price %>
+                                                    <%= carouselData[carouselData.length - 1].price %>
                                                 </p>
                                             </div>
                                         </div>
@@ -90,7 +91,7 @@
                                 </div>
 
                                 <!-- Original slides -->
-                                <% user.carouselData.slice(0, 5).forEach(function(bag) { %>
+                                <% carouselData.slice(0, 5).forEach(function(bag) { %>
                                     <div class="min-w-full flex-shrink-0 h-full w-full flex-none overflow-hidden">
                                         <a href="/bag/<%= bag.id %>" class="block h-full w-full">
                                             <div
@@ -115,20 +116,20 @@
 
                                         <!-- Cloned first slide -->
                                         <div class="min-w-full flex-shrink-0 h-full w-full flex-none overflow-hidden">
-                                            <a href="/bag/<%= user.carouselData[0].id %>" class="block h-full w-full">
+                                            <a href="/bag/<%= carouselData[0].id %>" class="block h-full w-full">
                                                 <div
                                                     class="relative w-full h-full bg-gradient-to-b from-indigo-50 to-orange-50">
-                                                    <img src="<%= user.carouselData[0].image %>"
-                                                        alt="<%= user.carouselData[0].name %>"
+                                                    <img src="<%= carouselData[0].image %>"
+                                                        alt="<%= carouselData[0].name %>"
                                                         class="w-full h-full object-fill lg:object-cover object-center" />
                                                     <div
                                                         class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-8 carousel-text">
                                                         <h3
                                                             class="carousel-title text-2xl md:text-4xl font-bold text-white">
-                                                            <%= user.carouselData[0].name %>
+                                                            <%= carouselData[0].name %>
                                                         </h3>
                                                         <p class="carousel-price text-xl md:text-2xl text-orange-300">
-                                                            ₹<%= user.carouselData[0].price %>
+                                                            ₹<%= carouselData[0].price %>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -159,7 +160,7 @@
                             <!-- Dots -->
                             <div
                                 class="absolute bottom-4 sm:bottom-8 left-0 right-0 flex justify-center space-x-3 z-10">
-                                <% for (let i=0; i < Math.min(user.carouselData.length, 5); i++) { %>
+                                <% for (let i=0; i < Math.min(carouselData.length, 5); i++) { %>
                                     <button
                                         class="carousel-dot w-4 h-4 rounded-full bg-orange-300/50 hover:bg-orange-300 transition-all duration-300"
                                         data-index="<%= i %>"></button>
@@ -184,7 +185,7 @@
                                 <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 sm:rounded-xl sm:shadow-md sm:hover:shadow-lg sm:transform-none"
                                     role="article" aria-labelledby="bag-<%= bag.id %>-name"
                                     style="perspective: 1000px;">
-                                    <div style="background-color: <%=bag.bgColor%>;"
+                                    <div style="background-color: <%= bag.bgColor %>"
                                         class="relative h-64 sm:h-80 overflow-hidden">
                                         <img src="data:<%= bag.productImage.productImageType %>;base64,<%= bag.productImage.toString('base64') %>"
                                             class="w-full h-full object-cover group-hover:scale-102 sm:group-hover:scale-105 transition-transform duration-500"
@@ -221,61 +222,183 @@
                                                                 <!-- price -->
                                                                 <div class="flex items-center mb-3">
                                                                     <span class="text-xl font-bold text-orange-400">
-                                                                        ₹<%= (bag.discount) ? (bag.price * (1 -
-                                                                            bag.discount / 100)).toLocaleString('en-IN',
-                                                                            { minimumFractionDigits: 0,
-                                                                            maximumFractionDigits: 2 }) :
-                                                                            bag.price.toLocaleString('en-IN', {
-                                                                            minimumFractionDigits: 0,
-                                                                            maximumFractionDigits: 2 }) %>
+                                                                        ₹<%= (bag.discount) ? Math.round(bag.price * (1
+                                                                            - bag.discount /
+                                                                            100)).toLocaleString('en-IN') :
+                                                                            bag.price.toLocaleString('en-IN') %>
                                                                     </span>
                                                                     <% if (bag.discount) { %>
                                                                         <span
                                                                             class="ml-2 text-sm text-gray-300 line-through">
-                                                                            ₹<%= bag.price.toLocaleString('en-IN', {
-                                                                                minimumFractionDigits: 0,
-                                                                                maximumFractionDigits: 2 }) %>
+                                                                            ₹<%= bag.price.toLocaleString('en-IN') %>
                                                                         </span>
                                                                         <% } %>
                                                                 </div>
                                                                 <!-- Rating -->
-                                                                <div class="flex items-center mb-4">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4 text-yellow-400"
-                                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path
-                                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                    </svg>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4 text-yellow-400"
-                                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path
-                                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                    </svg>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4 text-yellow-400"
-                                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path
-                                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                    </svg>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4 text-yellow-400"
-                                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path
-                                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                    </svg>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4 text-gray-300"
-                                                                        fill="currentColor" viewBox="0 0 20 20">
-                                                                        <path
-                                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                                    </svg>
-                                                                    <span class="ml-2 text-xs text-gray-200">(
-                                                                        <%= bag.ratings || "0" %>
-                                                                            )
+                                                                <% if (bag.ratings && bag.ratings> 0 && bag.ratings <=
+                                                                        5) { %>
+                                                                        <div class="flex items-center space-x-1 mb-2"
+                                                                            aria-label="Rating <%= bag.ratings %> out of 5">
+                                                                            <% const fullStars=Math.floor(bag.ratings);
+                                                                                %>
+                                                                                <% const hasHalfStar=bag.ratings % 1>=
+                                                                                    0.3 && bag.ratings % 1 < 0.8; %>
+                                                                                        <% const emptyStars=5 -
+                                                                                            fullStars - (hasHalfStar ? 1
+                                                                                            : 0); %>
+
+                                                                                            <% for (let i=0; i <
+                                                                                                fullStars; i++) { %>
+                                                                                                <i
+                                                                                                    class="fas fa-star text-sm text-yellow-400"></i>
+                                                                                                <% } %>
+                                                                                                    <% if (hasHalfStar)
+                                                                                                        { %>
+                                                                                                        <i
+                                                                                                            class="fas fa-star-half-alt text-sm text-yellow-400"></i>
+                                                                                                        <% } %>
+                                                                                                            <% for (let
+                                                                                                                i=0; i <
+                                                                                                                emptyStars;
+                                                                                                                i++) {
+                                                                                                                %>
+                                                                                                                <i
+                                                                                                                    class="far fa-star text-sm text-gray-300"></i>
+                                                                                                                <% } %>
+                                                                                                                    <span
+                                                                                                                        class="text-sm text-gray-300 ml-1">(
+                                                                                                                        <%= bag.ratings.toFixed(1)
+                                                                                                                            %>
+                                                                                                                            )
+                                                                                                                    </span>
+                                                                        </div>
+                                                                        <% } %>
+
+                                                                            <!-- View Details Button -->
+                                                                            <div class="flex flex-col space-y-2">
+                                                                                <div class="flex space-x-2">
+                                                                                    <a href="/products/checkout/<%= bag.id %>"
+                                                                                        class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
+                                                                                        aria-label="Shop <%= bag.productName %>">Shop
+                                                                                        Now</a>
+                                                                                    <button
+                                                                                        class="w-10 h-10 flex items-center justify-center bg-orange-100 hover:bg-orange-200 rounded-lg transition transform hover:scale-105"
+                                                                                        aria-label="Add <%= bag.productName %> to cart">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                            class="w-5 h-5 text-orange-600"
+                                                                                            fill="none"
+                                                                                            viewBox="0 0 24 24"
+                                                                                            stroke="currentColor">
+                                                                                            <path stroke-linecap="round"
+                                                                                                stroke-linejoin="round"
+                                                                                                stroke-width="2"
+                                                                                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </div>
+                                                                                <div class="flex space-x-2">
+                                                                                    <a href="/products/view/<%= bag.id %>"
+                                                                                        class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
+                                                                                        aria-label="View details for <%= bag.productName %>">View
+                                                                                        Details</a>
+                                                                                    <button
+                                                                                        class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
+                                                                                        aria-label="Add <%= bag.productName %> to wishlist">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                            class="w-5 h-5 text-gray-600"
+                                                                                            fill="none"
+                                                                                            viewBox="0 0 24 24"
+                                                                                            stroke="currentColor">
+                                                                                            <path stroke-linecap="round"
+                                                                                                stroke-linejoin="round"
+                                                                                                stroke-width="2"
+                                                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                </div>
+
+                                    </div>
+                                    <!-- Persistent Details (Small Devices Only) -->
+                                    <div class="p-5 space-y-3 lg:hidden">
+                                        <!-- Stock Badge -->
+                                        <% if(bag.stock> 0 && bag.stock < 10) { %>
+                                                <div
+                                                    class="absolute top-3 left-3 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
+                                                    Only <%= bag.stock %> left
+                                                </div>
+                                                <% } %>
+
+                                                    <div class="flex justify-between items-start relative">
+                                                        <!-- Discount Tag -->
+                                                        <% if (bag.discount) { %>
+                                                            <div
+                                                                class="absolute -top-3.5 -right-2 bg-green-200 text-green-800 px-2 rounded-full text-xs font-medium">
+                                                                <%= bag.discount %>% OFF
+                                                            </div>
+                                                            <% } %>
+                                                                <h3 id="bag-<%= bag.id %>-name"
+                                                                    class="text-lg font-bold text-gray-900 line-clamp-1">
+                                                                    <%= bag.productName %>
+                                                                </h3>
+                                                                <!-- Price -->
+                                                                <div class="flex items-center space-x-1">
+                                                                    <span class="text-lg font-bold text-orange-600"
+                                                                        aria-label="Price <%= (bag.discount && bag.discount > 0 && bag.discount <= 100) ? Math.round((bag.price || 0) * (1 - bag.discount / 100)) : (bag.price || 0) %> rupees">
+                                                                        ₹<%= (bag.discount && bag.discount> 0 &&
+                                                                            bag.discount <= 100) ? Math.round((bag.price
+                                                                                || 0) * (1 - bag.discount /
+                                                                                100)).toLocaleString('en-IN') :
+                                                                                (bag.price || 0).toLocaleString('en-IN')
+                                                                                %>
                                                                     </span>
+                                                                    <% if (bag.discount && bag.discount> 0 &&
+                                                                        bag.discount <= 100) { %>
+                                                                            <span
+                                                                                class="text-sm text-gray-500 line-through"
+                                                                                aria-label="Original price <%= (bag.price || 0) %> rupees">
+                                                                                ₹<%= (bag.price ||
+                                                                                    0).toLocaleString('en-IN') %>
+                                                                            </span>
+                                                                            <% } %>
                                                                 </div>
-                                                                <!-- View Details Button -->
+                                                    </div>
+                                                    <!-- Rating -->
+                                                    <% if (bag.ratings && bag.ratings> 0 && bag.ratings <= 5) { %>
+                                                            <div
+                                                                class="flex gap-1 py-0.5 rounded-sm w-fit text-yellow-400">
+                                                                <% const fullStars=Math.floor(bag.ratings); %>
+                                                                    <% const hasHalfStar=bag.ratings % 1>= 0.3 &&
+                                                                        bag.ratings % 1 < 0.8; %>
+                                                                            <% const emptyStars=5 - fullStars -
+                                                                                (hasHalfStar ? 1 : 0); %>
+
+                                                                                <% for (let i=0; i < fullStars; i++) {
+                                                                                    %>
+                                                                                    <i class="fas fa-star text-xs"></i>
+                                                                                    <% } %>
+                                                                                        <% if (hasHalfStar) { %>
+                                                                                            <i
+                                                                                                class="fas fa-star-half-alt text-xs"></i>
+                                                                                            <% } %>
+                                                                                                <% for (let i=0; i <
+                                                                                                    emptyStars; i++) {
+                                                                                                    %>
+                                                                                                    <i
+                                                                                                        class="far fa-star text-xs text-gray-300"></i>
+                                                                                                    <% } %>
+                                                                                                        <span
+                                                                                                            class="text-[10px] text-gray-400 font-bold text-sm">
+                                                                                                            (<%= bag.ratings.toFixed(1)
+                                                                                                                %>)
+                                                                                                        </span>
+                                                            </div>
+                                                            <% } %>
+
+                                                                <p class="text-sm text-gray-600 line-clamp-2">
+                                                                    <%= bag.description %>
+                                                                </p>
                                                                 <div class="flex flex-col space-y-2">
                                                                     <div class="flex space-x-2">
                                                                         <a href="/products/checkout/<%= bag.id %>"
@@ -316,126 +439,6 @@
                                                                         </button>
                                                                     </div>
                                                                 </div>
-                                                </div>
-
-                                    </div>
-                                    <!-- Persistent Details (Small Devices Only) -->
-                                    <div class="p-5 space-y-3 lg:hidden">
-                                        <!-- Stock Badge -->
-                                        <% if(bag.stock> 0 && bag.stock < 10) { %>
-                                                <div
-                                                    class="absolute top-3 left-3 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
-                                                    Only <%= bag.stock %> left
-                                                </div>
-                                                <% } %>
-
-                                                    <div class="flex justify-between items-start relative">
-                                                        <!-- Discount Tag -->
-                                                        <% if (bag.discount) { %>
-                                                            <div
-                                                                class="absolute -top-3.5 -right-2 bg-green-200 text-green-800 px-2 rounded-full text-xs font-medium">
-                                                                <%= bag.discount %>% OFF
-                                                            </div>
-                                                            <% } %>
-                                                                <h3 id="bag-<%= bag.id %>-name"
-                                                                    class="text-lg font-bold text-gray-900 line-clamp-1">
-                                                                    <%= bag.productName %>
-                                                                </h3>
-                                                                <div class="flex items-center space-x-1">
-                                                                    <span class="text-lg font-bold text-orange-600">
-                                                                        ₹<%= (bag.discount) ? (bag.price * (1 -
-                                                                            bag.discount / 100)).toLocaleString('en-IN',
-                                                                            { minimumFractionDigits: 0,
-                                                                            maximumFractionDigits: 2 }) :
-                                                                            bag.price.toLocaleString('en-IN', {
-                                                                            minimumFractionDigits: 0,
-                                                                            maximumFractionDigits: 2 }) %>
-                                                                    </span>
-                                                                    <% if (bag.discount) { %>
-                                                                        <span
-                                                                            class="text-sm text-gray-500 line-through">
-                                                                            ₹<%= bag.price.toLocaleString('en-IN', {
-                                                                                minimumFractionDigits: 0,
-                                                                                maximumFractionDigits: 2 }) %>
-                                                                        </span>
-                                                                        <% } %>
-                                                                </div>
-                                                    </div>
-                                                    <!-- Rating -->
-                                                    <div class="flex items-center">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-4 h-4 text-yellow-400" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                        </svg>
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-4 h-4 text-yellow-400" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                        </svg>
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-4 h-4 text-yellow-400" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                        </svg>
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-4 h-4 text-yellow-400" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                        </svg>
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-4 h-4 text-gray-300" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                        </svg>
-                                                        <span class="ml-1 text-xs text-gray-600">(<%= bag.ratings || "0"
-                                                                %>
-                                                                )</span>
-                                                    </div>
-                                                    <p class="text-sm text-gray-600 line-clamp-2">
-                                                        <%= bag.description %>
-                                                    </p>
-                                                    <div class="flex flex-col space-y-2">
-                                                        <div class="flex space-x-2">
-                                                            <a href="/products/checkout/<%= bag.id %>"
-                                                                class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
-                                                                aria-label="Shop <%= bag.productName %>">Shop
-                                                                Now</a>
-                                                            <button
-                                                                class="w-10 h-10 flex items-center justify-center bg-orange-100 hover:bg-orange-200 rounded-lg transition transform hover:scale-105"
-                                                                aria-label="Add <%= bag.productName %> to cart">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="w-5 h-5 text-orange-600" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                        <div class="flex space-x-2">
-                                                            <a href="/products/view/<%= bag.id %>"
-                                                                class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
-                                                                aria-label="View details for <%= bag.productName %>">View
-                                                                Details</a>
-                                                            <button
-                                                                class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
-                                                                aria-label="Add <%= bag.productName %> to wishlist">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="w-5 h-5 text-gray-600" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </div>
                                     </div>
                                 </div>
                                 <% }); %>

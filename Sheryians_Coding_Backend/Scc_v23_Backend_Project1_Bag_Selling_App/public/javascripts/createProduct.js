@@ -92,4 +92,3 @@ function resetImageInput() {
   document.getElementById("uploadText").classList.remove("hidden");
   document.getElementById("changeImageBtn").classList.add("hidden");
 }
-F;

@@ -34,7 +34,6 @@
             <!-- Flash Message Include -->
             <%- include('partials/flashMessage') %>
 
-
                 <!-- Product Grid -->
                 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -42,21 +41,19 @@
                             <div class="product-card bg-white rounded-xl shadow-md overflow-hidden relative">
                                 <!-- Product Image -->
                                 <div class="relative aspect-square">
-
                                     <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
                                         alt="<%= product.productName %>"
-                                        class="w-full h-full object-cover  cursor-pointer"
-                                        style="background-color: <%=product.bgColor%>;">
-
+                                        class="w-full h-full object-cover cursor-pointer"
+                                        style="background-color: <%= product.bgColor %>">
                                     <!-- Quick Actions -->
                                     <div class="absolute top-2 right-2 flex flex-col space-y-2">
                                         <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
-                                   hover:bg-indigo-600 hover:text-white transition-colors"
+                                       hover:bg-indigo-600 hover:text-white transition-colors"
                                             onclick="openQuickView('<%= product._id %>')">
                                             <i class="fas fa-eye text-sm"></i>
                                         </button>
                                         <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
-                                   hover:bg-indigo-600 hover:text-white transition-colors">
+                                       hover:bg-indigo-600 hover:text-white transition-colors">
                                             <i class="far fa-heart text-sm"></i>
                                         </button>
                                     </div>
@@ -72,9 +69,38 @@
                                             <p class="text-sm text-gray-500">
                                                 <%= product.brandName %>
                                             </p>
+                                            <!-- Rating -->
+                                            <% if (product.ratings && product.ratings> 0 && product.ratings <= 5) { %>
+                                                    <div class="flex items-center space-x-1 mt-1"
+                                                        aria-label="Rating <%= product.ratings %> out of 5">
+                                                        <% const fullStars=Math.floor(product.ratings); %>
+                                                            <% const hasHalfStar=product.ratings % 1>= 0.3 &&
+                                                                product.ratings % 1 < 0.8; %>
+                                                                    <% const emptyStars=5 - fullStars - (hasHalfStar ? 1
+                                                                        : 0); %>
+
+                                                                        <% for (let i=0; i < fullStars; i++) { %>
+                                                                            <i
+                                                                                class="fas fa-star text-sm text-yellow-400"></i>
+                                                                            <% } %>
+                                                                                <% if (hasHalfStar) { %>
+                                                                                    <i
+                                                                                        class="fas fa-star-half-alt text-sm text-yellow-400"></i>
+                                                                                    <% } %>
+                                                                                        <% for (let i=0; i < emptyStars;
+                                                                                            i++) { %>
+                                                                                            <i
+                                                                                                class="far fa-star text-sm text-gray-300"></i>
+                                                                                            <% } %>
+                                                                                                <span
+                                                                                                    class="text-sm text-gray-600 ml-1">(
+                                                                                                    <%= product.ratings.toFixed(1)
+                                                                                                        %>)</span>
+                                                    </div>
+                                                    <% } %>
                                         </div>
-                                        <!-- discount offers -->
-                                        <% if(product.discount> 0) { %>
+                                        <!-- Discount Offers -->
+                                        <% if (product.discount> 0) { %>
                                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                                                 <%= product.discount %>% OFF
                                             </span>
@@ -83,33 +109,33 @@
 
                                     <!-- Price -->
                                     <div class="mb-3">
-                                        <% if(product.discount> 0) { %>
-                                            <span class="text-xl font-bold text-gray-900">
-                                                ₹<%= (product.price * (1 -
-                                                    product.discount/100)).toLocaleString('en-IN', {
-                                                    minimumFractionDigits: 0, maximumFractionDigits: 2 }) %>
-                                            </span>
-                                            <span class="text-gray-400 line-through text-sm ml-2">
-                                                ₹<%= product.price.toLocaleString('en-IN', { minimumFractionDigits: 0,
-                                                    maximumFractionDigits: 2 }) %>
-                                            </span>
-                                            <% } else { %>
-                                                <span class="text-xl font-bold text-gray-900">
-                                                    ₹<%= product.price.toLocaleString('en-IN', { minimumFractionDigits:
-                                                        0, maximumFractionDigits: 2 }) %>
+                                        <% if (product.discount> 0 && product.discount <= 100) { %>
+                                                <span class="text-xl font-bold text-gray-900"
+                                                    aria-label="Price <%= Math.round((product.price || 0) * (1 - product.discount / 100)) %> rupees">
+                                                    ₹<%= Math.round((product.price || 0) * (1 - product.discount /
+                                                        100)).toLocaleString('en-IN') %>
                                                 </span>
-                                                <% } %>
+                                                <span class="text-gray-400 line-through text-sm ml-2"
+                                                    aria-label="Original price <%= (product.price || 0) %> rupees">
+                                                    ₹<%= (product.price || 0).toLocaleString('en-IN') %>
+                                                </span>
+                                                <% } else { %>
+                                                    <span class="text-xl font-bold text-gray-900"
+                                                        aria-label="Price <%= (product.price || 0) %> rupees">
+                                                        ₹<%= (product.price || 0).toLocaleString('en-IN') %>
+                                                    </span>
+                                                    <% } %>
                                     </div>
 
                                     <!-- Actions -->
                                     <div class="flex gap-2">
                                         <a href="/products/<%= product._id %>" class="flex-1 text-center py-2 px-4 border border-gray-300 rounded-lg 
-                                  hover:border-indigo-600 hover:text-indigo-600 transition-colors">
+                              hover:border-indigo-600 hover:text-indigo-600 transition-colors">
                                             View Details
                                         </a>
-                                        <% if(product.stock> 0) { %>
+                                        <% if (product.stock> 0) { %>
                                             <button onclick="addToCart('<%= product._id %>')" class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg 
-                                           hover:bg-indigo-700 transition-colors">
+                               hover:bg-indigo-700 transition-colors">
                                                 Add to Cart
                                             </button>
                                             <% } else { %>
@@ -122,7 +148,7 @@
                                 </div>
 
                                 <!-- Stock Badge -->
-                                <% if(product.stock> 0 && product.stock < 10) { %>
+                                <% if (product.stock> 0 && product.stock < 10) { %>
                                         <div
                                             class="absolute top-2 left-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
                                             Only <%= product.stock %> left
@@ -137,7 +163,6 @@
                 <div id="quickViewModal" class="hidden fixed inset-0 bg-black/50 z-50">
                     <div class="flex items-center justify-center min-h-screen">
                         <div class="bg-white rounded-xl max-w-2xl w-full mx-4 p-6 relative">
-                            <!-- Modal content will be loaded via AJAX -->
                             <button onclick="closeQuickView()"
                                 class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                                 <i class="fas fa-times text-xl"></i>
@@ -174,7 +199,6 @@
                             });
 
                             if (response.ok) {
-                                // Update cart count
                                 const cartCount = document.querySelector('[data-cart-count]');
                                 cartCount.textContent = parseInt(cartCount.textContent) + 1;
                             }
@@ -184,7 +208,6 @@
                     }
                 </script>
 
-                <!-- Scripts -->
                 <script src="/javascripts/searchAndMenuToggle.js"></script>
                 <script src="/javascripts/profileToggle.js"></script>
                 <script src="/javascripts/flashMessage.js"></script>

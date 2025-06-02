@@ -2,22 +2,6 @@ import User from "../models/user-model.js";
 import Product from "../models/product-model.js";
 import jwt from "jsonwebtoken";
 
-import {
-  validateGstin,
-  validateAadhar,
-  validateEmail,
-  validateAge,
-  validateGender,
-  validatePhone,
-  validatePassword,
-  validatePinCode,
-} from "../helpers/validators.js";
-
-// index page method (GET)
-// export const index = (req, res) => {
-//   res.render("index", { bags: [], reviews: [], cartCount: 2 });
-// });
-
 // Example bag data (replace with database query in production)
 const carouselData = [
   {
@@ -148,6 +132,7 @@ const reviews = [
   },
 ];
 
+// index page method (GET)
 export const indexPage = async (req, res) => {
   let error = req.flash("error"); // Retrieve error flash messages
   let success = req.flash("success"); // Retrieve success flash messages
@@ -160,9 +145,6 @@ export const indexPage = async (req, res) => {
       const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
       user = decoded;
     }
-
-    // set carouselData in user
-    user.carouselData = carouselData;
 
     // Check if product already exists by model
     const products = await Product.find().limit("12").sort({ createdAt: -1 });
@@ -179,6 +161,7 @@ export const indexPage = async (req, res) => {
       user,
       isLogin,
       bags: products, // Pass the enhanced array of bags
+      carouselData, // pass carousel poster
       reviews: reviews,
       cartCount: 2,
       wishlistCount: 5,

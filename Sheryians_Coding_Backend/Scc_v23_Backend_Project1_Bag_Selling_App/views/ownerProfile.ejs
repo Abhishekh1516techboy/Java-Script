@@ -190,73 +190,71 @@
                                     <% if (user?.products && user.products?.length> 0) { %>
                                         <div class="space-y-3 max-h-98 overflow-y-auto pr-2">
                                             <% user?.products.forEach(product=> { %>
-                                                <a href="/products/<%= product._id %>" class="block"
-                                                    aria-label="View details for <%= product.productName %>">
-                                                    <div class="relative p-4 rounded-lg shadow-sm border border-gray-300 hover:border-blue-300 hover:bg-gray-100 transition product-card flex items-center space-x-4"
-                                                        data-category="<%= product.category %>">
-                                                        <% if (product.productImage) { %>
-                                                            <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
-                                                                alt="<%= product.productName %>"
-                                                                class="w-16 h-16 rounded object-cover"
-                                                                style="background-color: <%=product.bgColor%>;">
-                                                            <% } %>
-                                                                <div class="flex-1">
-                                                                    <span
-                                                                        class="absolute top-1 bg-orange-500 text-white rounded-sm px-1  text-xs">
-                                                                        <%= product.category %>
+                                                <div class="relative p-4 rounded-lg shadow-sm border border-gray-300 hover:border-blue-300 hover:bg-gray-100 transition product-card flex items-center space-x-4"
+                                                    data-category="<%= product.category %>">
+                                                    <% if (product.productImage) { %>
+                                                        <img src="data:<%= product.productImageType %>;base64,<%= product.productImage.toString('base64') %>"
+                                                            alt="<%= product.productName %>"
+                                                            class="w-16 h-16 rounded object-cover"
+                                                            style="background-color: <%= product.bgColor %>;">
+                                                        <% } %>
+                                                            <div class="flex-1">
+                                                                <span
+                                                                    class="absolute top-1 bg-orange-500 text-white rounded-sm px-1 text-xs">
+                                                                    <%= product.category %>
+                                                                </span>
+                                                                <h2 class="text-violet-600 font-semibold text-lg mt-1">
+                                                                    <%= product.productName %>
+                                                                </h2>
+                                                                <p class="text-xs text-gray-500 font-semibold">
+                                                                    Model: <%= product.model || 'N/A' %>
+                                                                </p>
+                                                                <!-- price -->
+                                                                <div class="flex items-center mb-3">
+                                                                    <span class="text-sm font-semibold text-gray-700">
+                                                                        ₹<%= (product.discount) ?
+                                                                            Math.round(product.price * (1 -
+                                                                            product.discount /
+                                                                            100)).toLocaleString('en-IN') :
+                                                                            Math.round(product.price).toLocaleString('en-IN')
+                                                                            %>
                                                                     </span>
-                                                                    <h2
-                                                                        class="text-violet-600 font-semibold text-lg mt-1">
-                                                                        <%= product.productName %>
-                                                                    </h2>
-                                                                    <p class="text-xs text-gray-500 font-semibold">
-                                                                        Model: <%= product.model || 'N/A' %>
-                                                                    </p>
-                                                                    <!-- Price -->
-                                                                    <div>
-                                                                        <% if(product.discount> 0) { %>
-                                                                            <span
-                                                                                class="text-xs font-bold text-gray-900">
-                                                                                ₹<%= (product.price * (1 -
-                                                                                    product.discount/100)).toLocaleString('en-IN',
-                                                                                    { minimumFractionDigits: 0,
-                                                                                    maximumFractionDigits: 2 }) %>
-                                                                            </span>
-                                                                            <span
-                                                                                class="text-gray-500 line-through text-xs ml-2">
-                                                                                ₹<%= product.price.toLocaleString('en-IN',
-                                                                                    { minimumFractionDigits: 0,
-                                                                                    maximumFractionDigits: 2 }) %>
-                                                                            </span>
-                                                                            <% } else { %>
-                                                                                <span
-                                                                                    class="text-xs font-bold text-gray-900">
-                                                                                    ₹<%= product.price.toLocaleString('en-IN',
-                                                                                        { minimumFractionDigits: 0,
-                                                                                        maximumFractionDigits: 2 }) %>
-                                                                                </span>
-                                                                                <% } %>
-                                                                                    <!-- Discount OFF -->
-                                                                                    <% if(product.discount> 0) { %>
-                                                                                        <span
-                                                                                            class="bg-green-200 text-green-800 px-1 rounded-full text-xs ml-1">
-                                                                                            <%= product.discount %>% OFF
-                                                                                        </span>
-                                                                                        <% } %>
-                                                                    </div>
-                                                                </div>
-                                                                <i
-                                                                    class="fas fa-external-link-alt text-blue-500 hover:text-blue-700"></i>
-
-                                                                <!-- Stock Badge -->
-                                                                <% if(product.stock> 0 && product.stock < 10) { %>
-                                                                        <div
-                                                                            class="absolute top-1 right-2 bg-orange-100 text-orange-800 px-2 rounded-full text-xs">
-                                                                            Only <%= product.stock %> left
-                                                                        </div>
+                                                                    <% if (product.discount) { %>
+                                                                        <span
+                                                                            class="ml-2 text-sm text-gray-400 line-through">
+                                                                            ₹<%= Math.round(product.price).toLocaleString('en-IN')
+                                                                                %>
+                                                                        </span>
+                                                                        <span
+                                                                            class="ml-2 px-2 py-0.5 bg-green-200 text-green-800 rounded-full text-xs font-semibold">
+                                                                            <%= product.discount %>% OFF
+                                                                        </span>
                                                                         <% } %>
-                                                    </div>
-                                                </a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Stock Badge -->
+                                                            <% if (product.stock> 0 && product.stock < 10) { %>
+                                                                    <div
+                                                                        class="absolute top-1 -right-2 bg-orange-100 text-orange-800 px-2 rounded-full text-xs">
+                                                                        Only <%= product.stock %> left
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <!-- Link for Update Product -->
+                                                                        <div class="flex items-center space-x-3">
+                                                                            <a href="/owners/updateProduct/<%= product._id %>"
+                                                                                class="text-blue-500 hover:text-blue-700"
+                                                                                aria-label="View details for <%= product.productName %>">
+                                                                                <i class="fas fa-external-link-alt"></i>
+                                                                            </a>
+                                                                            <button type="button"
+                                                                                class="text-red-500 hover:text-red-700 delete-product-btn"
+                                                                                data-product-id="<%= product._id %>"
+                                                                                data-product-name="<%= product.productName %>"
+                                                                                aria-label="Delete <%= product.productName %>">
+                                                                                <i class="fas fa-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                </div>
                                                 <% }) %>
                                         </div>
                                         <% } else { %>
@@ -727,6 +725,32 @@
                     </div>
                 </div>
 
+                <!-- Delete Product Confirmation Modal -->
+                <div id="deleteProductModal" class="fixed inset-0 z-50 hidden">
+                    <div class="modal-overlay absolute inset-0"></div>
+                    <div class="flex items-center justify-center min-h-screen px-4">
+                        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+                            <button id="closeDeleteModal"
+                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times text-xl"></i>
+                            </button>
+                            <h3 class="text-xl font-bold mb-4 text-red-600">
+                                <i class="fas fa-trash mr-2"></i>Confirm Delete
+                            </h3>
+                            <p class="text-gray-700 mb-6">Are you sure you want to delete "<span
+                                    id="deleteProductName"></span>"? This action cannot be undone.</p>
+                            <form id="deleteProductForm" action="" method="POST">
+                                <div class="flex justify-end space-x-3">
+                                    <button type="button" id="cancelDeleteBtn"
+                                        class="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-lg">Cancel</button>
+                                    <button type="submit" id="confirmDeleteBtn"
+                                        class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Delete</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <script>
 
                     // Close modal when clicking outside
@@ -748,7 +772,6 @@
                         };
                         reader.readAsDataURL(event.target.files[0]);
                     }
-
                 </script>
 
                 <!-- JavaScripts -->
@@ -758,6 +781,7 @@
                 <script src="/javascripts/flashMessage.js"></script>
                 <script src="/javascripts/ownerPasswordChangeModel.js"></script>
                 <script src="/javascripts/ownerProfileUpdate.js"></script>
+                <script src="/javascripts/deleteProduct.js"></script>
     </body>
 
 </html>

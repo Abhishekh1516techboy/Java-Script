@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Update Product</title>
+        <link href="/stylesheets/output.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+
+    <body class="bg-gray-50 font-sans">
+        <!-- Headers -->
+        <%- include('partials/header') %>
+            <!-- Flash Message -->
+            <%- include('partials/flashMessage') %>
+
+                <main class="p-4">
+                    <div class="bg-white rounded-xl shadow-md border border-gray-100 max-w-3xl w-full mx-auto">
+                        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 rounded-t-xl">
+                            <h1 class="text-2xl font-bold text-white text-center">
+                                <i class="fas fa-edit mr-2"></i>Update Product
+                            </h1>
+                        </div>
+                        <div class="p-8">
+                            <form action="/owners/updateProduct/<%= user.product._id %>" method="POST"
+                                enctype="multipart/form-data" class="space-y-6" onsubmit="handleSubmit(event)">
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="relative">
+                                        <input type="text" id="productName" name="productName"
+                                            value="<%= user.product.productName %>" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <label for="productName"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Product
+                                            Name</label>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" id="brandName" name="brandName"
+                                            value="<%= user.product.brandName %>" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <label for="brandName"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Brand
+                                            Name</label>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="relative">
+                                        <select id="category" name="category" required
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg">
+                                            <option value="" disabled <%=!user.product.category ? 'selected' : '' %>
+                                                >Select Category</option>
+                                            <option value="Backpack" <%=user.product.category==='Backpack' ? 'selected'
+                                                : '' %>>Backpack</option>
+                                            <option value="Handbag" <%=user.product.category==='Handbag' ? 'selected'
+                                                : '' %>>Handbag</option>
+                                            <option value="School bag" <%=user.product.category==='School bag'
+                                                ? 'selected' : '' %>>School bag</option>
+                                            <option value="Laptop bag" <%=user.product.category==='Laptop bag'
+                                                ? 'selected' : '' %>>Laptop bag</option>
+                                            <option value="Wallet" <%=user.product.category==='Wallet' ? 'selected' : ''
+                                                %>>Wallet</option>
+                                            <option value="Camera bag" <%=user.product.category==='Camera bag'
+                                                ? 'selected' : '' %>>Camera bag</option>
+                                            <option value="Gym bag" <%=user.product.category==='Gym bag' ? 'selected'
+                                                : '' %>>Gym bag</option>
+                                        </select>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text" id="model" value="<%= user.product.model %>"
+                                            required placeholder=" "
+                                            disabled
+                                            class="peer w-full px-4 py-2 border border-gray-300 bg-gray-100 rounded-lg outline-none text-lg" />
+                                        <label for="model"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Model</label>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-3">
+                                    <div class="relative">
+                                        <input type="number" id="price" name="price" value="<%= user.product.price %>"
+                                            min="0" step="0.01" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <label for="price"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Price
+                                            (₹)</label>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="number" id="discount" name="discount"
+                                            value="<%= user.product.discount %>" min="0" max="100" step="1"
+                                            placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <label for="discount"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Discount
+                                            (%)</label>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="number" id="stock" name="stock" value="<%= user.product.stock %>"
+                                            min="0" step="1" required placeholder=" "
+                                            class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg" />
+                                        <label for="stock"
+                                            class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Stock
+                                            Quantity</label>
+                                    </div>
+                                </div>
+                                <div class="grid gap-6 md:grid-cols-2">
+                                    <div class="flex items-center gap-4">
+                                        <input type="color" id="bgColor" name="bgColor"
+                                            value="<%= user.product.bgColor || '#ffffff' %>"
+                                            class="w-24 h-10 rounded-lg border border-gray-300 cursor-pointer" />
+                                        <label for="bgColor" class="text-gray-600 font-medium">Background Color</label>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <input type="color" id="panelColor" name="panelColor"
+                                            value="<%= user.product.panelColor || '#dadada' %>"
+                                            class="w-24 h-10 rounded-lg border border-gray-300 cursor-pointer" />
+                                        <label for="panelColor" class="text-gray-600 font-medium">Panel Color</label>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <textarea id="description" name="description" required minlength="10"
+                                        maxlength="500" placeholder=" "
+                                        class="peer w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-lg h-32 resize-none"><%= user.product.description %></textarea>
+                                    <label for="description"
+                                        class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Product
+                                        Description</label>
+                                    <div class="absolute bottom-2 right-3 text-sm bg-blue-50 px-2 py-1 rounded-md"
+                                        aria-live="polite">
+                                        <span id="charCount" class="text-gray-500">
+                                            <%= user.product.description.length %>
+                                        </span>/500
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="productImage" class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-image mr-2"></i>Product Image
+                                    </label>
+                                    <div id="uploadContainer"
+                                        class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300"
+                                        ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"
+                                        ondrop="handleDrop(event)">
+                                        <div class="space-y-4">
+                                            <img id="imgPreview"
+                                                src="data:<%= user.product.productImageType %>;base64,<%= user.product.productImage.toString('base64') %>"
+                                                alt="Product image preview"
+                                                class="w-32 h-32 object-cover rounded-lg border border-gray-300 mx-auto"
+                                                style="background-color: <%= user.product.bgColor%>" />
+                                            <div id="uploadText"
+                                                class="<%= user.product.productImage ? 'hidden' : '' %>">
+                                                <label
+                                                    class="cursor-pointer text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-200">
+                                                    <i class="fas fa-camera mr-2"></i>Upload Image
+                                                    <input type="file" name="productImage"
+                                                        accept="image/jpeg,image/png,image/gif"
+                                                        onchange="previewImage(event)" class="hidden"
+                                                        id="productImage" />
+                                                </label>
+                                                <p class="text-sm text-gray-500 mt-2">or drag and drop here</p>
+                                            </div>
+                                            <button type="button" id="changeImageBtn"
+                                                class="<%= user.product.productImage ? '' : 'hidden' %> text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-200"
+                                                onclick="resetImageInput()">
+                                                <i class="fas fa-camera mr-2"></i>Change Image
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit"
+                                    class="submit-btn w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                                    <span class="submit-text">
+                                        <i class="fas fa-edit mr-2"></i>Update Product
+                                    </span>
+                                    <svg class="animate-spin h-5 w-5 text-white hidden submit-spinner"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                            stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor"
+                                            d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8 8 8 0 01-8-8z"></path>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+                <script src="/javascripts/createProduct.js"></script>
+    </body>
+
+</html>

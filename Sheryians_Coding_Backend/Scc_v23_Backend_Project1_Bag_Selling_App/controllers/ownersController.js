@@ -169,7 +169,6 @@ export const profileUpdate = async (req, res) => {
       return res.status(400).json({ message: "No profile data provided" });
     }
 
-
     // Parse json data
     const updateData = JSON.parse(req.body.data);
 
@@ -373,5 +372,161 @@ export const createProduct = async (req, res) => {
 
     req.flash("error", "Failed to Create product");
     return res.redirect("/owners/createProduct");
+  }
+};
+
+export const updateProductPage = async (req, res) => {
+  let error = req.flash("error"); // Retrieve error flash messages
+  let success = req.flash("success"); // Retrieve success flash messages
+
+  try {
+    // Get the authenticated user's ID from JWT
+    const authUser = req.user;
+
+    // Extract the userId from the route parameter
+    const productId = req.params.id;
+
+    if (!authUser.id) {
+      req.flash("error", "You are not authorized!");
+      return res.redirect("/");
+    }
+
+    // find Products by ID
+    const product = await Product.findById(productId);
+
+    // set product data in authUser
+    authUser.product = product;
+
+    let isLogin = false;
+    if (authUser.id) {
+      isLogin = true;
+    }
+
+    res.render("updateProduct", {
+      authPage: false,
+      error,
+      success,
+      user: authUser,
+      isLogin,
+      cartCount: 2,
+      wishlistCount: 5,
+    });
+  } catch (error) {
+    console.error("Create Product error:", error);
+    req.flash("error", "Server error during Product creating");
+    return res.redirect("/");
+  }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
+    // Get the authenticated user's ID from JWT
+    const authUser = req.user.id;
+
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    if (product.ownerId.toString() !== authUser) {
+      req.flash("error", "Something went wrong!");
+      return res.redirect("/");
+    }
+
+    // Body contains updated-form data
+    const {
+      productName,
+      brandName,
+      category,
+      price,
+      discount,
+      stock,
+      bgColor,
+      panelColor,
+      description,
+    } = req.body;
+
+    //check form data is available in body or not
+    if (!req.body || Object.keys(req.body).length === 0) {
+      req.flash("error", "Form data is required");
+      return res.redirect(`/owners/updateProduct/${productId}`);
+    }
+
+    // Validate price
+    if (!price || isNaN(price) || price < 0) {
+      req.flash("error", "Price must be a positive number");
+      return res.redirect(`/owners/updateProduct/${productId}`);
+    }
+
+    // Validate discount
+    if (discount && (isNaN(discount) || discount < 0 || discount > 100)) {
+      req.flash("error", "Discount must be between 0 and 100");
+      return res.redirect(`/owners/updateProduct/${productId}`);
+    }
+
+    if (!stock || isNaN(stock) || stock < 0) {
+      req.flash("error", "Stock quantity must be a positive number");
+      return res.redirect(`/owners/updateProduct/${productId}`);
+    }
+
+    const updateData = {
+      productName,
+      brandName,
+      category,
+      price: parseFloat(price),
+      discount: parseFloat(discount),
+      stock: parseInt(stock),
+      bgColor,
+      panelColor,
+      description,
+    };
+
+    if (req.file) {
+      updateData.productImage = req.file.buffer; // set image in db
+    }
+
+    await Product.findByIdAndUpdate(productId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    req.flash("success", "Product updated successfully");
+    res.redirect("/owners/profile"); // Adjust redirect as needed
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Error:`, error);
+    req.flash("error", "Server error during product update");
+    res.redirect(`/owners/updateProduct/${req.params.id}`);
+  }
+};
+
+export const deleteProduct = async (req, res) => {
+  try {
+    // Get the authenticated user's ID from JWT
+    const authUser = req.user.id;
+    const productId = req.params.id;
+
+    // Find the product by ID
+    const product = await Product.findById(productId);
+
+    // Check if product exists
+    if (!product) {
+      req.flash("error", "Product not found");
+      return res.redirect("/owners/profile");
+    }
+
+    // Check if the user owns the product
+    if (product.ownerId.toString() !== authUser) {
+      req.flash("error", "Something went wrong!");
+      return res.redirect("/");
+    }
+
+    // Delete the product
+    await Product.findByIdAndDelete(productId);
+
+    req.flash("success", "Product deleted successfully");
+    res.redirect("/owners/profile");
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Error:`, error);
+    req.flash("error", "Server error during product deletion");
+    res.redirect("/owners/profile");
   }
 };

@@ -26,6 +26,7 @@ app.use(express.json()); // Parse incoming JSON payloads
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 app.use(express.static(path.join(__dirname, "public"))); // Serve static files from the 'public' directory
 app.use(cookieParser()); // cookie parser
+
 // Session configuration
 app.use(
   session({
@@ -59,7 +60,7 @@ app.use((err, req, res, next) => {
   res.status(500).redirect("/");
 });
 
-// Immediately Invoked Async Function Expression (IIAFE) to handle app startup
+// Immediately Invoked Async Function Expression (IIFE) to handle app startup
 (async () => {
   try {
     console.log(`Running in ${process.env.NODE_ENV} mode`); // Log Production OR Development Mode
