@@ -30,7 +30,7 @@ export const profile = async (req, res) => {
       .select("+aadharNumber +phone")
       .populate({
         path: "products",
-        options: { sort: { createdAt: -1 } }, // sort createdAt populated products
+        options: { sort: { updatedAt: -1 } }, // sort createdAt populated products
       })
       .lean();
 

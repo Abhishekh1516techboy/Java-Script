@@ -147,7 +147,7 @@ export const indexPage = async (req, res) => {
     }
 
     // Check if product already exists by model
-    const products = await Product.find().limit("12").sort({ createdAt: -1 });
+    const products = await Product.find().limit("12").sort({ updatedAt: -1 });
 
     if (!products) {
       req.flash("error", "Not Products Lists");

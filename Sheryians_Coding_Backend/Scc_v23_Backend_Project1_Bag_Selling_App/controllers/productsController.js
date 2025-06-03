@@ -1,4 +1,5 @@
 import Product from "../models/product-model.js";
+import jwt from "jsonwebtoken";
 // import Users from "../models/user-model.js";
 
 // ********************** /Product controllers **********************
@@ -7,16 +8,8 @@ export const productsPage = async (req, res) => {
   let success = req.flash("success"); // Retrieve success flash messages
 
   try {
-    // Get the authenticated user's ID from JWT
-    const authUser = req.user;
-
-    if (!authUser.id) {
-      req.flash("error", "You are not authorized!");
-      return res.redirect("/");
-    }
-
     // Check if product already exists by model
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.find().limit("50").sort({ updatedAt: -1 });
 
     if (!products) {
       req.flash("error", "Not Products Lists");
@@ -24,8 +17,11 @@ export const productsPage = async (req, res) => {
     }
 
     let isLogin = false;
-    if (authUser.id) {
+    let user;
+    if (req.cookies?.token) {
       isLogin = true;
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      user = decoded;
     }
 
     res.render("productsPage", {
@@ -33,7 +29,7 @@ export const productsPage = async (req, res) => {
       products,
       error,
       success,
-      user: authUser,
+      user,
       isLogin,
       cartCount: 2,
       wishlistCount: 5,
