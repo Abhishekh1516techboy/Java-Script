@@ -62,7 +62,7 @@ router.post(
 router.get("/updateProduct/:id", isLoggedIn, updateProductPage);
 
 // Update Product Route
-router.post(
+router.put(
   "/updateProduct/:id",
   upload.single("productImage"), // Multer middleware to parse single file
   isLoggedIn,
@@ -70,6 +70,6 @@ router.post(
 );
 
 // Delete Product Route
-router.post("/deleteProduct/:id", isLoggedIn, deleteProduct);
+router.delete("/deleteProduct/:id", isLoggedIn, deleteProduct);
 
 export default router;

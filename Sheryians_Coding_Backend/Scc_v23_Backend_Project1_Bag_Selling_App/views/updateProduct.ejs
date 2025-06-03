@@ -23,8 +23,8 @@
                             </h1>
                         </div>
                         <div class="p-8">
-                            <form action="/owners/updateProduct/<%= user.product._id %>" method="POST"
-                                enctype="multipart/form-data" class="space-y-6" onsubmit="handleSubmit(event)">
+                            <form id="updateProduct" enctype="multipart/form-data" class="space-y-6"
+                                onsubmit="handleSubmit(event)">
                                 <div class="grid gap-6 md:grid-cols-2">
                                     <div class="relative">
                                         <input type="text" id="productName" name="productName"
@@ -66,9 +66,8 @@
                                         </select>
                                     </div>
                                     <div class="relative">
-                                        <input type="text" id="model" value="<%= user.product.model %>"
-                                            required placeholder=" "
-                                            disabled
+                                        <input type="text" id="model" value="<%= user.product.model %>" required
+                                            placeholder=" " disabled
                                             class="peer w-full px-4 py-2 border border-gray-300 bg-gray-100 rounded-lg outline-none text-lg" />
                                         <label for="model"
                                             class="absolute left-4 top-3 text-sm text-gray-500 pointer-events-none transition-all duration-200 peer-focus:-top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-blue-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">Model</label>
@@ -180,10 +179,13 @@
                         </div>
                     </div>
                 </main>
+                <script>
+                    const productId = "<%= user.product.id %>"; // set ProductId
+                </script>
                 <script src="/javascripts/searchAndMenuToggle.js"></script>
                 <script src="/javascripts/profileToggle.js"></script>
                 <script src="/javascripts/flashMessage.js"></script>
-                <script src="/javascripts/createProduct.js"></script>
+                <script src="/javascripts/updateProduct.js"></script>
     </body>
 
 </html>

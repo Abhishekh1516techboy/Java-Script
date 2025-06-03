@@ -420,17 +420,24 @@ export const updateProductPage = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    // Get the authenticated user's ID from JWT
-    const authUser = req.user.id;
+    const authUserId = req.user.id; // Get the authenticated user's ID from JWT
+    const productId = req.params.id; // Get product ID from URL params
 
-    const productId = req.params.id;
-
+    // Verify product exists
     const product = await Product.findById(productId);
 
-    if (product.ownerId.toString() !== authUser) {
-      req.flash("error", "Something went wrong!");
+    if (product.ownerId.toString() !== authUserId) {
+      req.flash("error", "Unauthorized!");
       return res.redirect("/");
     }
+
+    // Parse textual data from req.body.data
+    if (!req.body.data) {
+      return res.status(400).json({ message: "No product data provided" });
+    }
+
+    // Parse JSON data
+    const data = JSON.parse(req.body.data);
 
     // Body contains updated-form data
     const {
@@ -443,7 +450,7 @@ export const updateProduct = async (req, res) => {
       bgColor,
       panelColor,
       description,
-    } = req.body;
+    } = data;
 
     //check form data is available in body or not
     if (!req.body || Object.keys(req.body).length === 0) {
@@ -468,6 +475,7 @@ export const updateProduct = async (req, res) => {
       return res.redirect(`/owners/updateProduct/${productId}`);
     }
 
+    // Prepare update object
     const updateData = {
       productName,
       brandName,
@@ -480,17 +488,22 @@ export const updateProduct = async (req, res) => {
       description,
     };
 
+    // Include image if uploaded
     if (req.file) {
-      updateData.productImage = req.file.buffer; // set image in db
+      updateData.productImage = req.file.buffer;
     }
 
+    // Update product in database
     await Product.findByIdAndUpdate(productId, updateData, {
       new: true,
       runValidators: true,
     });
 
     req.flash("success", "Product updated successfully");
-    res.redirect("/owners/profile"); // Adjust redirect as needed
+
+    res
+      .status(200)
+      .json({ message: "Product updated successfully", updateData });
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error:`, error);
     req.flash("error", "Server error during product update");
@@ -523,7 +536,8 @@ export const deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(productId);
 
     req.flash("success", "Product deleted successfully");
-    res.redirect("/owners/profile");
+    // res.redirect("/owners/profile");
+    res.status(200).json({ message: "Product Delete successfully", product });
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error:`, error);
     req.flash("error", "Server error during product deletion");
