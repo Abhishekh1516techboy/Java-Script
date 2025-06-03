@@ -80,11 +80,12 @@
                                 <div class="bg-white rounded-xl shadow-sm p-6 sticky top-8">
                                     <div class="flex flex-col items-center pb-6 border-b border-gray-200">
 
-                                        <!-- Profile Image  -->
+                                        <!-- Profile Image -->
                                         <div class="relative mb-4">
-                                            <img id="profileImage" src="<%= user.picture || '/images/author.webp' %>"
-                                                alt="Profile"
-                                                class="w-24 h-24 rounded-full object-cover object-top bg-yellow-400 border-4 border-indigo-300">
+                                            <img id="profileImage"
+                                                src="<%= user.picture ? `data:${user.picture.productImageType};base64,${user.picture.toString('base64')}` : '/images/default-user.png' %>"
+                                                alt="Profile picture of <%= user?.name %>"
+                                                class="w-24 h-24 rounded-full object-cover object-top bg-yellow-400 border-4 border-indigo-300" />
                                             <label for="imageUpload"
                                                 class="absolute h-7 w-7 flex justify-center items-center bottom-0 right-0 bg-indigo-600 text-white rounded-full cursor-pointer hover:bg-indigo-700 transform hover:scale-105 transition">
                                                 <i class="fas fa-camera text-sm"></i>
@@ -758,34 +759,6 @@
                         });
                     });
 
-                    // Profile Image Upload
-                    const profileImage = document.getElementById('profileImage');
-                    const imageUpload = document.getElementById('imageUpload');
-                    imageUpload.addEventListener('change', async (e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = async (event) => {
-                                profileImage.src = event.target.result;
-                                const formData = new FormData();
-                                formData.append('picture', file);
-                                try {
-                                    const response = await fetch(`/users/profile/${userId}/imageUpload`, {
-                                        method: 'PUT',
-                                        body: formData
-                                    });
-                                    const data = await response.json();
-                                    if (response.ok) {
-                                        alert("imageUpload SuccessFull!");
-                                    }
-                                } catch (error) {
-                                    alert('An error occurred while uploading the image');
-                                }
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-
 
                     // Cart Actions
                     document.querySelectorAll('.remove-cart').forEach(btn => {
@@ -910,6 +883,7 @@
                 <script src="/javascripts/flashMessage.js"></script>
                 <script src="/javascripts/passwordChangeModel.js"></script>
                 <script src="/javascripts/profileUpdate.js"></script>
+                <script src="/javascripts/profilePicUpdate.js"></script>
     </body>
 
 </html>

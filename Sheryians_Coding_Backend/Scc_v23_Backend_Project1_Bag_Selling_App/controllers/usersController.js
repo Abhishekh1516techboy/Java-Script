@@ -206,6 +206,46 @@ export const profileUpdate = async (req, res) => {
   }
 };
 
+export const profileImageUpdate = async (req, res) => {
+  try {
+    const userId = req.params.id; // Extract the User ID from URL parameters
+    const authUserId = req.user.id; // Get the authenticated user's ID from JWT
+
+    // Check if the requested userId matches the authenticated user's ID
+    if (userId !== authUserId) {
+      return res.status(403).json({ message: "Unauthorized!" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const updatedProfile = await User.findByIdAndUpdate(
+      userId,
+      {
+        picture: req.file?.buffer, // store image in Buffer
+      },
+      { new: true, runValidators: true }
+    ).select("_id name picture");
+
+    if (!updatedProfile) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // In passwordChange
+    req.session.profileUpdate = true;
+
+    res.status(200).json({
+      message: "Profile image updated successfully",
+      updatedProfile,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to update profile image" });
+  }
+};
+
 // export const deleteUser = async (req, res) => {
 //   try {
 //     // Extract the :id parameter from the route

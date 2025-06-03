@@ -1,4 +1,5 @@
 import User from "../models/user-model.js";
+import Owner from "../models/owner-model.js";
 import Product from "../models/product-model.js";
 import jwt from "jsonwebtoken";
 
@@ -144,6 +145,12 @@ export const indexPage = async (req, res) => {
       isLogin = true;
       const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
       user = decoded;
+      //find user by userId and set picture in user
+      if (!user.isOwner) {
+        user = await User.findById(user.id);
+      } else {
+        user = await Owner.findById(user.id);
+      }
     }
 
     // Check if product already exists by model

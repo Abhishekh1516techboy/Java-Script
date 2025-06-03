@@ -48,12 +48,7 @@
                                     <!-- Quick Actions -->
                                     <div class="absolute top-2 right-2 flex flex-col space-y-2">
                                         <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
-                                       hover:bg-indigo-600 hover:text-white transition-colors"
-                                            onclick="openQuickView('<%= product._id %>')">
-                                            <i class="fas fa-eye text-sm"></i>
-                                        </button>
-                                        <button class="quick-view-btn bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-sm 
-                                       hover:bg-indigo-600 hover:text-white transition-colors">
+                                       hover:bg-red-500 hover:text-white transition-colors cursor-pointer">
                                             <i class="far fa-heart text-sm"></i>
                                         </button>
                                     </div>
@@ -95,7 +90,8 @@
                                                                                                 <span
                                                                                                     class="text-sm text-gray-600 ml-1">(
                                                                                                     <%= product.ratings.toFixed(1)
-                                                                                                        %>)</span>
+                                                                                                        %>)
+                                                                                                </span>
                                                     </div>
                                                     <% } %>
                                         </div>
@@ -159,34 +155,8 @@
                     </div>
                 </main>
 
-                <!-- Quick View Modal (Hidden by default) -->
-                <div id="quickViewModal" class="hidden fixed inset-0 bg-black/50 z-50">
-                    <div class="flex items-center justify-center min-h-screen">
-                        <div class="bg-white rounded-xl max-w-2xl w-full mx-4 p-6 relative">
-                            <button onclick="closeQuickView()"
-                                class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                                <i class="fas fa-times text-xl"></i>
-                            </button>
-                            <div id="quickViewContent"></div>
-                        </div>
-                    </div>
-                </div>
 
                 <script>
-                    // Quick View Functions
-                    function openQuickView (productId) {
-                        fetch(`/products/${productId}/quick-view`)
-                            .then(response => response.text())
-                            .then(html => {
-                                document.getElementById('quickViewContent').innerHTML = html;
-                                document.getElementById('quickViewModal').style.display = 'block';
-                            });
-                    }
-
-                    function closeQuickView () {
-                        document.getElementById('quickViewModal').style.display = 'none';
-                    }
-
                     // Cart Functions
                     async function addToCart (productId) {
                         try {

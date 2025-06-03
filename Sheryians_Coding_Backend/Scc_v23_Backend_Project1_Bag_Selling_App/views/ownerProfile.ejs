@@ -75,7 +75,7 @@
                         <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
                             <div class="flex flex-col md:flex-row items-center">
                                 <div class="relative mb-4 md:mb-0 md:mr-6 bg-yellow-300 rounded-full">
-                                    <img src="data:<%= user.picture?.productImageType %>;base64,<%= user.picture?.toString('base64') || '/images/author.webp'%>"
+                                    <img src="<%= user.picture ? `data:${user.picture.productImageType};base64,${user.picture.toString('base64')}` : '/images/default-user.png' %>"
                                         alt="Profile picture of <%= user?.name %>"
                                         class="w-24 h-24 rounded-full object-cover object-top border-3 border-white">
                                     <span
@@ -209,9 +209,23 @@
                                                                 <p class="text-xs text-gray-500 font-semibold">
                                                                     Model: <%= product.model || 'N/A' %>
                                                                 </p>
-                                                                <div class="text-xs text-gray-500 mt-1 flex flex-col mb-1">
-                                                                    <span>Created: <%= new Date(product.createdAt).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) %></span>
-                                                                    <span>Updated: <%= new Date(product.updatedAt).toLocaleString('en-IN', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }) %></span>
+                                                                <!-- Product Created Data & updated Data -->
+                                                                <div
+                                                                    class="text-xs text-gray-400 flex flex-col mb-1 font-semibold">
+                                                                    <span>
+                                                                        Created: <%= new
+                                                                            Date(product.createdAt).toLocaleString('en-IN',
+                                                                            { day: '2-digit' , month: '2-digit' ,
+                                                                            year: '2-digit' , hour: '2-digit' ,
+                                                                            minute: '2-digit' }) %>
+                                                                    </span>
+                                                                    <span>
+                                                                        Updated: <%= new
+                                                                            Date(product.updatedAt).toLocaleString('en-IN',
+                                                                            { day: '2-digit' , month: '2-digit' ,
+                                                                            year: '2-digit' , hour: '2-digit' ,
+                                                                            minute: '2-digit' }) %>
+                                                                    </span>
                                                                 </div>
                                                                 <!-- price -->
                                                                 <div class="flex items-center mb-3">
@@ -235,7 +249,7 @@
                                                                         </span>
                                                                         <% } %>
                                                                 </div>
-                                                         
+
                                                             </div>
                                                             <!-- Stock Badge -->
                                                             <% if (product.stock> 0 && product.stock < 10) { %>
@@ -260,7 +274,7 @@
                                                                                     class="fas fa-trash cursor-pointer"></i>
                                                                             </button>
                                                                         </div>
-                                                                        
+
                                                 </div>
                                                 <% }) %>
                                         </div>
@@ -314,11 +328,12 @@
                                     <h4 class="text-lg font-semibold text-slate-600 border-b pb-2">Personal Information
                                     </h4>
 
+                                    <!-- src="data:<%= user.picture?.productImageType %>;base64,<%= user.picture?.toString('base64')|| '/images/author.webp' %>" -->
                                     <!-- Profile Picture Upload -->
                                     <div class="flex items-center space-x-4">
                                         <div class="relative">
                                             <img id="profilePreview"
-                                                src="data:<%= user.picture?.productImageType %>;base64,<%= user.picture?.toString('base64')|| '/images/author.webp' %>"
+                                                src="<%= user.picture ? `data:${user.picture.productImageType};base64,${user.picture.toString('base64')}` : '/images/default-user.png' %>"
                                                 class="w-20 h-20 rounded-full object-cover object-top border-2 border-gray-200 bg-yellow-300">
                                             <div class="file-upload mt-2">
                                                 <label for="picture"

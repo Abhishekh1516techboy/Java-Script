@@ -1,9 +1,11 @@
 import express from "express";
 import { isLoggedIn } from "../middlewares/isLoggedin.js";
+import upload from "../config/multer-config.js";
 import {
   profilePage,
   passwordChange,
   profileUpdate,
+  profileImageUpdate,
 } from "../controllers/usersController.js";
 
 import {
@@ -33,5 +35,13 @@ router.put("/profile/:id/change-password", isLoggedIn, passwordChange);
 
 // User Profile-Update route
 router.put("/profile/:id/update", isLoggedIn, profileUpdate);
+
+// User Profile-imageUpdate route
+router.put(
+  "/profile/:id/imageUpdate",
+  upload.single("picture"),
+  isLoggedIn,
+  profileImageUpdate
+);
 
 export default router;

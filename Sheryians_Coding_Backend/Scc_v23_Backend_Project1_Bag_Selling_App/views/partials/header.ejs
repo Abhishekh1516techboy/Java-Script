@@ -121,21 +121,24 @@
                     <% if (isLogin) { %>
                         <div class="relative">
                             <button id="profile-btn"
-                                class="h-8 w-8 cursor-pointer rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-600"
+                                class="h-8 w-8 cursor-pointer rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-orange-600 bg-yellow-400"
                                 aria-expanded="false" aria-controls="profile-dropdown">
-                                <img src="/images/owner.jpg" alt="owner picture"
-                                    class="h-full w-full object-center object-cover">
+                                <img src="<%= user.picture ? `data:${user.picture.productImageType};base64,${user.picture.toString('base64')}` : '/images/default-user.png' %>"
+                                    alt="Profile picture of <%= user?.name %>"
+                                    class="h-full w-full object-top object-cover">
                             </button>
 
                             <div id="profile-dropdown"
                                 class="absolute hidden -right-13 sm:-right-7 mt-3 bg-white/90 shadow-lg rounded-lg z-50 min-w-[150px] max-w-[90vw] sm:max-w-[400px]">
+
                                 <!-- User Info -->
                                 <div class="flex items-center px-3 py-3 border-b border-gray-300 whitespace-nowrap">
-                                    <img src="<%='/images/owner.jpg' %>" alt="Profile"
-                                        class="h-8 w-8 rounded-full mr-2 object-cover">
+                                    <img src="<%= user.picture ? `data:${user.picture.productImageType};base64,${user.picture.toString('base64')}` : '/images/default-user.png' %>"
+                                        alt="Profile picture of <%= user?.name %>"
+                                        class="h-8 w-8 rounded-full mr-2 object-cover object-top bg-yellow-400">
                                     <div>
                                         <p id="user-email" class="text-xs font-mono text-gray-800">
-                                            <%= user.email%>
+                                            <%= user.email %>
                                         </p>
                                     </div>
                                 </div>
@@ -207,8 +210,8 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden lg:hidden bg-white shadow-lg">
         <div class="px-4 py-2">
-            <a href="/products/all"
-                class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">All Bags</a>
+            <a href="/products/all" class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">All
+                Bags</a>
             <a href="/categories/backpacks"
                 class="block px-4 py-2 text-gray-800 hover:bg-orange-50 hover:text-orange-600">Backpacks</a>
             <a href="/categories/luggage"
@@ -232,7 +235,7 @@
     <!-- Mobile Search -->
     <div id="mobileSearch" class="hidden lg:hidden px-4 py-3 bg-white border-t">
         <div class="relative">
-            <input type="text" placeholder="Search for bags..."
+            <input id="searchbar" type="text" name="searchBag" placeholder="Search for bags..."
                 class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent text-sm" />
             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
