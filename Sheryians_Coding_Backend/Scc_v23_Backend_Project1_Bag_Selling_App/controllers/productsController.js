@@ -2,7 +2,6 @@ import User from "../models/user-model.js";
 import Owner from "../models/owner-model.js";
 import Product from "../models/product-model.js";
 import jwt from "jsonwebtoken";
-// import Users from "../models/user-model.js";
 
 // ********************** /Product controllers **********************
 export const productsPage = async (req, res) => {

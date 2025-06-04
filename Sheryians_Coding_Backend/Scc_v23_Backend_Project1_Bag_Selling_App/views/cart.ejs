@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cart</title>
+        <link rel="stylesheet" href="/stylesheets/output.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    </head>
+
+    <body class="bg-gray-200 text-gray-900">
+        <!-- Header Include -->
+        <%- include('partials/header') %>
+
+            <!-- Flash Message Include -->
+            <%- include('partials/flashMessage') %>
+
+                <div class="min-h-screen flex items-center justify-center px-4 py-5">
+                    <div class="w-full max-w-xl bg-white rounded-2xl shadow-md p-6">
+                        <h2 class="text-2xl font-bold mb-4">Cart</h2>
+
+                        <!-- Cart Items -->
+                        <div class="space-y-3" id="cart-items-container">
+                            <% if (cartItems.length===0) { %>
+                                <div class="text-center py-10">
+                                    <i class="fas fa-shopping-cart fa-3x text-gray-300 mb-4"></i>
+                                    <p class="text-gray-500">Your cart is empty</p>
+                                </div>
+                                <% } else { %>
+                                    <% cartItems.forEach(item=> { %>
+                                        <div class="flex items-center justify-between hover:bg-gray-200 px-2 rounded-lg"
+                                            data-item-id="<%= item.id %>">
+                                            <!-- Left: Image + Info -->
+                                            <div class="flex items-center space-x-4">
+                                                <img src="data:<%= item.productImage.productImageType %>;base64,<%= item.productImage.toString('base64') %>"
+                                                    alt="<%= item.brandName %>"
+                                                    class="w-15 h-15 rounded-lg object-cover border"
+                                                    style="background-color: <%= item.bgColor %>" />
+                                                <div>
+                                                    <small
+                                                        class="text-xs font-mono text-white bg-orange-400 w-fit px-2 rounded-xl">
+                                                        <%= item.category %>
+                                                    </small>
+                                                    <h3 class="text-sm font-medium">
+                                                        <%= item.productName %>
+                                                    </h3>
+                                                    <p class="text-xs text-gray-400 font-semibold">
+                                                        Model: <%= item.model %>
+                                                    </p>
+                                                    <p class="text-xs text-violet-500 font-serif">
+                                                        Brand: <%= item.brandName %>
+                                                    </p>
+
+                                                    <!-- Price -->
+                                                    <div>
+                                                        <% if (item.discount> 0 && item.discount <= 100) { %>
+                                                                <span class="text-xs font-medium text-gray-900"
+                                                                    aria-label="Price <%= ((item.price || 0) * (1 - item.discount / 100)).toFixed(2) %> rupees">
+                                                                    ₹<%= ((item.price || 0) * (1 - item.discount /
+                                                                        100)).toFixed(2).toLocaleString('en-IN') %>
+                                                                </span>
+                                                                <span class="text-gray-500 line-through text-xs ml-1"
+                                                                    aria-label="Original price <%= (item.price || 0) %> rupees">
+                                                                    ₹<%= (item.price || 0).toLocaleString('en-IN') %>
+                                                                </span>
+                                                                <% } else { %>
+                                                                    <span class="text-xs font-medium text-gray-900"
+                                                                        aria-label="Price <%= (item.price || 0) %> rupees">
+                                                                        ₹<%= (item.price || 0).toFixed(2).toLocaleString('en-IN')
+                                                                            %>
+                                                                    </span>
+                                                                    <% } %>
+                                                                        <!-- Discount Offers -->
+                                                                        <% if (item.discount> 0) { %>
+                                                                            <span
+                                                                                class="bg-green-100 text-green-800 px-1 rounded-full text-xs font-mono ml-1">
+                                                                                <%= item.discount %>% OFF
+                                                                            </span>
+                                                                            <% } %>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Right: Quantity + Delete -->
+                                            <div class="flex items-center space-x-3">
+                                                <div class="flex items-center border rounded-md px-2 text-sm">
+                                                    <button class="px-2 hover:text-red-500 decrease-quantity"
+                                                        data-item-id="<%= item.id %>" aria-label="Decrease quantity">
+                                                        <i class="fa-duotone fa-solid fa-minus fa-sm"></i>
+                                                    </button>
+                                                    <span class="px-1 quantity">
+                                                        <%= item.quantity %>
+                                                    </span>
+                                                    <button class="px-2 hover:text-green-600 increase-quantity"
+                                                        data-item-id="<%= item.id %>" aria-label="Increase quantity">
+                                                        <i class="fa-duotone fa-solid fa-plus fa-sm"></i>
+                                                    </button>
+                                                </div>
+                                                <form action="/cart/remove/<%= item.id %>" method="POST"
+                                                    class="remove-form">
+                                                    <button type="submit" class="text-gray-400 hover:text-red-500"
+                                                        aria-label="Remove item">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                            <% } %>
+                        </div>
+
+                        <!-- Summary -->
+                        <% if (cartItems.length> 0) { %>
+                            <div class="mt-6 border-t pt-4 space-y-2 text-sm" id="cart-summary">
+                                <div class="flex justify-between">
+                                    <span>Subtotal</span>
+                                    <span id="subtotal">₹<%= subtotal.toFixed(2) %></span>
+                                </div>
+                                <div class="flex justify-between text-green-600">
+                                    <span>Discount 20%</span>
+                                    <span>− ₹<span id="discount-amount">
+                                            <%= discount.toFixed(2) %>
+                                        </span></span>
+                                </div>
+                                <div class="flex justify-between text-gray-500">
+                                    <span>Tax 18%</span>
+                                    <span>+ ₹<span id="tax-amount">
+                                            <%= tax.toFixed(2) %>
+                                        </span></span>
+                                </div>
+                                <div class="flex justify-between font-semibold text-base pt-2 border-t mt-2">
+                                    <span>Total</span>
+                                    <span>₹<span id="total-amount">
+                                            <%= total.toFixed(2) %>
+                                        </span></span>
+                                </div>
+                            </div>
+
+                            <!-- CTA Buttons -->
+                            <div class="mt-6 space-y-2">
+                                <a href="/checkout"
+                                    class="w-full block text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
+                                    Proceed to checkout
+                                </a>
+                                <a href="/products/shop"
+                                    class="w-full block text-center border border-gray-300 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                                    Continue shopping
+                                </a>
+                            </div>
+                            <% } else { %>
+                                <div class="mt-6">
+                                    <a href="/products/shop"
+                                        class="w-full block text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
+                                        Start Shopping
+                                    </a>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+
+                <script>
+                    // Handle quantity updates
+                    function setupQuantityButtons () {
+                        // Increase quantity
+                        document.querySelectorAll('.increase-quantity').forEach(button => {
+                            button.addEventListener('click', updateQuantity);
+                        });
+
+                        // Decrease quantity
+                        document.querySelectorAll('.decrease-quantity').forEach(button => {
+                            button.addEventListener('click', updateQuantity);
+                        });
+                    }
+
+                    // Handle item removal
+                    function setupRemoveForms () {
+                        document.querySelectorAll('.remove-form').forEach(form => {
+                            form.addEventListener('submit', removeItem);
+                        });
+                    }
+
+                    async function updateQuantity (e) {
+                        const button = e.currentTarget;
+                        const itemId = button.dataset.itemId;
+                        const isIncrease = button.classList.contains('increase-quantity');
+                        const quantityElement = button.parentElement.querySelector('.quantity');
+                        let quantity = parseInt(quantityElement.textContent);
+
+                        if (isIncrease) {
+                            quantity++;
+                        } else {
+                            if (quantity <= 1) return;
+                            quantity--;
+                        }
+
+                        try {
+                            const response = await fetch(`/cart/update/${itemId}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ quantity: quantity })
+                            });
+
+                            if (response.ok) {
+                                quantityElement.textContent = quantity;
+                                updateSummary();
+                            } else {
+                                const error = await response.json();
+                                alert(error.message || 'Failed to update quantity');
+                            }
+                        } catch (error) {
+                            console.error('Error updating quantity:', error);
+                            alert('Network error. Please try again.');
+                        }
+                    }
+
+                    async function removeItem (e) {
+                        e.preventDefault();
+                        const form = e.currentTarget;
+                        const itemId = form.action.split('/').pop();
+                        const cartItem = form.closest(`[data-item-id="${itemId}"]`);
+
+                        try {
+                            const response = await fetch(form.action, {
+                                method: 'POST'
+                            });
+
+                            if (response.ok) {
+                                cartItem.remove();
+
+                                // Check if cart is empty
+                                if (document.querySelectorAll('[data-item-id]').length === 0) {
+                                    document.getElementById('cart-summary')?.remove();
+                                    document.querySelector('.mt-6.space-y-2')?.remove();
+
+                                    const emptyCartHTML = `
+                            <div class="text-center py-10">
+                                <i class="fas fa-shopping-cart fa-3x text-gray-300 mb-4"></i>
+                                <p class="text-gray-500">Your cart is empty</p>
+                            </div>
+                        `;
+
+                                    document.getElementById('cart-items-container').innerHTML = emptyCartHTML;
+                                    document.querySelector('.mt-6').innerHTML = `
+                            <a href="/products/shop"
+                                class="w-full block text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
+                                Start Shopping
+                            </a>
+                        `;
+                                } else {
+                                    updateSummary();
+                                }
+                            } else {
+                                const error = await response.json();
+                                alert(error.message || 'Failed to remove item');
+                            }
+                        } catch (error) {
+                            console.error('Error removing item:', error);
+                            alert('Network error. Please try again.');
+                        }
+                    }
+
+                    async function updateSummary () {
+                        try {
+                            const response = await fetch('/cart/summary');
+                            if (!response.ok) throw new Error('Failed to get updated summary');
+
+                            const { subtotal, discount, tax, total } = await response.json();
+
+                            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+                            document.getElementById('discount-amount').textContent = discount.toFixed(2);
+                            document.getElementById('tax-amount').textContent = tax.toFixed(2);
+                            document.getElementById('total-amount').textContent = total.toFixed(2);
+                        } catch (error) {
+                            console.error('Error updating summary:', error);
+                        }
+                    }
+
+                    // Initialize event listeners
+                    document.addEventListener('DOMContentLoaded', () => {
+                        if (document.querySelector('.increase-quantity')) setupQuantityButtons();
+                        if (document.querySelector('.remove-form')) setupRemoveForms();
+                    });
+                </script>
+
+                <!-- Scripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+    </body>
+
+</html>

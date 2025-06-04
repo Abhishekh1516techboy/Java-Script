@@ -10,6 +10,7 @@ import indexRoutes from "./routes/indexRoutes.js";
 import ownersRoutes from "./routes/ownersRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
+import cartsRoutes from "./routes/cartsRoutes.js";
 
 const app = express();
 dotenv.config(); // Load environment variables from .env file
@@ -44,6 +45,7 @@ app.use("/", indexRoutes);
 app.use("/owners", ownersRoutes);
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
+app.use("/carts", cartsRoutes);
 
 
 // Logout (POST for security)

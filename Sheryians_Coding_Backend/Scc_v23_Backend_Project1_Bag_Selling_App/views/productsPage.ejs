@@ -8,6 +8,29 @@
         <link rel="stylesheet" href="/stylesheets/output.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <style>
+            /* Yo-yo bounce animation for flash messages */
+            @keyframes yoyo-bounce {
+                0% {
+                    transform: scale(0);
+                }
+
+                50% {
+                    transform: scale(1.1);
+                }
+
+                75% {
+                    transform: scale(0.95);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .yoyo-bounce {
+                animation: yoyo-bounce 0.5s ease-in-out forwards;
+            }
+
             .product-card {
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
@@ -28,7 +51,7 @@
     </head>
 
     <body class="bg-gray-50">
-        <!-- Header -->
+        <!-- Header Include -->
         <%- include('partials/header') %>
 
             <!-- Flash Message Include -->
@@ -64,7 +87,7 @@
                                             <p class="text-sm text-gray-500">
                                                 <%= product.brandName %>
                                             </p>
-                                            <!-- Rating -->
+                                            <!-- Rating render only rating available -->
                                             <% if (product.ratings && product.ratings> 0 && product.ratings <= 5) { %>
                                                     <div class="flex items-center space-x-1 mt-1"
                                                         aria-label="Rating <%= product.ratings %> out of 5">
@@ -130,10 +153,13 @@
                                             View Details
                                         </a>
                                         <% if (product.stock> 0) { %>
-                                            <button onclick="addToCart('<%= product._id %>')" class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg 
-                               hover:bg-indigo-700 transition-colors">
-                                                Add to Cart
-                                            </button>
+                                            <form action="/carts/add" method="post">
+                                                <input type="hidden" name="productId" value="<%= product._id %>" />
+                                                <button type="submit"
+                                                    class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer">
+                                                    Add to Cart
+                                                </button>
+                                            </form>
                                             <% } else { %>
                                                 <button
                                                     class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
@@ -154,33 +180,12 @@
                             <% }) %>
                     </div>
                 </main>
+                <!-- Footer -->
+                <%- include('partials/footer') %>
 
-
-                <script>
-                    // Cart Functions
-                    async function addToCart (productId) {
-                        try {
-                            const response = await fetch('/cart/add', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ productId })
-                            });
-
-                            if (response.ok) {
-                                const cartCount = document.querySelector('[data-cart-count]');
-                                cartCount.textContent = parseInt(cartCount.textContent) + 1;
-                            }
-                        } catch (error) {
-                            console.error('Error adding to cart:', error);
-                        }
-                    }
-                </script>
-
-                <script src="/javascripts/searchAndMenuToggle.js"></script>
-                <script src="/javascripts/profileToggle.js"></script>
-                <script src="/javascripts/flashMessage.js"></script>
+                    <script src="/javascripts/searchAndMenuToggle.js"></script>
+                    <script src="/javascripts/profileToggle.js"></script>
+                    <script src="/javascripts/flashMessage.js"></script>
     </body>
 
 </html>
