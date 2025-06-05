@@ -78,11 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
         submitSpinner.classList.add("hidden");
       }
     } catch (error) {
-      alert("An error occurred while updating the product");
       console.error(error);
       submitBtn.disabled = false;
       submitText.classList.remove("hidden");
       submitSpinner.classList.add("hidden");
+      window.location.reload();
     }
   });
 });

@@ -25,13 +25,12 @@ export const addToCart = async (req, res) => {
 
     // Restrict cart functionality to User (optional, remove if Owner has cart)
     if (user?.isOwner) {
-      req.flash("error", "Cart functionality is not available for owners");
+      req.flash("error", "Add To Cart is not for owners");
       return res.redirect("/owners/profile");
     }
 
     // Extract productId and quantity from request body
-    const { productId } = req.body;
-    const quantity = 1;
+    const { productId, quantity } = req.body;
 
     // Check if user exists
     const existingUser = await User.findById(user?._id);
@@ -54,7 +53,7 @@ export const addToCart = async (req, res) => {
 
     if (cartItemIndex >= 0) {
       // Product exists in cart, update quantity
-      existingUser.cart[cartItemIndex].quantity += quantity;
+      existingUser.cart[cartItemIndex].quantity += Number(quantity);
       existingUser.cart[cartItemIndex].addedAt = new Date();
     } else {
       // Add new product to cart
@@ -71,8 +70,7 @@ export const addToCart = async (req, res) => {
     req.flash("success", "Product added to cart.");
 
     req.flash("success", "Product added to cart.");
-    return res.redirect("/products/shop"); // or redirect to a specific page like `/cart`
-    
+    return res.redirect("/carts"); // or redirect to a specific page like `/cart`
   } catch (error) {
     console.error("Error adding to cart:", error);
     req.flash("error", "Server error while adding to cart");
@@ -87,17 +85,17 @@ export const cartPage = async (req, res) => {
   try {
     const authUser = req.user; // Safe access to req.user.id
 
+    if (authUser.isOwner) {
+      req.flash("error", "Cart is not for owners!");
+      return res.redirect("/owners/profile");
+    }
+
     // Fetch user and populate cart product details
     const user = await User.findById(req.user._id).populate({
       path: "cart.product",
       select:
         "productName brandName model price discount category stock productImage bgColor",
     });
-
-    if (!user) {
-      req.flash("error", "cart Item not found!");
-      return res.redirect("/");
-    }
 
     // Prepare cartItems for template
     const cartItems = user.cart
@@ -145,8 +143,8 @@ export const cartPage = async (req, res) => {
       error,
       success,
       user: authUser,
-      isLogin: !!req.user?._id,
-      cartCount: cartItems.length,
+      isLogin: !!user?._id,
+      cartCount: user?.cart?.length || 0,
       wishlistCount: 5,
       cartItems,
       subtotal,

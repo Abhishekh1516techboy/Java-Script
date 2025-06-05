@@ -211,125 +211,201 @@
                                                                 class="absolute top-2 left-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
                                                                 Only <%= bag.stock %> left
                                                             </div>
-                                                            <% } %>
-                                                                <h3 id="bag-<%= bag.id %>-name"
-                                                                    class="text-lg font-bold text-white mb-2">
-                                                                    <%= bag.productName %>
-                                                                </h3>
-                                                                <p class="text-sm text-gray-200 mb-3 line-clamp-2">
-                                                                    <%= bag.description %>
-                                                                </p>
-                                                                <!-- price -->
-                                                                <div class="flex items-center mb-3">
-                                                                    <span class="text-xl font-bold text-orange-400">
-                                                                        ₹<%= (bag.discount) ? Math.round(bag.price * (1
-                                                                            - bag.discount /
-                                                                            100)).toLocaleString('en-IN') :
-                                                                            bag.price.toLocaleString('en-IN') %>
-                                                                    </span>
-                                                                    <% if (bag.discount) { %>
-                                                                        <span
-                                                                            class="ml-2 text-sm text-gray-300 line-through">
-                                                                            ₹<%= bag.price.toLocaleString('en-IN') %>
-                                                                        </span>
-                                                                        <% } %>
+                                                            <% }else if(bag.stock <=0){ %>
+                                                                <div
+                                                                    class="absolute top-2 left-2 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">
+                                                                    Sold Out
                                                                 </div>
-                                                                <!-- Rating -->
-                                                                <% if (bag.ratings && bag.ratings> 0 && bag.ratings <=
-                                                                        5) { %>
-                                                                        <div class="flex items-center space-x-1 mb-2"
-                                                                            aria-label="Rating <%= bag.ratings %> out of 5">
-                                                                            <% const fullStars=Math.floor(bag.ratings);
-                                                                                %>
-                                                                                <% const hasHalfStar=bag.ratings % 1>=
-                                                                                    0.3 && bag.ratings % 1 < 0.8; %>
-                                                                                        <% const emptyStars=5 -
-                                                                                            fullStars - (hasHalfStar ? 1
-                                                                                            : 0); %>
+                                                                <%}%>
 
-                                                                                            <% for (let i=0; i <
-                                                                                                fullStars; i++) { %>
-                                                                                                <i
-                                                                                                    class="fas fa-star text-sm text-yellow-400"></i>
-                                                                                                <% } %>
-                                                                                                    <% if (hasHalfStar)
-                                                                                                        { %>
-                                                                                                        <i
-                                                                                                            class="fas fa-star-half-alt text-sm text-yellow-400"></i>
-                                                                                                        <% } %>
-                                                                                                            <% for (let
-                                                                                                                i=0; i <
-                                                                                                                emptyStars;
-                                                                                                                i++) {
-                                                                                                                %>
-                                                                                                                <i
-                                                                                                                    class="far fa-star text-sm text-gray-300"></i>
-                                                                                                                <% } %>
-                                                                                                                    <span
-                                                                                                                        class="text-sm text-gray-300 ml-1">(
-                                                                                                                        <%= bag.ratings.toFixed(1)
-                                                                                                                            %>
-                                                                                                                            )
-                                                                                                                    </span>
-                                                                        </div>
-                                                                        <% } %>
+                                                                    <h3 id="bag-<%= bag.id %>-name"
+                                                                        class="text-lg font-bold text-white mb-2">
+                                                                        <%= bag.productName %>
+                                                                    </h3>
+                                                                    <p class="text-sm text-gray-200 mb-3 line-clamp-2">
+                                                                        <%= bag.description %>
+                                                                    </p>
+                                                                    <!-- price -->
+                                                                    <div class="flex items-center mb-3">
+                                                                        <span class="text-xl font-bold text-orange-400">
+                                                                            ₹<%= (bag.discount) ? Math.round(bag.price *
+                                                                                (1 - bag.discount /
+                                                                                100)).toLocaleString('en-IN') :
+                                                                                bag.price.toLocaleString('en-IN') %>
+                                                                        </span>
+                                                                        <% if (bag.discount) { %>
+                                                                            <span
+                                                                                class="ml-2 text-sm text-gray-300 line-through">
+                                                                                ₹<%= bag.price.toLocaleString('en-IN')
+                                                                                    %>
+                                                                            </span>
+                                                                            <% } %>
+                                                                    </div>
+                                                                    <!-- Rating -->
+                                                                    <% if (bag.ratings && bag.ratings> 0 && bag.ratings
+                                                                        <= 5) { %>
+                                                                            <div class="flex items-center space-x-1 mb-2"
+                                                                                aria-label="Rating <%= bag.ratings %> out of 5">
+                                                                                <% const
+                                                                                    fullStars=Math.floor(bag.ratings);
+                                                                                    %>
+                                                                                    <% const hasHalfStar=bag.ratings %
+                                                                                        1>=
+                                                                                        0.3 && bag.ratings % 1 < 0.8; %>
+                                                                                            <% const emptyStars=5 -
+                                                                                                fullStars - (hasHalfStar
+                                                                                                ? 1 : 0); %>
 
-                                                                            <!-- View Details Button -->
-                                                                            <div class="flex flex-col space-y-2">
-                                                                                <div class="flex space-x-2">
-                                                                                    <a href="/products/checkout/<%= bag.id %>"
-                                                                                        class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
-                                                                                        aria-label="Shop <%= bag.productName %>">Shop
-                                                                                        Now</a>
-                                                                                    <button
-                                                                                        class="w-10 h-10 flex items-center justify-center bg-orange-100 hover:bg-orange-200 rounded-lg transition transform hover:scale-105"
-                                                                                        aria-label="Add <%= bag.productName %> to cart">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                            class="w-5 h-5 text-orange-600"
-                                                                                            fill="none"
-                                                                                            viewBox="0 0 24 24"
-                                                                                            stroke="currentColor">
-                                                                                            <path stroke-linecap="round"
-                                                                                                stroke-linejoin="round"
-                                                                                                stroke-width="2"
-                                                                                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                </div>
-                                                                                <div class="flex space-x-2">
-                                                                                    <a href="/products/view/<%= bag.id %>"
-                                                                                        class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
-                                                                                        aria-label="View details for <%= bag.productName %>">View
-                                                                                        Details</a>
-                                                                                    <button
-                                                                                        class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
-                                                                                        aria-label="Add <%= bag.productName %> to wishlist">
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                            class="w-5 h-5 text-gray-600"
-                                                                                            fill="none"
-                                                                                            viewBox="0 0 24 24"
-                                                                                            stroke="currentColor">
-                                                                                            <path stroke-linecap="round"
-                                                                                                stroke-linejoin="round"
-                                                                                                stroke-width="2"
-                                                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                </div>
+                                                                                                <% for (let i=0; i <
+                                                                                                    fullStars; i++) { %>
+                                                                                                    <i
+                                                                                                        class="fas fa-star text-sm text-yellow-400"></i>
+                                                                                                    <% } %>
+                                                                                                        <% if
+                                                                                                            (hasHalfStar)
+                                                                                                            { %>
+                                                                                                            <i
+                                                                                                                class="fas fa-star-half-alt text-sm text-yellow-400"></i>
+                                                                                                            <% } %>
+                                                                                                                <% for
+                                                                                                                    (let
+                                                                                                                    i=0;
+                                                                                                                    i <
+                                                                                                                    emptyStars;
+                                                                                                                    i++)
+                                                                                                                    { %>
+                                                                                                                    <i
+                                                                                                                        class="far fa-star text-sm text-gray-300"></i>
+                                                                                                                    <% }
+                                                                                                                        %>
+                                                                                                                        <span
+                                                                                                                            class="text-sm text-gray-300 ml-1">(
+                                                                                                                            <%= bag.ratings.toFixed(1)
+                                                                                                                                %>
+                                                                                                                                )
+                                                                                                                        </span>
                                                                             </div>
+                                                                            <% } %>
+
+                                                                                <!-- View Details Button -->
+                                                                                <div class="flex flex-col space-y-2">
+                                                                                    <div class="flex space-x-2">
+                                                                                        <a href="/products/checkout/<%= bag.id %>"
+                                                                                            class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
+                                                                                            aria-label="Shop <%= bag.productName %>">Shop
+                                                                                            Now</a>
+                                                                                        <!-- Cart Action -->
+                                                                                        <% if (bag.stock> 0) { %>
+                                                                                            <% if (bag.isInCart) { %>
+                                                                                                <button
+                                                                                                    class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-600 rounded-lg cursor-not-allowed"
+                                                                                                    disabled
+                                                                                                    aria-label="<%= bag.productName %> already added to cart">
+                                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                        class="w-5 h-5"
+                                                                                                        fill="none"
+                                                                                                        viewBox="0 0 24 24"
+                                                                                                        stroke="currentColor">
+                                                                                                        <path
+                                                                                                            stroke-linecap="round"
+                                                                                                            stroke-linejoin="round"
+                                                                                                            stroke-width="2"
+                                                                                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                                    </svg>
+                                                                                                </button>
+                                                                                                <% } else { %>
+                                                                                                    <form
+                                                                                                        action="/carts/add"
+                                                                                                        method="post"
+                                                                                                        class="add-to-cart">
+                                                                                                        <input
+                                                                                                            type="hidden"
+                                                                                                            name="productId"
+                                                                                                            value="<%= bag.id %>" />
+                                                                                                        <input
+                                                                                                            type="number"
+                                                                                                            name="quantity"
+                                                                                                            value="1"
+                                                                                                            min="1"
+                                                                                                            max="<%= bag.stock %>"
+                                                                                                            class="hidden"
+                                                                                                            aria-label="Quantity for <%= bag.productName %>" />
+                                                                                                        <button
+                                                                                                            type="submit"
+                                                                                                            class="w-10 h-10 flex items-center cursor-pointer justify-center bg-orange-100 hover:bg-orange-200 text-orange-600 rounded-lg transition transform hover:scale-105"
+                                                                                                            aria-label="Add <%= bag.productName %> to cart">
+                                                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                                class="w-5 h-5"
+                                                                                                                fill="none"
+                                                                                                                viewBox="0 0 24 24"
+                                                                                                                stroke="currentColor">
+                                                                                                                <path
+                                                                                                                    stroke-linecap="round"
+                                                                                                                    stroke-linejoin="round"
+                                                                                                                    stroke-width="2"
+                                                                                                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                                            </svg>
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                                    <% } %>
+                                                                                                        <% } else { %>
+                                                                                                            <button
+                                                                                                                class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-600 rounded-lg cursor-not-allowed"
+                                                                                                                disabled
+                                                                                                                aria-label="<%= bag.productName %> is sold out">
+                                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                                    class="w-5 h-5"
+                                                                                                                    fill="none"
+                                                                                                                    viewBox="0 0 24 24"
+                                                                                                                    stroke="currentColor">
+                                                                                                                    <path
+                                                                                                                        stroke-linecap="round"
+                                                                                                                        stroke-linejoin="round"
+                                                                                                                        stroke-width="2"
+                                                                                                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                                                </svg>
+                                                                                                            </button>
+                                                                                                            <% } %>
+                                                                                    </div>
+                                                                                    <div class="flex space-x-2">
+                                                                                        <a href="/products/view/<%= bag.id %>"
+                                                                                            class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
+                                                                                            aria-label="View details for <%= bag.productName %>">View
+                                                                                            Details</a>
+                                                                                        <button
+                                                                                            class="w-10 h-10 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
+                                                                                            aria-label="Add <%= bag.productName %> to wishlist">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="w-5 h-5 text-gray-600"
+                                                                                                fill="none"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke="currentColor">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
                                                 </div>
 
                                     </div>
                                     <!-- Persistent Details (Small Devices Only) -->
                                     <div class="p-5 space-y-3 lg:hidden">
                                         <!-- Stock Badge -->
-                                        <% if(bag.stock> 0 && bag.stock < 10) { %>
+                                        <% if (bag.stock < 10 && bag.stock> 0) { %>
+                                            <div
+                                                class="absolute top-3 left-3 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
+                                                Only <%= bag.stock %> left
+                                            </div>
+                                            <% } else if (bag.stock <=0) { %>
                                                 <div
                                                     class="absolute top-3 left-3 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
-                                                    Only <%= bag.stock %> left
+                                                    Sold out
                                                 </div>
                                                 <% } %>
-
                                                     <div class="flex justify-between items-start relative">
                                                         <!-- Discount Tag -->
                                                         <% if (bag.discount) { %>

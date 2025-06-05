@@ -153,20 +153,35 @@
                                             View Details
                                         </a>
                                         <% if (product.stock> 0) { %>
-                                            <form action="/carts/add" method="post">
-                                                <input type="hidden" name="productId" value="<%= product._id %>" />
-                                                <button type="submit"
-                                                    class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer">
-                                                    Add to Cart
-                                                </button>
-                                            </form>
-                                            <% } else { %>
+                                            <% if (product.isInCart) { %>
                                                 <button
-                                                    class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
-                                                    Sold Out
+                                                    class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed"
+                                                    disabled
+                                                    aria-label="<%= product.productName %> already added to cart">
+                                                    Added
                                                 </button>
-                                                <% } %>
+                                                <% } else { %>
+                                                    <form action="/carts/add" method="post" class="add-to-cart">
+                                                        <input type="hidden" name="productId"
+                                                            value="<%= product._id %>" />
+                                                        <input type="number" name="quantity" value="1" min="1"
+                                                            max="<%= product.stock %>" class="hidden"
+                                                            aria-label="Quantity for <%= product.productName %>" />
+                                                        <button type="submit"
+                                                            class="flex-1 text-center py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer"
+                                                            aria-label="Add <%= product.productName %> to cart">
+                                                            Add to Cart
+                                                        </button>
+                                                    </form>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <button
+                                                                class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded-lg cursor-not-allowed">
+                                                                Sold Out
+                                                            </button>
+                                                            <% } %>
                                     </div>
+
                                 </div>
 
                                 <!-- Stock Badge -->

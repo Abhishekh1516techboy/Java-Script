@@ -139,20 +139,6 @@ export const indexPage = async (req, res) => {
   let success = req.flash("success"); // Retrieve success flash messages
 
   try {
-    let isLogin = false;
-    let user;
-    if (req.cookies?.token) {
-      isLogin = true;
-      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-      user = decoded;
-      //find user by userId and set picture in user
-      if (!user.isOwner) {
-        user = await User.findById(user.id);
-      } else {
-        user = await Owner.findById(user.id);
-      }
-    }
-
     // Check if product already exists by model
     const products = await Product.find().limit("12").sort({ updatedAt: -1 });
 
@@ -161,16 +147,36 @@ export const indexPage = async (req, res) => {
       return res.redirect("/");
     }
 
+    let user = null;
+    if (req.cookies?.token) {
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      user = decoded;
+      //find user by userId and set picture in user
+      if (!user?.isOwner) {
+        user = await User.findById(user?.id);
+        // Add isInCart flag to products
+        const cartProductIds = user?.cart?.map((item) =>
+          item.product.toString()
+        );
+        products.forEach((product) => {
+          product.isInCart = cartProductIds.includes(product._id.toString());
+        });
+        products.isInCart = cartProductIds || false; // Default to false for non-logged-in users
+      } else {
+        user = await Owner.findById(user?.id);
+      }
+    }
+
     res.render("index", {
       authPage: false,
       error,
       success,
       user,
-      isLogin,
+      isLogin: !!user?._id,
       bags: products, // Pass the enhanced array of bags
       carouselData, // pass carousel poster
       reviews: reviews,
-      cartCount: 2,
+      cartCount: user?.cart?.length || 0,
       wishlistCount: 5,
     });
   } catch (error) {

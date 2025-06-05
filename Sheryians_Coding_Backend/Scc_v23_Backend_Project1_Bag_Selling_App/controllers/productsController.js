@@ -17,15 +17,19 @@ export const productsPage = async (req, res) => {
       return res.redirect("/products/create");
     }
 
-    let isLogin = false;
-    let user;
+    let user = null;
     if (req.cookies?.token) {
-      isLogin = true;
       const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
       user = decoded;
       //find user by userId and set picture in user
-      if (!user.isOwner) {
-        user = await User.findById(user.id);
+      if (!user?.isOwner) {
+        user = await User.findById(user?.id);
+        // Add isInCart flag to products
+        const cartProductIds = user.cart.map((item) => item.product.toString());
+        products.forEach((product) => {
+          product.isInCart = cartProductIds.includes(product._id.toString());
+        });
+        products.isInCart = cartProductIds || false; // Default to false for non-logged-in users
       } else {
         user = await Owner.findById(user.id);
       }
@@ -37,8 +41,8 @@ export const productsPage = async (req, res) => {
       error,
       success,
       user,
-      isLogin,
-      cartCount: 2,
+      isLogin: !!user?._id,
+      cartCount: user?.cart?.length || 0,
       wishlistCount: 5,
     });
   } catch (error) {

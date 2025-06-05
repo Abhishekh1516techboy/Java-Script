@@ -38,18 +38,12 @@ export const profile = async (req, res) => {
     if (!owner) {
       return res.status(404).json({ message: "Owner not found" });
     }
-
+    
     // hidden Aadhar Number show like "xxxx-xxxx-6194" format
     owner.hiddenAadharNumber = hiddenAadharNumber(owner.aadharNumber);
 
     // hidden GSTIN Number show like "27A-xxxx-xxxx-F1Z5" format
     owner.hiddenGstin = hiddenGstinNumber(owner.gstin);
-
-    // set owner is login
-    let isLogin = false;
-    if (authOwnerId) {
-      isLogin = true;
-    }
 
     // if password Change show message
     if (req.session.passwordChanged) {
@@ -69,9 +63,9 @@ export const profile = async (req, res) => {
       error,
       success,
       authPage: true,
-      isLogin,
+      isLogin: !!owner?._id,
+      cartCount: owner?.cart?.length || 0, // Example cart count
       wishlistCount: 5,
-      cartCount: 2, // Example cart count
     });
   } catch (error) {
     console.error("Admin Profile error:", error);
@@ -244,18 +238,13 @@ export const createProductPage = async (req, res) => {
       return res.redirect("/");
     }
 
-    let isLogin = false;
-    if (authUser.id) {
-      isLogin = true;
-    }
-
     res.render("createProduct", {
       authPage: false,
       error,
       success,
       user: authUser,
-      isLogin,
-      cartCount: 2,
+      isLogin: !!authUser?._id,
+      cartCount: authUser?.cart?.length || 0, // Example cart count
       wishlistCount: 5,
     });
   } catch (error) {
@@ -397,18 +386,13 @@ export const updateProductPage = async (req, res) => {
     // set product data in authUser
     authUser.product = product;
 
-    let isLogin = false;
-    if (authUser.id) {
-      isLogin = true;
-    }
-
     res.render("updateProduct", {
       authPage: false,
       error,
       success,
       user: authUser,
-      isLogin,
-      cartCount: 2,
+      isLogin: !!authUser?._id,
+      cartCount: authUser?.cart?.length || 0, // Example cart count
       wishlistCount: 5,
     });
   } catch (error) {
@@ -470,7 +454,8 @@ export const updateProduct = async (req, res) => {
       return res.redirect(`/owners/updateProduct/${productId}`);
     }
 
-    if (!stock || isNaN(stock) || stock < 0) {
+    // Validate stock
+    if (stock === undefined || stock === null || isNaN(stock) || stock < 0) {
       req.flash("error", "Stock quantity must be a positive number");
       return res.redirect(`/owners/updateProduct/${productId}`);
     }

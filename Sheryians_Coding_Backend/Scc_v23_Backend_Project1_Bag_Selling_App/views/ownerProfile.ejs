@@ -252,10 +252,15 @@
 
                                                             </div>
                                                             <!-- Stock Badge -->
-                                                            <% if (product.stock> 0 && product.stock < 10) { %>
+                                                            <% if (product.stock && product.stock > 0) { %>
+                                                                <div
+                                                                    class="absolute top-1 -right-2 bg-orange-100 text-orange-800 px-2 rounded-full text-xs">
+                                                                    Only <%= product.stock %> left
+                                                                </div>
+                                                                <% }else{ %>
                                                                     <div
-                                                                        class="absolute top-1 -right-2 bg-orange-100 text-orange-800 px-2 rounded-full text-xs">
-                                                                        Only <%= product.stock %> left
+                                                                        class="absolute top-1 -right-2 bg-orange-200 text-orange-700 px-2 rounded-full text-xs font-bold">
+                                                                        Sold Out
                                                                     </div>
                                                                     <% } %>
                                                                         <!-- Link for Update Product -->

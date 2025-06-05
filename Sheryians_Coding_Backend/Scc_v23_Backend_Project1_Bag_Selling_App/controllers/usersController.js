@@ -24,7 +24,7 @@ export const profilePage = async (req, res) => {
     const userId = req.params.id;
 
     // Get the authenticated user's ID from JWT
-    const authUserId = req.user.id;
+    const authUserId = req.user?.id;
 
     // Check if the requested userId matches the authenticated user's ID
     if (userId !== authUserId) {
@@ -42,12 +42,6 @@ export const profilePage = async (req, res) => {
 
     // Formated Aadhar Number show like "xxxx-xxxx-6194" format
     user.hiddenAadharNumber = hiddenAadharNumber(user.aadharNumber);
-
-    // set user is login
-    let isLogin = false;
-    if (authUserId) {
-      isLogin = true;
-    }
 
     // if password Change show message
     if (req.session.passwordChanged) {
@@ -67,9 +61,9 @@ export const profilePage = async (req, res) => {
       error,
       success,
       authPage: true,
-      isLogin,
+      isLogin: !!user?._id,
+      cartCount: user?.cart.length || 0,
       wishlistCount: 5,
-      cartCount: 2, // Example cart count
     });
   } catch (error) {
     console.error("Profile error:", error);
