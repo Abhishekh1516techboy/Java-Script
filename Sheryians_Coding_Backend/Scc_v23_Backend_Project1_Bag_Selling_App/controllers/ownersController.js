@@ -504,7 +504,7 @@ export const deleteProduct = async (req, res) => {
 
     // Find the product by ID
     const product = await Product.findById(productId);
-
+    
     // Check if product exists
     if (!product) {
       req.flash("error", "Product not found");
@@ -521,7 +521,6 @@ export const deleteProduct = async (req, res) => {
     await Product.findByIdAndDelete(productId);
 
     req.flash("success", "Product deleted successfully");
-    // res.redirect("/owners/profile");
     res.status(200).json({ message: "Product Delete successfully", product });
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error:`, error);

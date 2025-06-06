@@ -69,8 +69,7 @@ export const addToCart = async (req, res) => {
 
     req.flash("success", "Product added to cart.");
 
-    req.flash("success", "Product added to cart.");
-    return res.redirect("/carts"); // or redirect to a specific page like `/cart`
+    return res.redirect("/carts");
   } catch (error) {
     console.error("Error adding to cart:", error);
     req.flash("error", "Server error while adding to cart");
@@ -91,16 +90,18 @@ export const cartPage = async (req, res) => {
     }
 
     // Fetch user and populate cart product details
-    const user = await User.findById(req.user._id).populate({
-      path: "cart.product",
-      select:
-        "productName brandName model price discount category stock productImage bgColor",
-    });
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: "cart.product",
+        select:
+          "productName brandName model price discount category stock productImage bgColor",
+      })
+      .lean();
 
     // Prepare cartItems for template
     const cartItems = user.cart
       .map((item) => ({
-        id: item._id.toString(),
+        _id: item.product._id,
         category: item.product.category,
         productImage: item.product.productImage,
         productName: item.product.productName,
@@ -156,5 +157,119 @@ export const cartPage = async (req, res) => {
     console.error("Create Product error:", error);
     req.flash("error", "Server error during Product creating");
     return res.redirect("/");
+  }
+};
+
+export const removeFromCart = async (req, res) => {
+  try {
+    let user = req.user;
+
+    // Extract productId from request params
+    const productId = req.params.id; // Use 'id' to match route parameter
+
+    // Check if user exists
+    const existingUser = await User.findById(user._id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // Check if product exists
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      req.flash("success", "Product Not Found.");
+      res.redirect("/carts");
+    }
+
+    // Check if product is in cart
+    const cartItemIndex = existingUser.cart.findIndex(
+      (item) => item.product.toString() === productId
+    );
+
+    if (cartItemIndex < 0) {
+      req.flash("success", "Product not found in cart.");
+      res.redirect("/carts");
+    }
+
+    // Remove product from cart
+    existingUser.cart.splice(cartItemIndex, 1);
+
+    // Save updated user document
+    await existingUser.save();
+
+    req.flash("success", "Product Removed from cart.");
+
+    return res.status(200).json({
+      message: "Product removed from cart successfully",
+      cart: product.model,
+    });
+  } catch (error) {
+    console.error("Error removing from cart:", error);
+    req.flash("success", "Product Removed from cart.");
+    res.redirect("/");
+  }
+};
+
+export const updateCartItemQuantity = async (req, res) => {
+  try {
+    const user = req.user;
+
+    // Extract itemId from params and quantity from body
+    const itemId = req.params.id;
+    const { quantity } = req.body;
+
+    // Validate quantity
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      return res
+        .status(400)
+        .json({ message: "Quantity must be a positive integer" });
+    }
+
+    // Check if user exists
+    const existingUser = await User.findById(user._id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    // Find the cart item
+    const cartItemIndex = existingUser.cart.findIndex((item) => {
+      const itemProductId = item.product;
+      return itemProductId.toString() === itemId;
+    });
+
+    if (cartItemIndex < 0) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    const cartItem = existingUser.cart[cartItemIndex];
+    const productId = cartItem.product;
+
+    // Check if product exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Validate stock
+    if (quantity > product.stock) {
+      return res
+        .status(400)
+        .json({ message: `Only ${product.stock} items available in stock` });
+    }
+
+    // Update quantity
+    existingUser.cart[cartItemIndex].quantity = quantity;
+
+    // Save updated user document
+    await existingUser.save();
+
+    req.flash("success", "Product Quantity updated.");
+
+    return res.status(200).json({ message: "Quantity updated successfully" });
+  } catch (error) {
+    console.error("Error updating cart item quantity:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error while updating quantity" });
   }
 };
