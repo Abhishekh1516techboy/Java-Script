@@ -154,7 +154,7 @@ export const indexPage = async (req, res) => {
       //find user by userId and set picture in user
       if (!user?.isOwner) {
         user = await User.findById(user?.id);
-        // Add isInCart flag to products
+        // --------------Add isInCart flag to products--------------
         const cartProductIds = user?.cart?.map((item) =>
           item.product.toString()
         );
@@ -162,11 +162,22 @@ export const indexPage = async (req, res) => {
           product.isInCart = cartProductIds.includes(product._id.toString());
         });
         products.isInCart = cartProductIds || false; // Default to false for non-logged-in users
+
+        // -----------Add isInWishlist flag to products--------------
+        const wishlistProductIds = user.wishlist.map((item) =>
+          item.product.toString()
+        );
+        products.forEach((product) => {
+          product.isInWishlist = wishlistProductIds.includes(
+            product._id.toString()
+          );
+        });
+        products.isInWishlist = wishlistProductIds || false; // Default to false for non-logged-in users
       } else {
         user = await Owner.findById(user?.id);
       }
     }
-
+    // console.log(products.id)
     res.render("index", {
       authPage: false,
       error,
@@ -177,7 +188,7 @@ export const indexPage = async (req, res) => {
       carouselData, // pass carousel poster
       reviews: reviews,
       cartCount: user?.cart?.length || 0,
-      wishlistCount: 5,
+      wishlistCount: user?.wishlist?.length || 0,
     });
   } catch (error) {
     console.error("Index Page error:", error);

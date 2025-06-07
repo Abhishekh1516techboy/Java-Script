@@ -10,6 +10,7 @@ import indexRoutes from "./routes/indexRoutes.js";
 import ownersRoutes from "./routes/ownersRoutes.js";
 import usersRoutes from "./routes/usersRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
+import wishlistsRoutes from "./routes/wishlistsRoutes.js";
 import cartsRoutes from "./routes/cartsRoutes.js";
 
 const app = express();
@@ -45,6 +46,7 @@ app.use("/", indexRoutes);
 app.use("/owners", ownersRoutes);
 app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
+app.use("/wishlists", wishlistsRoutes);
 app.use("/carts", cartsRoutes);
 
 

@@ -63,7 +63,7 @@ export const profilePage = async (req, res) => {
       authPage: true,
       isLogin: !!user?._id,
       cartCount: user?.cart.length || 0,
-      wishlistCount: 5,
+      wishlistCount: user?.wishlist?.length || 0,
     });
   } catch (error) {
     console.error("Profile error:", error);

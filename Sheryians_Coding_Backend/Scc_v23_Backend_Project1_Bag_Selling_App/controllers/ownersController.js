@@ -38,7 +38,7 @@ export const profile = async (req, res) => {
     if (!owner) {
       return res.status(404).json({ message: "Owner not found" });
     }
-    
+
     // hidden Aadhar Number show like "xxxx-xxxx-6194" format
     owner.hiddenAadharNumber = hiddenAadharNumber(owner.aadharNumber);
 
@@ -504,7 +504,7 @@ export const deleteProduct = async (req, res) => {
 
     // Find the product by ID
     const product = await Product.findById(productId);
-    
+
     // Check if product exists
     if (!product) {
       req.flash("error", "Product not found");
@@ -515,6 +515,13 @@ export const deleteProduct = async (req, res) => {
     if (product.ownerId.toString() !== authUser) {
       req.flash("error", "Something went wrong!");
       return res.redirect("/");
+    }
+
+    // Find the owner and remove the product ID from their products array
+    const owner = await Owner.findById(authUser);
+    if (owner) {
+      owner.products.pull(productId);
+      await owner.save();
     }
 
     // Delete the product

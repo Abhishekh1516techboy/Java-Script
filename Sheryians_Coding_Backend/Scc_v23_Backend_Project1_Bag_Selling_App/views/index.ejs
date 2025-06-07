@@ -372,21 +372,51 @@
                                                                                             class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
                                                                                             aria-label="View details for <%= bag.productName %>">View
                                                                                             Details</a>
-                                                                                        <button
-                                                                                            class="w-10 h-10 flex items-center justify-center cursor-pointer bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
-                                                                                            aria-label="Add <%= bag.productName %> to wishlist">
-                                                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                                class="w-5 h-5 text-gray-600"
-                                                                                                fill="none"
-                                                                                                viewBox="0 0 24 24"
-                                                                                                stroke="currentColor">
-                                                                                                <path
-                                                                                                    stroke-linecap="round"
-                                                                                                    stroke-linejoin="round"
-                                                                                                    stroke-width="2"
-                                                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                                                            </svg>
-                                                                                        </button>
+                                                                                        <!-- Wishlist Action -->
+                                                                                        <% if (bag.isInWishlist) { %>
+                                                                                            <!-- Already in wishlist -->
+                                                                                            <button
+                                                                                                class="w-10 h-10 flex items-center justify-center bg-red-100 text-red-600 rounded-lg cursor-not-allowed"
+                                                                                                disabled
+                                                                                                aria-label="<%= bag.productName %> already in wishlist">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                    class="w-5 h-5"
+                                                                                                    fill="currentColor"
+                                                                                                    viewBox="0 0 24 24">
+                                                                                                    <path
+                                                                                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 
+                                                                                                        2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 
+                                                                                                        4.5 2.09C13.09 3.81 14.76 3 16.5 3 
+                                                                                                        19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 
+                                                                                                        11.54L12 21.35z" />
+                                                                                                </svg>
+                                                                                            </button>
+                                                                                            <% } else { %>
+                                                                                                <!-- Add to wishlist form -->
+                                                                                                <form
+                                                                                                    action="/wishlists/add/<%= bag._id %>"
+                                                                                                    method="post">
+                                                                                                    <button
+                                                                                                        type="submit"
+                                                                                                        class="w-10 h-10 cursor-pointer flex items-center justify-center bg-gray-100 hover:bg-red-100 text-gray-600 hover:text-red-600 rounded-lg transition transform hover:scale-105"
+                                                                                                        aria-label="Add <%= bag.productName %> to wishlist">
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                            class="w-5 h-5"
+                                                                                                            fill="none"
+                                                                                                            viewBox="0 0 24 24"
+                                                                                                            stroke="currentColor">
+                                                                                                            <path
+                                                                                                                stroke-linecap="round"
+                                                                                                                stroke-linejoin="round"
+                                                                                                                stroke-width="2"
+                                                                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 
+                                                                                                            20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 
+                                                                                                            7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                                                                        </svg>
+                                                                                                    </button>
+                                                                                                </form>
+                                                                                                <% } %>
+
                                                                                     </div>
                                                                                 </div>
                                                 </div>
@@ -481,38 +511,118 @@
                                                                             class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
                                                                             aria-label="Shop <%= bag.productName %>">Shop
                                                                             Now</a>
-                                                                        <button
-                                                                            class="w-10 h-10 flex items-center justify-center bg-orange-100 hover:bg-orange-200 rounded-lg transition transform hover:scale-105"
-                                                                            aria-label="Add <%= bag.productName %> to cart">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                class="w-5 h-5 text-orange-600"
-                                                                                fill="none" viewBox="0 0 24 24"
-                                                                                stroke="currentColor">
-                                                                                <path stroke-linecap="round"
-                                                                                    stroke-linejoin="round"
-                                                                                    stroke-width="2"
-                                                                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                                            </svg>
-                                                                        </button>
+                                                                        <!-- Cart Action -->
+                                                                        <% if (bag.stock> 0) { %>
+                                                                            <% if (bag.isInCart) { %>
+                                                                                <button
+                                                                                    class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-600 rounded-lg cursor-not-allowed"
+                                                                                    disabled
+                                                                                    aria-label="<%= bag.productName %> already added to cart">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                        class="w-5 h-5" fill="none"
+                                                                                        viewBox="0 0 24 24"
+                                                                                        stroke="currentColor">
+                                                                                        <path stroke-linecap="round"
+                                                                                            stroke-linejoin="round"
+                                                                                            stroke-width="2"
+                                                                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                                <% } else { %>
+                                                                                    <form action="/carts/add"
+                                                                                        method="post"
+                                                                                        class="add-to-cart">
+                                                                                        <input type="hidden"
+                                                                                            name="productId"
+                                                                                            value="<%= bag.id %>" />
+                                                                                        <input type="number"
+                                                                                            name="quantity" value="1"
+                                                                                            min="1"
+                                                                                            max="<%= bag.stock %>"
+                                                                                            class="hidden"
+                                                                                            aria-label="Quantity for <%= bag.productName %>" />
+                                                                                        <button type="submit"
+                                                                                            class="w-10 h-10 flex items-center cursor-pointer justify-center bg-orange-100 hover:bg-orange-200 text-orange-600 rounded-lg transition transform hover:scale-105"
+                                                                                            aria-label="Add <%= bag.productName %> to cart">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                class="w-5 h-5"
+                                                                                                fill="none"
+                                                                                                viewBox="0 0 24 24"
+                                                                                                stroke="currentColor">
+                                                                                                <path
+                                                                                                    stroke-linecap="round"
+                                                                                                    stroke-linejoin="round"
+                                                                                                    stroke-width="2"
+                                                                                                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                            </svg>
+                                                                                        </button>
+                                                                                    </form>
+                                                                                    <% } %>
+                                                                                        <% } else { %>
+                                                                                            <button
+                                                                                                class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-600 rounded-lg cursor-not-allowed"
+                                                                                                disabled
+                                                                                                aria-label="<%= bag.productName %> is sold out">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                    class="w-5 h-5"
+                                                                                                    fill="none"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    stroke="currentColor">
+                                                                                                    <path
+                                                                                                        stroke-linecap="round"
+                                                                                                        stroke-linejoin="round"
+                                                                                                        stroke-width="2"
+                                                                                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                                                                </svg>
+                                                                                            </button>
+                                                                                            <% } %>
                                                                     </div>
                                                                     <div class="flex space-x-2">
                                                                         <a href="/products/view/<%= bag.id %>"
                                                                             class="flex-1 bg-gray-100 hover:bg-orange-100 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition transform hover:scale-105 text-center"
                                                                             aria-label="View details for <%= bag.productName %>">View
                                                                             Details</a>
-                                                                        <button
-                                                                            class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
-                                                                            aria-label="Add <%= bag.productName %> to wishlist">
-                                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                                class="w-5 h-5 text-gray-600"
-                                                                                fill="none" viewBox="0 0 24 24"
-                                                                                stroke="currentColor">
-                                                                                <path stroke-linecap="round"
-                                                                                    stroke-linejoin="round"
-                                                                                    stroke-width="2"
-                                                                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                                            </svg>
-                                                                        </button>
+                                                                        <!-- Wishlist Action -->
+                                                                        <% if (bag.isInWishlist) { %>
+                                                                            <!-- Already in wishlist -->
+                                                                            <button
+                                                                                class="w-10 h-10 flex items-center justify-center bg-red-100 text-red-600 rounded-lg cursor-not-allowed"
+                                                                                disabled
+                                                                                aria-label="<%= bag.productName %> already in wishlist">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    class="w-5 h-5" fill="currentColor"
+                                                                                    viewBox="0 0 24 24" stroke="none">
+                                                                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 
+                                                                                                2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 
+                                                                                                4.5 2.09C13.09 3.81 14.76 3 16.5 3 
+                                                                                                19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 
+                                                                                                11.54L12 21.35z" />
+                                                                                </svg>
+                                                                            </button>
+                                                                            <% } else { %>
+                                                                                <!-- Not in wishlist: clickable -->
+                                                                                <form
+                                                                                    action="/wishlists/add/<%= bag._id %>"
+                                                                                    method="post">
+                                                                                    <button type="submit"
+                                                                                        class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-orange-100 rounded-lg transition transform hover:scale-105"
+                                                                                        aria-label="Add <%= bag.productName %> to wishlist">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                            class="w-5 h-5 text-gray-600"
+                                                                                            fill="none"
+                                                                                            viewBox="0 0 24 24"
+                                                                                            stroke="currentColor">
+                                                                                            <path stroke-linecap="round"
+                                                                                                stroke-linejoin="round"
+                                                                                                stroke-width="2"
+                                                                                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 
+                                                                                                        20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 
+                                                                                                        7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </form>
+                                                                                <% } %>
+
                                                                     </div>
                                                                 </div>
                                     </div>

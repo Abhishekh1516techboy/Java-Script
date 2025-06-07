@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Wishlist</title>
+        <link rel="stylesheet" href="/stylesheets/output.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    </head>
+
+    <body class="bg-gray-50 font-sans antialiased">
+        <!-- Header Include -->
+        <%- include('partials/header') %>
+
+            <!-- Flash Message Include -->
+            <%- include('partials/flashMessage') %>
+
+                <!-- Wishlist Section -->
+                <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                    <h1 class="text-2xl font-semibold text-gray-900 mb-6 text-center">My Wishlist</h1>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                        <!-- Wishlist Items -->
+                        <div class="space-y-4" id="wishlist-items-container">
+                            <% if (wishlistItems.length===0) { %>
+                                <div class="text-center py-12">
+                                    <i class="fas fa-heart fa-3x text-gray-300 mb-4"></i>
+                                    <h2 class="text-xl font-medium text-gray-700">Your wishlist is empty</h2>
+                                    <p class="mt-2 text-gray-500 text-sm">Add products you love to your wishlist!</p>
+                                    <a href="/products/shop"
+                                        class="mt-4 inline-block bg-indigo-600 text-white px-6 py-2.5 rounded-full hover:bg-indigo-700 transition duration-200 text-sm font-medium">
+                                        Browse Products
+                                    </a>
+                                </div>
+                                <% } else { %>
+                                    <% wishlistItems.forEach(item=> { %>
+                                        <div class="flex items-center justify-between p-3 rounded-xl hover:bg-gray-100 transition duration-200"
+                                            data-item-id="<%= item._id %>">
+                                            <!-- Left: Image + Info -->
+                                            <div class="flex items-center space-x-4">
+                                                <div class="relative w-16 h-16 rounded-lg overflow-hidden"
+                                                    style="background-color: <%= item.bgColor || '#f5f5f5' %>">
+                                                    <img loading="lazy"
+                                                        src="data:<%= item.productImage.productImageType %>;base64,<%= item.productImage.toString('base64') %>"
+                                                        alt="<%= item.productName %>"
+                                                        class="w-full h-full object-cover object-center">
+                                                </div>
+                                                <div>
+                                                    <span
+                                                        class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                                        <%= item.category %>
+                                                    </span>
+                                                    <h3 class="text-sm font-semibold text-gray-800 line-clamp-1 mt-1">
+                                                        <%= item.brandName %>
+                                                            <%= item.productName %>
+                                                    </h3>
+                                                    <p class="text-xs text-gray-500">Model: <%= item.model %>
+                                                    </p>
+
+                                                    <!-- Price -->
+                                                    <div class="mt-1">
+                                                        <% if (item.discount> 0 && item.discount <= 100) { %>
+                                                                <span class="text-sm font-semibold text-gray-900"
+                                                                    aria-label="Price <%= ((item.price || 0) * (1 - item.discount / 100)).toFixed(2) %>">
+                                                                    ₹<%= ((item.price || 0) * (1 - item.discount /
+                                                                        100)).toFixed(2) %>
+                                                                </span>
+                                                                <span class="text-gray-400 line-through text-xs ml-1"
+                                                                    aria-label="Original price <%= (item.price || 0) %>">
+                                                                    ₹<%= (item.price || 0).toFixed(2) %>
+                                                                </span>
+                                                                <span
+                                                                    class="text-xs font-medium text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full ml-1">
+                                                                    <%= item.discount %>% OFF
+                                                                </span>
+                                                                <% } else { %>
+                                                                    <span class="text-sm font-semibold text-gray-900"
+                                                                        aria-label="Price <%= (item.price || 0) %>">
+                                                                        ₹<%= (item.price || 0).toFixed(2) %>
+                                                                    </span>
+                                                                    <% } %>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Right: Action Buttons -->
+                                            <div class="flex items-center space-x-3">
+                                                <a href="/products/<%= item._id %>"
+                                                    class="bg-indigo-600 text-white text-center px-3 py-1.5 rounded-full hover:bg-indigo-700 transition duration-200 text-xs font-medium">
+                                                    View
+                                                </a>
+                                                <button type="button"
+                                                    class="bg-red-600 cursor-pointer text-white px-3 py-1.5 rounded-full hover:bg-red-700 transition duration-200 text-xs font-medium remove-wishlist-btn"
+                                                    data-product-id="<%= item._id %>" onclick="removeFromWishlist(this)"
+                                                    aria-label="Remove <%= item.productName %> from wishlist">
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                            <% } %>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scripts -->
+                <script src="/javascripts/searchAndMenuToggle.js"></script>
+                <script src="/javascripts/profileToggle.js"></script>
+                <script src="/javascripts/flashMessage.js"></script>
+                <script src="/javascripts/wishlistRemove.js"></script>
+    </body>
+
+</html>
