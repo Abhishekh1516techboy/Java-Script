@@ -90,13 +90,11 @@ export const cartPage = async (req, res) => {
     }
 
     // Fetch user and populate cart product details
-    const user = await User.findById(req.user._id)
-      .populate({
-        path: "cart.product",
-        select:
-          "productName brandName model price discount category stock productImage bgColor",
-      })
-      .lean();
+    const user = await User.findById(req.user._id).populate({
+      path: "cart.product",
+      select:
+        "productName brandName model price discount category stock productImage bgColor",
+    });
 
     // Prepare cartItems for template
     const cartItems = user.cart

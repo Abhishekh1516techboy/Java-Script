@@ -16,7 +16,7 @@ document.querySelectorAll(".remove-cart-btn").forEach((button) => {
 
       if (response.ok) {
         setTimeout(() => {
-          window.location.href = `/carts?productRemove=true`;
+          window.location.reload();
         }, 1000);
       } else {
         throw new Error(data.message || "Failed to remove product from cart");

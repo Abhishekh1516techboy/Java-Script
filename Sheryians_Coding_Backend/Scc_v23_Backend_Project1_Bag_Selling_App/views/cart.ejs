@@ -86,14 +86,16 @@
                                             <!-- Right: Quantity + Delete -->
                                             <div class="flex items-center space-x-3">
                                                 <div class="flex items-center border rounded-md px-2 text-sm">
-                                                    <button class="px-2 hover:text-red-500 decrease-quantity"
+                                                    <button
+                                                        class="px-2 hover:text-red-500 decrease-quantity border-r border-gray-600 cursor-pointer"
                                                         data-item-id="<%= item._id %>" aria-label="Decrease quantity">
                                                         <i class="fa-duotone fa-solid fa-minus fa-sm"></i>
                                                     </button>
                                                     <span class="px-1 quantity">
                                                         <%= item.quantity %>
                                                     </span>
-                                                    <button class="px-2 hover:text-green-600 increase-quantity"
+                                                    <button
+                                                        class="px-2 hover:text-green-600 increase-quantity border-l border-gray-600 cursor-pointer"
                                                         data-item-id="<%= item._id %>" aria-label="Increase quantity">
                                                         <i class="fa-duotone fa-solid fa-plus fa-sm"></i>
                                                     </button>
@@ -118,7 +120,7 @@
                                     <span id="subtotal">₹<%= subtotal.toFixed(2) %></span>
                                 </div>
                                 <div class="flex justify-between text-green-600">
-                                    <span>Discount 20%</span>
+                                    <span>Discount</span>
                                     <span>− ₹<span id="discount-amount">
                                             <%= discount.toFixed(2) %>
                                         </span></span>
@@ -158,7 +160,7 @@
                                 <% } %>
                     </div>
                 </div>
-\
+                \
                 <!-- Scripts -->
                 <script src="/javascripts/searchAndMenuToggle.js"></script>
                 <script src="/javascripts/profileToggle.js"></script>

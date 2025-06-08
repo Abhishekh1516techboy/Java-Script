@@ -357,26 +357,27 @@
                                                 <div
                                                     class="relative border border-gray-200 rounded-lg overflow-hidden hover:shadow-md smooth-transition">
                                                     <!-- Stock Badge -->
-                                                    <% if (item.product.stock < 10 && item.product.stock> 0) { %>
+                                                    <% if (item.product?.stock < 10 && item.product?.stock> 0) { %>
                                                         <div
                                                             class="absolute top-2 left-2 bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full text-xs font-semibold">
-                                                            Only <%= item.product.stock %> left
+                                                            Only <%= item.product?.stock %> left
                                                         </div>
-                                                        <% } else if (item.product.stock <=0) { %>
+                                                        <% } else if (item.product?.stock <=0) { %>
                                                             <div
                                                                 class="absolute top-3 left-3 bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
                                                                 Sold out
                                                             </div>
                                                             <% } %>
-                                                                <div class="h-52">
-                                                                    <img src="data:<%= item.product.productImageType %>;base64,<%= item.product.productImage.toString('base64') %>"
-                                                                        alt="Product" class="w-full h-full object-cover"
-                                                                        style="background-color: <%= item.product.bgColor %>" />
+                                                                <div class="h-50">
+                                                                    <img src="data:<%= item.product?.productImageType %>;base64,<%= item.product?.productImage.toString('base64') %>"
+                                                                        alt="Product <%= item.product?.productName %> img"
+                                                                        class="w-full h-full object-fill"
+                                                                        style="background-color: <%= item.product?.bgColor %>" />
                                                                     <button
                                                                         class="remove-wishlist-btn absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:bg-red-500 text-red-500 hover:text-white transition-colors duration-300 cursor-pointer"
-                                                                        data-product-id="<%= item.product._id %>"
+                                                                        data-product-id="<%= item.product?._id %>"
                                                                         onclick="removeFromWishlist(this)"
-                                                                        aria-label="Remove <%= item.product.productName %> from wishlist">
+                                                                        aria-label="Remove <%= item.product?.productName %> from wishlist">
                                                                         <i class=" fas fa-heart"></i>
                                                                     </button>
                                                                 </div>
@@ -386,7 +387,7 @@
                                                                             || 'Unknown Product' %>
                                                                     </h3>
                                                                     <p class="text-xs text-gray-500 font-semibold">
-                                                                        Model: <%= item.product.model %>
+                                                                        Model: <%= item.product?.model %>
                                                                     </p>
                                                                     <p class="text-gray-400 text-xs font-semibold">
                                                                         Added: <%= item.addedAt.toLocaleDateString() %>
@@ -396,32 +397,32 @@
                                                                     </p>
                                                                     <!-- Price -->
                                                                     <div class="mb-2">
-                                                                        <% if (item.product.discount> 0 &&
-                                                                            item.product.discount
+                                                                        <% if (item.product?.discount> 0 &&
+                                                                            item.product?.discount
                                                                             <= 100) { %>
                                                                                 <span
                                                                                     class="text-md font-semibold text-gray-900"
-                                                                                    aria-label="Price <%= Math.round((item.product.price || 0) * (1 - item.product.discount / 100)) %> rupees">
-                                                                                    ₹<%= Math.round((item.product.price
+                                                                                    aria-label="Price <%= Math.round((item.product?.price || 0) * (1 - item.product?.discount / 100)) %> rupees">
+                                                                                    ₹<%= Math.round((item.product?.price
                                                                                         || 0) * (1 -
-                                                                                        item.product.discount /
+                                                                                        item.product?.discount /
                                                                                         100)).toLocaleString('en-IN') %>
                                                                                 </span>
                                                                                 <span
                                                                                     class="text-gray-400 line-through text-sm ml-2"
-                                                                                    aria-label="Original price <%= (item.product.price || 0) %> rupees">
-                                                                                    ₹<%= (item.product.price ||
+                                                                                    aria-label="Original price <%= (item.product?.price || 0) %> rupees">
+                                                                                    ₹<%= (item.product?.price ||
                                                                                         0).toLocaleString('en-IN') %>
                                                                                 </span>
                                                                                 <span
                                                                                     class="text-xs font-medium text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full ml-1">
-                                                                                    <%= item.product.discount %>% OFF
+                                                                                    <%= item.product?.discount %>% OFF
                                                                                 </span>
                                                                                 <% } else { %>
                                                                                     <span
                                                                                         class="text-md font-semibold text-gray-900"
-                                                                                        aria-label="Price <%= (item.product.price || 0) %> rupees">
-                                                                                        ₹<%= (item.product.price ||
+                                                                                        aria-label="Price <%= (item.product?.price || 0) %> rupees">
+                                                                                        ₹<%= (item.product?.price ||
                                                                                             0).toLocaleString('en-IN')
                                                                                             %>
                                                                                     </span>
@@ -429,12 +430,12 @@
                                                                     </div>
                                                                     <!--Add to cart-->
                                                                     <div class="flex space-x-2">
-                                                                        <% if (item.product.stock> 0) { %>
-                                                                            <% if (item.product.isInCart) { %>
+                                                                        <% if (item.product?.stock> 0) { %>
+                                                                            <% if (item.product?.isInCart) { %>
                                                                                 <button
                                                                                     class="flex-1 py-2 px-4 bg-gray-200 text-gray-500 rounded hover:opacity-80 transition cursor-not-allowed"
                                                                                     disabled
-                                                                                    aria-label="<%= item.product.productName %> already added to cart">
+                                                                                    aria-label="<%= item.product?.productName %> already added to cart">
                                                                                     Added
                                                                                 </button>
                                                                                 <% } else { %>
@@ -442,15 +443,15 @@
                                                                                         method="post" class="flex-1">
                                                                                         <input type="hidden"
                                                                                             name="productId"
-                                                                                            value="<%= item.product._id %>" />
+                                                                                            value="<%= item.product?._id %>" />
                                                                                         <input type="number"
                                                                                             name="quantity" value="1"
                                                                                             min="1"
-                                                                                            max="<%= item.product.stock %>"
+                                                                                            max="<%= item.product?.stock %>"
                                                                                             class="hidden" />
                                                                                         <button type="submit"
                                                                                             class="w-full py-2 px-4 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors cursor-pointer"
-                                                                                            aria-label="Add <%= item.product.productName %> to cart">
+                                                                                            aria-label="Add <%= item.product?.productName %> to cart">
                                                                                             Add to Cart
                                                                                         </button>
                                                                                     </form>
@@ -492,69 +493,112 @@
                                         <div class="space-y-6">
                                             <% user.cart.forEach(item=> { %>
                                                 <div
-                                                    class="flex flex-col md:flex-row border border-gray-200 rounded-lg p-4 hover:shadow-md smooth-transition">
-                                                    <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4">
-                                                        <img src="<%= item.product?.image || 'https://via.placeholder.com/120' %>"
-                                                            alt="Product" class="w-24 h-24 object-cover rounded" />
+                                                    class="flex flex-col md:flex-row border border-gray-200 rounded-lg p-4 hover:shadow-md smooth-transition relative">
+                                                    <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-4 rounded-lg sm:w-24 sm:h-24"
+                                                        style="background-color: <%= item.product?.bgColor %>">
+                                                        <img src="data:<%= item.product?.productImageType %>;base64,<%= item.product?.productImage.toString('base64') %>"
+                                                            alt="Product <%= item.product?.productName %>"
+                                                            class="w-full h-48 sm:h-full object-fill rounded" />
                                                     </div>
                                                     <div class="flex-grow">
                                                         <div class="flex justify-between">
                                                             <div>
+                                                                <small
+                                                                    class="absolute top-5 right-5 sm:right-2 sm:top-2 text-xs font-mono text-white bg-orange-400 w-fit px-2 rounded-xl">
+                                                                    <%= item.product?.category %>
+                                                                </small>
                                                                 <h3 class="font-medium text-gray-800">
-                                                                    <%= item.product?.name || 'Unknown Product' %>
+                                                                    <%= item.product?.productName || 'Unknown Product'
+                                                                        %>
                                                                 </h3>
-                                                                <p class="text-gray-600 text-sm">Price: ₹<%=
-                                                                        item.product?.price?.toFixed(2) || '0.00' %>
+                                                                <p class="text-xs text-gray-400 font-semibold">
+                                                                    Model: <%= item.product?.model %>
                                                                 </p>
+                                                                <p class="text-xs text-violet-500 font-serif">
+                                                                    Brand: <%= item.product?.brandName %>
+                                                                </p>
+
+                                                                <!-- Price -->
+                                                                <div>
+                                                                    <% if (item.product?.discount> 0 &&
+                                                                        item.product?.discount <= 100) { %>
+                                                                            <span
+                                                                                class="text-xs font-medium text-gray-900"
+                                                                                aria-label="Price <%= ((item.product?.price || 0) * (1 - item.product?.discount / 100)).toFixed(2) %> rupees">
+                                                                                ₹<%= ((item.product?.price || 0) * (1 -
+                                                                                    item.product?.discount /
+                                                                                    100)).toFixed(2).toLocaleString('en-IN')
+                                                                                    %>
+                                                                            </span>
+                                                                            <span
+                                                                                class="text-gray-500 line-through text-xs ml-1"
+                                                                                aria-label="Original price <%= (item.product?.price || 0) %> rupees">
+                                                                                ₹<%= (item.product?.price ||
+                                                                                    0).toLocaleString('en-IN') %>
+                                                                            </span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="text-xs font-medium text-gray-900"
+                                                                                    aria-label="Price <%= (item.product?.price || 0) %> rupees">
+                                                                                    ₹<%= (item.product?.price ||
+                                                                                        0).toFixed(2).toLocaleString('en-IN')
+                                                                                        %>
+                                                                                </span>
+                                                                                <% } %>
+                                                                                    <!-- Discount Offers -->
+                                                                                    <% if (item.product?.discount> 0) {
+                                                                                        %>
+                                                                                        <span
+                                                                                            class="bg-green-100 text-green-800 px-1 rounded-full text-xs font-mono ml-1">
+                                                                                            <%= item.product?.discount
+                                                                                                %>
+                                                                                                % OFF
+                                                                                        </span>
+                                                                                        <% } %>
+                                                                </div>
                                                             </div>
-                                                            <button class="remove-cart text-gray-400 hover:text-red-500"
-                                                                data-id="<%= item._id %>">
-                                                                <i class="fas fa-times"></i>
+                                                            <button
+                                                                class="remove-cart-btn text-gray-400 hover:text-red-500 cursor-pointer absolute right-4 bottom-4 sm:right-5 sm:top-4"
+                                                                aria-label="Remove item <%= item.product._id %>"
+                                                                data-cart-id="<%= item.product._id %>">
+                                                                <i class="fas fa-trash-alt"></i>
                                                             </button>
                                                         </div>
                                                         <div
-                                                            class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                                                            class="mt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between">
                                                             <div class="flex items-center mb-3 sm:mb-0">
-                                                                <button
-                                                                    class="update-quantity w-8 h-8 border border-gray-300 rounded-l flex items-center justify-center"
-                                                                    data-id="<%= item._id %>"
-                                                                    data-action="decrease">-</button>
-                                                                <span
-                                                                    class="w-12 h-8 border-t border-b border-gray-300 flex items-center justify-center">
-                                                                    <%= item.quantity %>
-                                                                </span>
-                                                                <button
-                                                                    class="update-quantity w-8 h-8 border border-gray-300 rounded-r flex items-center justify-center"
-                                                                    data-id="<%= item._id %>"
-                                                                    data-action="increase">+</button>
+                                                                <div
+                                                                    class="flex items-center border rounded-md px-2 text-sm">
+                                                                    <button
+                                                                        class="px-2 hover:text-red-500 decrease-quantity border-r border-gray-600 cursor-pointer"
+                                                                        data-item-id="<%= item.product._id %>"
+                                                                        aria-label="Decrease quantity">
+                                                                        <i
+                                                                            class="fa-duotone fa-solid fa-minus fa-sm"></i>
+                                                                    </button>
+                                                                    <span class="px-1 quantity">
+                                                                        <%= item.quantity %>
+                                                                    </span>
+                                                                    <button
+                                                                        class="px-2 hover:text-green-600 increase-quantity border-l border-gray-600 cursor-pointer"
+                                                                        data-item-id="<%= item.product._id %>"
+                                                                        aria-label="Increase quantity">
+                                                                        <i
+                                                                            class="fa-duotone fa-solid fa-plus fa-sm"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                            <p class="font-bold text-lg">₹<%= (item.product?.price *
+                                                            <p class="font-bold text-sm">₹<%= (item.product?.price *
                                                                     item.quantity).toFixed(2) || '0.00' %>
                                                             </p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <% }) %>
-                                                    <div class="bg-gray-50 p-6 rounded-lg mt-8">
-                                                        <div class="flex justify-between mb-4">
-                                                            <p class="text-gray-600">Subtotal</p>
-                                                            <p class="font-medium">₹<%= user.cart.reduce((total, item)=>
-                                                                    total + (item.product?.price * item.quantity || 0),
-                                                                    0).toFixed(2) %></p>
-                                                        </div>
-                                                        <div class="flex justify-between mb-4">
-                                                            <p class="text-gray-600">Shipping</p>
-                                                            <p class="font-medium">₹50.00</p>
-                                                        </div>
-                                                        <div
-                                                            class="flex justify-between mb-6 pt-4 border-t border-gray-200">
-                                                            <p class="text-lg font-bold">Total</p>
-                                                            <p class="text-lg font-bold">₹<%= (user.cart.reduce((total,
-                                                                    item)=> total + (item.product?.price * item.quantity
-                                                                    || 0), 0) + 50).toFixed(2) %></p>
-                                                        </div>
+                                                    <div class="bg-gray-50 p-6 rounded-lg mt-2">
+                                                      
                                                         <button
-                                                            class="w-full py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
+                                                            class="w-full py-3 mt-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
                                                             to Checkout</button>
                                                     </div>
                                         </div>
@@ -563,7 +607,7 @@
                                                 <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
                                                 <h3 class="text-lg font-medium text-gray-700">Your cart is empty</h3>
                                                 <p class="text-gray-500 mt-2">Add some items to get started</p>
-                                                <a href="/products"
+                                                <a href="/products/shop"
                                                     class="mt-4 inline-block px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Continue
                                                     Shopping</a>
                                             </div>
@@ -712,8 +756,8 @@
                                                 </div>
                                                 <div>
                                                     <label for="pinCode"
-                                                        class="block text-sm font-medium text-gray-700 mb-1">Pin
-                                                        Code</label>
+                                                        class="block text-sm font-medium text-gray-700 mb-1">
+                                                        Pin Code</label>
                                                     <input type="text" id="pinCode" name="address.pinCode"
                                                         value="<%= user.address?.pinCode || '' %>"
                                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
@@ -809,128 +853,6 @@
                 <script>
                     const userId = "<%= user.id %>"; // set userID
 
-                    // Tab Switching
-                    function switchTab (tabName) {
-                        document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-                        document.querySelectorAll('[id$="Tab"]').forEach(tab => {
-                            tab.classList.remove('active-tab', 'bg-indigo-50', 'text-indigo-700');
-                            tab.classList.add('hover:bg-gray-100', 'text-gray-700');
-                        });
-                        document.getElementById(tabName + 'Content').classList.remove('hidden');
-                        document.getElementById(tabName + 'Tab').classList.add('active-tab', 'bg-indigo-50', 'text-indigo-700');
-                        document.getElementById(tabName + 'Tab').classList.remove('hover:bg-gray-100', 'text-gray-700');
-                    }
-
-                    // Initialize Profile Tab
-                    document.addEventListener('DOMContentLoaded', () => {
-                        switchTab('profile');
-                    });
-
-                    // Order Filtering
-                    const filterButtons = document.querySelectorAll('.filter-btn');
-                    const orderItems = document.querySelectorAll('.order-item');
-                    filterButtons.forEach(btn => {
-                        btn.addEventListener('click', () => {
-                            filterButtons.forEach(b => b.classList.remove('active-tab'));
-                            btn.classList.add('active-tab');
-                            const filter = btn.dataset.filter;
-                            orderItems.forEach(item => {
-                                item.classList.remove('hidden');
-                                if (filter !== 'all' && item.dataset.status !== filter) {
-                                    item.classList.add('hidden');
-                                }
-                            });
-                        });
-                    });
-
-
-                    // Cart Actions
-                    // document.querySelectorAll('.remove-cart').forEach(btn => {
-                    //     btn.addEventListener('click', async () => {
-                    //         const itemId = btn.dataset.id;
-                    //         try {
-                    //             const response = await fetch(`/user/cart/${itemId}`, {
-                    //                 method: 'DELETE'
-                    //             });
-                    //             const data = await response.json();
-                    //             if (response.ok) {
-                    //                 alert('Item removed from cart');
-                    //                 window.location.reload();
-                    //             } else {
-                    //                 alert(data.message || 'Failed to remove item');
-                    //             }
-                    //         } catch (error) {
-                    //             alert('An error occurred while removing the item');
-                    //         }
-                    //     });
-                    // });
-
-
-                    // document.querySelectorAll('.update-quantity').forEach(btn => {
-                    //     btn.addEventListener('click', async () => {
-                    //         const itemId = btn.dataset.id;
-                    //         const action = btn.dataset.action;
-                    //         try {
-                    //             const response = await fetch(`/user/cart/${itemId}/quantity`, {
-                    //                 method: 'PUT',
-                    //                 headers: { 'Content-Type': 'application/json' },
-                    //                 body: JSON.stringify({ action })
-                    //             });
-                    //             const data = await response.json();
-                    //             if (response.ok) {
-                    //                 window.location.reload();
-                    //             } else {
-                    //                 alert(data.message || 'Failed to update quantity');
-                    //             }
-                    //         } catch (error) {
-                    //             alert('An error occurred while updating the quantity');
-                    //         }
-                    //     });
-                    // });
-
-                    // // Wishlist Actions
-                    // document.querySelectorAll('.remove-wishlist').forEach(btn => {
-                    //     btn.addEventListener('click', async () => {
-                    //         const itemId = btn.dataset.id;
-                    //         try {
-                    //             const response = await fetch(`/user/wishlist/${itemId}`, {
-                    //                 method: 'DELETE'
-                    //             });
-                    //             const data = await response.json();
-                    //             if (response.ok) {
-                    //                 alert('Item removed from wishlist');
-                    //                 window.location.reload();
-                    //             } else {
-                    //                 alert(data.message || 'Failed to remove item');
-                    //             }
-                    //         } catch (error) {
-                    //             alert('An error occurred while removing the item');
-                    //         }
-                    //     });
-                    // });
-
-                    // document.querySelectorAll('.add-to-cart').forEach(btn => {
-                    //     btn.addEventListener('click', async () => {
-                    //         const productId = btn.dataset.productId;
-                    //         try {
-                    //             const response = await fetch('/user/cart', {
-                    //                 method: 'POST',
-                    //                 headers: { 'Content-Type': 'application/json' },
-                    //                 body: JSON.stringify({ productId })
-                    //             });
-                    //             const data = await response.json();
-                    //             if (response.ok) {
-                    //                 alert('Item added to cart');
-                    //                 window.location.reload();
-                    //             } else {
-                    //                 alert(data.message || 'Failed to add item to cart');
-                    //             }
-                    //         } catch (error) {
-                    //             alert('An error occurred while adding the item to cart');
-                    //         }
-                    //     });
-                    // });
-
                     // Order Actions (Placeholder)
                     document.querySelectorAll('.track-order').forEach(btn => {
                         btn.addEventListener('click', () => {
@@ -970,6 +892,9 @@
                 <script src="/javascripts/profileUpdate.js"></script>
                 <script src="/javascripts/profilePicUpdate.js"></script>
                 <script src="/javascripts/wishlistRemove.js"></script>
+                <script src="/javascripts/cartRemove.js"></script>
+                <script src="/javascripts/profilePageActiveTab.js"></script>
+                <script src="/javascripts/cartQuantityUpdate.js"></script>
     </body>
 
 </html>

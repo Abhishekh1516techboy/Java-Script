@@ -26,9 +26,7 @@ export const profilePage = async (req, res) => {
     // Find user and populate cart/wishlist products
     const user = await User.findById(userId)
       .select("+phone +aadharNumber")
-      .populate("wishlist.product cart.product")
-      .lean();
-
+      .populate("wishlist.product cart.product");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -36,6 +34,33 @@ export const profilePage = async (req, res) => {
     // Reverse wishlist & cart order
     user.wishlist = user.wishlist?.reverse() || [];
     user.cart = user.cart?.reverse() || [];
+
+    // Calculate cart summary
+    const subtotal = user.cart.reduce(
+      (sum, item) => sum + (item.product?.price || 0) * item.quantity,
+      0
+    );
+
+    const discount = user.cart.reduce(
+      (sum, item) =>
+        sum +
+        (((item.product?.price || 0) * (item.product?.discount || 0)) / 100) *
+          item.quantity,
+      0
+    );
+
+    const tax = user.cart.reduce(
+      (sum, item) =>
+        sum +
+        (((item.product?.price || 0) -
+          ((item.product?.price || 0) * (item.product?.discount || 0)) / 100) *
+          item.quantity *
+          18) /
+          100,
+      0
+    );
+
+    const total = subtotal - discount + tax;
 
     // Fetch all products
     const products = await Product.find().sort({ updatedAt: -1 });
@@ -79,6 +104,10 @@ export const profilePage = async (req, res) => {
       isLogin: !!user?._id,
       cartCount: user.cart.length || 0,
       wishlistCount: user.wishlist.length || 0,
+      subtotal,
+      discount,
+      tax,
+      total,
     });
   } catch (error) {
     console.error("Profile error:", error);
