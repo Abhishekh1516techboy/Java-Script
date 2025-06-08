@@ -51,24 +51,33 @@
                                                         class="text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                                                         <%= item.category %>
                                                     </span>
-                                                    <h3 class="text-sm font-semibold text-gray-800 line-clamp-1 mt-1">
+                                                    <h3
+                                                        class="text-sm font-semibold text-gray-800 line-clamp-1 mt-1 mb-1">
                                                         <%= item.brandName %>
                                                             <%= item.productName %>
                                                     </h3>
-                                                    <p class="text-xs text-gray-500">Model: <%= item.model %>
+                                                    <p class="text-xs text-gray-500 font-semibold">Model: <%= item.model
+                                                            %>
                                                     </p>
-
+                                                    <p class="text-gray-400 text-xs font-semibold">Added: <%=
+                                                            item.addedAt.toLocaleDateString() %>
+                                                    </p>
+                                                    <p class="text-xs text-violet-500 font-serif">
+                                                        Brand: <%= item.brandName %>
+                                                    </p>
                                                     <!-- Price -->
-                                                    <div class="mt-1">
-                                                        <% if (item.discount> 0 && item.discount <= 100) { %>
-                                                                <span class="text-sm font-semibold text-gray-900"
-                                                                    aria-label="Price <%= ((item.price || 0) * (1 - item.discount / 100)).toFixed(2) %>">
-                                                                    ₹<%= ((item.price || 0) * (1 - item.discount /
-                                                                        100)).toFixed(2) %>
+                                                    <div>
+                                                        <% if (item.discount> 0 &&
+                                                            item.discount
+                                                            <= 100) { %>
+                                                                <span class="text-sm font-semibold text-gray-700"
+                                                                    aria-label="Price <%= Math.round((item.price || 0) * (1 - item.discount / 100)) %> rupees">
+                                                                    ₹<%= Math.round((item.price || 0) * (1 -
+                                                                        item.discount / 100)).toLocaleString('en-IN') %>
                                                                 </span>
-                                                                <span class="text-gray-400 line-through text-xs ml-1"
-                                                                    aria-label="Original price <%= (item.price || 0) %>">
-                                                                    ₹<%= (item.price || 0).toFixed(2) %>
+                                                                <span class="text-gray-400 line-through text-sm ml-2"
+                                                                    aria-label="Original price <%= (item.price || 0) %> rupees">
+                                                                    ₹<%= (item.price || 0).toLocaleString('en-IN') %>
                                                                 </span>
                                                                 <span
                                                                     class="text-xs font-medium text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full ml-1">
@@ -76,8 +85,9 @@
                                                                 </span>
                                                                 <% } else { %>
                                                                     <span class="text-sm font-semibold text-gray-900"
-                                                                        aria-label="Price <%= (item.price || 0) %>">
-                                                                        ₹<%= (item.price || 0).toFixed(2) %>
+                                                                        aria-label="Price <%= (item.price || 0) %> rupees">
+                                                                        ₹<%= (item.price || 0).toLocaleString('en-IN')
+                                                                            %>
                                                                     </span>
                                                                     <% } %>
                                                     </div>

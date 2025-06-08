@@ -5,11 +5,8 @@ import {
   validateGstin,
   validateAadhar,
   validateEmail,
-  validateAge,
   validateGender,
-  validatePhone,
   validatePassword,
-  validatePinCode,
 } from "../helpers/validators.js";
 
 // Render owner signUp page only in Development Mode
@@ -17,10 +14,8 @@ export const signUpPage = (req, res) => {
   let error = req.flash("error"); // Retrieve error flash messages
   let success = req.flash("success"); // Retrieve success flash messages
 
-  let isLogin = false;
-  let user;
+  let user = null;
   if (req.cookies?.token) {
-    isLogin = true;
     const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
     user = decoded;
   }
@@ -37,9 +32,9 @@ export const signUpPage = (req, res) => {
     error,
     success,
     user,
-    isLogin,
-    wishlistCount: 5,
-    cartCount: 2, // Example cart count
+    isLogin: !!user?._id,
+    cartCount: user?.cart?.length || 0,
+    wishlistCount: user?.wishlist?.length || 0,
   });
 };
 
@@ -136,21 +131,20 @@ export const loginPage = (req, res) => {
   let error = req.flash("error"); // Retrieve error flash messages
   let success = req.flash("success"); // Retrieve success flash messages
 
-  let isLogin = false;
-  let user;
+  let user = null;
   if (req.cookies?.token) {
-    isLogin = true;
     const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
     user = decoded;
   }
+
   res.render("ownerLogin", {
     authPage: true,
     error,
     success,
     user,
-    isLogin,
-    wishlistCount: 5,
-    cartCount: 2, // Example cart count
+    isLogin: !!user?._id,
+    cartCount: user?.cart?.length || 0,
+    wishlistCount: user?.wishlist?.length || 0,
   });
 };
 

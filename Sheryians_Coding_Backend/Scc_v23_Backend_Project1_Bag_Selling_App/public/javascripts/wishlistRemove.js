@@ -16,10 +16,12 @@ async function removeFromWishlist(button) {
     const data = await response.json();
     if (response.ok) {
       setTimeout(() => {
-        window.location.href = `/wishlists?productRemove=true`;
+        window.location.reload();
       }, 1000);
     } else {
-      throw new Error(data.message || "Failed to remove product from wishlists");
+      throw new Error(
+        data.message || "Failed to remove product from wishlists"
+      );
     }
   } catch (error) {
     alert(error.message || "An error occurred while removing the wishlists");

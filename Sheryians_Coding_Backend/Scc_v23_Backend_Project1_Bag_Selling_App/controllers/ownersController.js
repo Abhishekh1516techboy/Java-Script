@@ -1,14 +1,11 @@
 import Owner from "../models/owner-model.js";
 import Product from "../models/product-model.js";
-import generateToken from "../utils/generateToken.js";
-import jwt from "jsonwebtoken";
 import {
   hiddenAadharNumber,
   hiddenGstinNumber,
   validateGstin,
   validateAadhar,
   validateEmail,
-  validateAge,
   validateGender,
   validatePhone,
   validatePassword,
@@ -65,7 +62,7 @@ export const profile = async (req, res) => {
       authPage: true,
       isLogin: !!owner?._id,
       cartCount: owner?.cart?.length || 0, // Example cart count
-      wishlistCount: 5,
+      wishlistCount: owner?.wishlist?.length || 0,
     });
   } catch (error) {
     console.error("Admin Profile error:", error);
@@ -245,7 +242,7 @@ export const createProductPage = async (req, res) => {
       user: authUser,
       isLogin: !!authUser?._id,
       cartCount: authUser?.cart?.length || 0, // Example cart count
-      wishlistCount: 5,
+      wishlistCount: authUser?.wishlist?.length || 0,
     });
   } catch (error) {
     console.error("Create Product error:", error);
@@ -393,7 +390,7 @@ export const updateProductPage = async (req, res) => {
       user: authUser,
       isLogin: !!authUser?._id,
       cartCount: authUser?.cart?.length || 0, // Example cart count
-      wishlistCount: 5,
+      wishlistCount: authUser?.wishlist?.length || 0,
     });
   } catch (error) {
     console.error("Create Product error:", error);

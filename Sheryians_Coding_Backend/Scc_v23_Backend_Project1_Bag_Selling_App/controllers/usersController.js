@@ -1,14 +1,8 @@
 import User from "../models/user-model.js";
-import generateToken from "../utils/generateToken.js";
-import jwt from "jsonwebtoken";
-
+import Product from "../models/product-model.js";
 import {
-  formatAadharNumber,
   hiddenAadharNumber,
   validateAadhar,
-  validateEmail,
-  validateAge,
-  validateGender,
   validatePhone,
   validatePassword,
   validatePinCode,
@@ -16,54 +10,75 @@ import {
 
 // ********************** /user **********************
 export const profilePage = async (req, res) => {
-  let error = req.flash("error"); // Retrieve error flash messages
-  let success = req.flash("success"); // Retrieve success flash messages
+  let error = req.flash("error");
+  let success = req.flash("success");
 
   try {
-    // Extract the userId from the route parameter
     const userId = req.params.id;
-
-    // Get the authenticated user's ID from JWT
     const authUserId = req.user?.id;
 
-    // Check if the requested userId matches the authenticated user's ID
+    // Security check
     if (userId !== authUserId) {
       req.flash("error", "You are not authorized to view this profile");
       return res.redirect("/");
     }
 
-    //find user by userId
-    const user = await User.findById(userId).select("+phone +aadharNumber");
+    // Find user and populate cart/wishlist products
+    const user = await User.findById(userId)
+      .select("+phone +aadharNumber")
+      .populate("wishlist.product cart.product")
+      .lean();
 
-    // if user not found
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Formated Aadhar Number show like "xxxx-xxxx-6194" format
+    // Reverse wishlist & cart order
+    user.wishlist = user.wishlist?.reverse() || [];
+    user.cart = user.cart?.reverse() || [];
+
+    // Fetch all products
+    const products = await Product.find().sort({ updatedAt: -1 });
+
+    if (!products || products.length === 0) {
+      req.flash("error", "No product list found");
+      return res.redirect("/");
+    }
+
+    // Get cart product IDs as strings
+    const cartProductIds = user.cart.map((item) =>
+      item.product?._id?.toString()
+    );
+
+    // Set isInCart for each wishlist.product
+    user.wishlist.forEach((item) => {
+      const productId = item.product?._id?.toString();
+      item.product.isInCart = cartProductIds.includes(productId);
+    });
+
+    // Format Aadhar number
     user.hiddenAadharNumber = hiddenAadharNumber(user.aadharNumber);
 
-    // if password Change show message
+    // Handle flash messages
     if (req.session.passwordChanged) {
       success = ["Password changed successfully"];
       delete req.session.passwordChanged;
     }
 
-    // if Profile-Update show message
     if (req.session.profileUpdate) {
-      success = ["Profile-Update successfully"];
+      success = ["Profile updated successfully"];
       delete req.session.profileUpdate;
     }
 
-    // return user response
+    // Render profile page
     res.render("Profile", {
       user,
       error,
       success,
       authPage: true,
       isLogin: !!user?._id,
-      cartCount: user?.cart.length || 0,
-      wishlistCount: user?.wishlist?.length || 0,
+      cartCount: user.cart.length || 0,
+      wishlistCount: user.wishlist.length || 0,
     });
   } catch (error) {
     console.error("Profile error:", error);
