@@ -596,7 +596,29 @@
                                                 </div>
                                                 <% }) %>
                                                     <div class="bg-gray-50 p-6 rounded-lg mt-2">
-                                                      
+                                                        <div class="flex justify-between">
+                                                            <span>Subtotal</span>
+                                                            <span id="subtotal">₹<%= subtotal.toFixed(2) %></span>
+                                                        </div>
+                                                        <div class="flex justify-between text-green-600">
+                                                            <span>Discount</span>
+                                                            <span>− ₹<span id="discount-amount">
+                                                                    <%= discount.toFixed(2) %>
+                                                                </span></span>
+                                                        </div>
+                                                        <div class="flex justify-between text-gray-500">
+                                                            <span>Tax 18%</span>
+                                                            <span>+ ₹<span id="tax-amount">
+                                                                    <%= tax.toFixed(2) %>
+                                                                </span></span>
+                                                        </div>
+                                                        <div
+                                                            class="flex justify-between font-semibold text-base pt-2 border-t mt-2">
+                                                            <span>Total</span>
+                                                            <span>₹<span id="total-amount">
+                                                                    <%= total.toFixed(2) %>
+                                                                </span></span>
+                                                        </div>
                                                         <button
                                                             class="w-full py-3 mt-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
                                                             to Checkout</button>
