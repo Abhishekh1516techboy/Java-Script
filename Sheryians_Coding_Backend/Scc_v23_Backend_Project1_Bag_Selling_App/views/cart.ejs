@@ -141,10 +141,10 @@
 
                             <!-- CTA Buttons -->
                             <div class="mt-6 space-y-2">
-                                <a href="/checkout"
-                                    class="w-full block text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">
-                                    Proceed to checkout
-                                </a>
+                                <button onclick="payNow()"
+                                    class="w-full cursor-pointer block text-center bg-blue-600 text-white font-medium py-2 rounded-lg hover:bg-blue-700 transition">Pay
+                                    Now</button>
+
                                 <a href="/products/shop"
                                     class="w-full block text-center border border-gray-300 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition">
                                     Continue shopping
@@ -160,7 +160,12 @@
                                 <% } %>
                     </div>
                 </div>
-                
+
+                <script>
+                    const amount = `<%= Math.ceil(total) %>`
+                </script>
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                <script src="/javascripts/RazorPay.js"></script>
                 <!-- Scripts -->
                 <script src="/javascripts/searchAndMenuToggle.js"></script>
                 <script src="/javascripts/profileToggle.js"></script>

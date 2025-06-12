@@ -21,7 +21,8 @@
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.14.0",
-    "multer": "^1.4.5-lts.2"
+    "multer": "^1.4.5-lts.2",
+    "razorpay": "^2.9.6"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.4",

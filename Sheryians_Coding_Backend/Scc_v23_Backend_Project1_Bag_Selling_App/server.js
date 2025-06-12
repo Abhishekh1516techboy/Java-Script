@@ -12,6 +12,7 @@ import usersRoutes from "./routes/usersRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
 import wishlistsRoutes from "./routes/wishlistsRoutes.js";
 import cartsRoutes from "./routes/cartsRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 dotenv.config(); // Load environment variables from .env file
@@ -40,7 +41,6 @@ app.use(
 );
 app.use(flash()); // Initialize connect-flash
 
-
 // Routes
 app.use("/", indexRoutes);
 app.use("/owners", ownersRoutes);
@@ -48,7 +48,7 @@ app.use("/users", usersRoutes);
 app.use("/products", productsRoutes);
 app.use("/wishlists", wishlistsRoutes);
 app.use("/carts", cartsRoutes);
-
+app.use("/api/payment", paymentRoutes);
 
 // Logout (POST for security)
 app.post("/logout", async (req, res) => {

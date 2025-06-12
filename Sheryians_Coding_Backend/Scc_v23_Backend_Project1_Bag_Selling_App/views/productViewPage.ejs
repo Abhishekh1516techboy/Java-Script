@@ -94,9 +94,10 @@
                             <p class="mt-4 text-gray-700"><%- product.description %></p>
                             <p class="mt-2 text-gray-600">
                                 Stock:
-                                <%= product.stock === 0 ? 'Out of Stock' : product.stock  < 10 ? product.stock : 'In Stock' %>
-                              </p>
-                              
+                                <%= product.stock===0 ? 'Out of Stock' : product.stock < 10 ? product.stock : 'In Stock'
+                                    %>
+                            </p>
+
 
                             <!-- Average Rating -->
                             <% if (product.ratings && product.ratings> 0 && product.ratings <= 5) { %>
@@ -123,13 +124,11 @@
                                                                                         %></span>
                                     </div>
                                     <% } %>
-                                        <a href="/products/checkout/<%= product._id %>">
-                                            <button
-                                                class="mt-6 bg-blue-600 cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 <%- product.stock === 0 ? 'opacity-50 cursor-not-allowed' : '' %>"
-                                                <%- product.stock===0 ? 'disabled' : '' %>>
-                                                <%- product.stock> 0 ? 'Shop Now' : 'Out of Stock' %>
-                                            </button>
-                                        </a>
+                                        <button onclick="payNow()"
+                                            class="mt-6 bg-blue-600 cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-300 <%- product.stock === 0 ? 'opacity-50 cursor-not-allowed' : '' %>"
+                                            <%- product.stock===0 ? 'disabled' : '' %>>
+                                            <%- product.stock> 0 ? 'Shop Now' : 'Out of Stock' %>
+                                        </button>
                         </div>
                     </div>
 
@@ -297,11 +296,17 @@
                 <!-- Footer -->
                 <%- include('partials/footer') %>
 
+
+                    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                    <script src="/javascripts/RazorPay.js"></script>
+
                     <script src="/javascripts/searchAndMenuToggle.js"></script>
                     <script src="/javascripts/profileToggle.js"></script>
                     <script src="/javascripts/flashMessage.js"></script>
                     <script src="/javascripts/productReviews.js"></script>
                     <script>
+                        const amount = `<%= Math.ceil(product.total) %>`
+
                         const productId = `<%= product._id %>`
                         let page = 1;
                         let isLoading = false;

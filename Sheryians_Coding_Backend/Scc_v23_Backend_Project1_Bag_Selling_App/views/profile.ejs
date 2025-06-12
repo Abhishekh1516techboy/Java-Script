@@ -619,8 +619,8 @@
                                                                     <%= total.toFixed(2) %>
                                                                 </span></span>
                                                         </div>
-                                                        <button
-                                                            class="w-full py-3 mt-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
+                                                        <button onclick="payNow()"
+                                                            class="w-full cursor-pointer py-3 mt-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium">Proceed
                                                             to Checkout</button>
                                                     </div>
                                         </div>
@@ -874,6 +874,7 @@
 
                 <script>
                     const userId = "<%= user.id %>"; // set userID
+                    const amount = `<%= Math.ceil(total) %>`
 
                     // Order Actions (Placeholder)
                     document.querySelectorAll('.track-order').forEach(btn => {
@@ -905,6 +906,8 @@
                     });
                 </script>
 
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+                <script src="/javascripts/RazorPay.js"></script>
                 <!-- Scripts -->
                 <script src="/javascripts/searchAndMenuToggle.js"></script>
                 <script src="/javascripts/profileToggle.js"></script>

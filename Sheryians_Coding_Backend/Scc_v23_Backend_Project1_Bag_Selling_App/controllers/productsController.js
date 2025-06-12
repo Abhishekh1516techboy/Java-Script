@@ -112,6 +112,17 @@ export const productViewPage = async (req, res) => {
       "name picture"
     );
 
+    const price = product.price;
+    const discountAmount = (price * product.discount) / 100;
+    const discountedPrice = price - discountAmount;
+
+    // 18% tax on discounted price
+    const tax = (discountedPrice * 18) / 100;
+
+    // Total = discounted price + tax
+    const total = discountedPrice + tax;
+    product.total = total;
+    
     res.render("productViewPage", {
       authPage: false,
       products,
