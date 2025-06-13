@@ -1,0 +1,29 @@
+
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build output (if applicable, though not in your structure yet)
+dist/
+build/
+
+# Runtime data
+*.pid
+*.seed
+
+# Optional npm cache
+.npm
+
+# Output of 
+npm
+pack
+*.tgz
+
+# IDE/Editor files
+.vscode/

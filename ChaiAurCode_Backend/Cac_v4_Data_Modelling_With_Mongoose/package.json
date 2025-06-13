@@ -1,0 +1,17 @@
+{
+  "name": "cac_v4_data_modelling_with_mongoose",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "NodeJS Backend data Modelling With Mongoose by Hitesh Sir With Love. (14/6/25 - 12:50 AM)",
+  "dependencies": {
+    "mongoose": "^8.15.2"
+  }
+}
