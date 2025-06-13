@@ -16,7 +16,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 dotenv.config(); // Load environment variables from .env file
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.set("view engine", "ejs"); // EJS templates will be used for dynamic HTML
 
