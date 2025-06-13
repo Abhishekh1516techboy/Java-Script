@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "Backend_Project1_Bag_Selling_App/server.js",
+      "src": "server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "Backend_Project1_Bag_Selling_App/server.js"
+      "dest": "server.js"
     }
   ]
 }
