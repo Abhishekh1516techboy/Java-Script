@@ -1,0 +1,15 @@
+{
+  "name": "cac_v5_e-commerce_hospital_data-modling",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "@Abhishekh1516techboy",
+  "description": "E-Commerce & Hospital management Data Modelling by Hitesh Sir With Love. (14/6/25 - 1:15 AM)",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^8.15.2"
+  }
+}
