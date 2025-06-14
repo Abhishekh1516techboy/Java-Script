@@ -1,0 +1,18 @@
+{
+  "name": "cac_v6_setup_professional_bckend_project",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "How to setUp Professional backend Project by Hitesh Sir (14/6/25 - 8:25PM)",
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3"
+  }
+}
