@@ -18,15 +18,15 @@ export const registerUser = asyncHandler(async (req, res) => {
   // Check if user already exists by (userName, email)
   const existedUser = await User.findOne({
     $or: [{ userName }, { email }],
-  });
+  }).select("userName email");
 
   if (existedUser) {
     throw new ApiError(409, "User already exist with this email or userName.");
   }
 
   // Check for images, avatar image is required
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  const avatarLocalPath = req.files?.avatar?.[0]?.path;
+  const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required.");
