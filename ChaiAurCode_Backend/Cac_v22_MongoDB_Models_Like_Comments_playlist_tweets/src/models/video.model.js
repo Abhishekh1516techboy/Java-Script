@@ -4,29 +4,41 @@ import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 const videoSchema = new mongoose.Schema(
   {
     videoFile: {
-      type: String, // Cloudinary URL
-      required: [true, "Video file is required"],
-      trim: true,
-      validate: {
-        validator: function (url) {
-          return /^https?:\/\/res\.cloudinary\.com\/.*\.(mp4|mov|avi|mkv|webm)$/.test(
-            url
-          );
+      url: {
+        type: String, // Cloudinary URL
+        required: [true, "Video file is required"],
+        trim: true,
+        validate: {
+          validator: function (url) {
+            return /^https?:\/\/res\.cloudinary\.com\/.*\.(mp4|mov|avi|mkv|webm)$/.test(
+              url
+            );
+          },
+          message: "Invalid Cloudinary URL for video file",
         },
-        message: "Invalid Cloudinary URL for video file",
+      },
+      public_id: {
+        type: String,
+        required: [true, "Cloudinary public_id is required"],
       },
     },
     thumbnail: {
-      type: String, // Cloudinary URL
-      required: [true, "Thumbnail is required"],
-      trim: true,
-      validate: {
-        validator: function (url) {
-          return /^https?:\/\/res\.cloudinary\.com\/.*\.(jpg|jpeg|png|webp)$/.test(
-            url
-          );
+      url: {
+        type: String, // Cloudinary URL
+        required: [true, "Thumbnail is required"],
+        trim: true,
+        validate: {
+          validator: function (url) {
+            return /^https?:\/\/res\.cloudinary\.com\/.*\.(jpg|jpeg|png|webp)$/.test(
+              url
+            );
+          },
+          message: "Invalid Cloudinary URL for thumbnail",
         },
-        message: "Invalid Cloudinary URL for thumbnail",
+      },
+      public_id: {
+        type: String,
+        required: [true, "Cloudinary public_id is required"],
       },
     },
     title: {

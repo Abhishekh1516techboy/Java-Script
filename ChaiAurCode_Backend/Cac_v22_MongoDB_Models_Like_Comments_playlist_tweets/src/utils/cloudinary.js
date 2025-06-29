@@ -34,14 +34,19 @@ export const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export const deleteFromCloudinary = async (publicId) => {
+export const deleteFromCloudinary = async (
+  publicId,
+  resource_type = "image"
+) => {
   // Validate publicId
   if (!publicId) {
     throw new ApiError(400, "Public ID is required for deletion!");
   }
 
   try {
-    const result = await cloudinary.uploader.destroy(publicId);
+    const result = await cloudinary.uploader.destroy(publicId, {
+      resource_type: `${resource_type}`,
+    });
 
     // Check deletion result
     if (result.result !== "ok") {
