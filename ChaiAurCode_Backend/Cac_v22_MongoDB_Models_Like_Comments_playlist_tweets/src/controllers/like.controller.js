@@ -7,6 +7,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
+// ----------toggle Video Like/Dislike-----------
 export const toggleVideoLike = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -59,6 +60,7 @@ export const toggleVideoLike = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { isLiked: true }, "Video liked successfully!"));
 });
 
+// ----------toggle Comment Like/Dislike-----------
 export const toggleCommentLike = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -116,6 +118,7 @@ export const toggleCommentLike = asyncHandler(async (req, res) => {
     );
 });
 
+// ----------toggle Tweet Like/Dislike-----------
 export const toggleTweetLike = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -167,6 +170,7 @@ export const toggleTweetLike = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { isLiked: true }, "Tweet liked successfully!"));
 });
 
+// ----------Get All Liked video-----------
 export const getLikedVideos = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -219,10 +223,10 @@ export const getLikedVideos = asyncHandler(async (req, res) => {
           description: 1,
           views: 1,
           duration: 1,
-          createdAt: 1,
+          uploadDate: 1,
           isPublished: 1,
           ownerDetails: {
-            username: 1,
+            userName: 1,
             fullName: 1,
             "avatar.url": 1,
           },

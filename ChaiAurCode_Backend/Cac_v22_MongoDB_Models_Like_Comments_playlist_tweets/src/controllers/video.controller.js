@@ -11,7 +11,7 @@ import {
   deleteFromCloudinary,
 } from "../utils/cloudinary.js";
 
-// Get all videos with optional query, sort, and pagination
+// -------------Get all videos with optional query, sort, and pagination-------------
 export const getAllVideos = asyncHandler(async (req, res) => {
   // Extract query parameters for pagination, search, sorting, and user filtering
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
@@ -104,15 +104,15 @@ export const getAllVideos = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, videos, "Videos fetched successfully!"));
 });
 
-// Publish a new video with video file and thumbnail
+// -------------Publish a new video with video file and thumbnail-------------
 export const publishAVideo = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
 
   // Extract and validate title and description
-  const { title, description  } = req.body;
+  const { title, description } = req.body;
 
-  if ([title, description ].some((field) => !field?.trim())) {
+  if ([title, description].some((field) => !field?.trim())) {
     throw new ApiError(400, "Title and description are required!");
   }
 
@@ -155,6 +155,7 @@ export const publishAVideo = asyncHandler(async (req, res) => {
       public_id: thumbnail.public_id,
     },
     owner: authUser?._id,
+    uploadDate: Date.now(),
     isPublished: false,
   });
 
@@ -171,7 +172,7 @@ export const publishAVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, videoUploaded, "Video uploaded successfully!"));
 });
 
-// Get a video by ID with likes and subscription details
+// -------------Get a video by ID with likes and subscription details-------------
 export const getVideoById = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -265,7 +266,7 @@ export const getVideoById = asyncHandler(async (req, res) => {
         title: 1,
         description: 1,
         views: 1,
-        createdAt: 1,
+        uploadDate: 1,
         duration: 1,
         comments: 1,
         owner: 1,
@@ -296,7 +297,7 @@ export const getVideoById = asyncHandler(async (req, res) => {
     );
 });
 
-// Update video details (title, description, thumbnail)
+// -------------Update video details (title, description, thumbnail)-------------
 export const updateVideo = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -380,7 +381,7 @@ export const updateVideo = asyncHandler(async (req, res) => {
     );
 });
 
-// Delete a video and its associated files, likes, and comments
+// -------------Delete a video and its associated files, likes, and comments-------------
 export const deleteVideo = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
@@ -427,7 +428,7 @@ export const deleteVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Video deleted successfully!"));
 });
 
-// Toggle the publish status of a video
+// -------------Toggle the publish status of a video-------------
 export const togglePublishStatus = asyncHandler(async (req, res) => {
   // authenticated user from cookies
   const authUser = req.user;
