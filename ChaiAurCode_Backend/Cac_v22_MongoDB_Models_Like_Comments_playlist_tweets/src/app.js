@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Serve static files f
 app.use(cookieParser()); // cookie parser
 
 // routes
+import healthCheckRouter from "./routes/healthcheck.routes.js";
 import userRouter from "./routes/user.routes.js";
 import tweetRouter from "./routes/tweet.routes.js";
 import likeRouter from "./routes/like.routes.js";
@@ -34,6 +35,7 @@ import playlistRouter from "./routes/playlist.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
 
 // routes decleration
+app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tweets", tweetRouter);
 app.use("/api/v1/likes", likeRouter);
