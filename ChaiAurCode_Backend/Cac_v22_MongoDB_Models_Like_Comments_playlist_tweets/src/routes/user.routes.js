@@ -47,7 +47,7 @@ router.route("/logout").post(verifyToken, logoutUser);
 router.route("/change-password").post(verifyToken, chnageCurrentUserPassword);
 
 // ---------Get Current User route---------
-router.route("/current-user").post(verifyToken, getCurrentUser);
+router.route("/current-user").get(verifyToken, getCurrentUser);
 
 // ---------Update Account Detailes route---------
 router.route("/update-account").patch(verifyToken, updateAccountDetails);
