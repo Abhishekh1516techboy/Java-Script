@@ -1,0 +1,17 @@
+{
+  "name": "tt_v29_realtime_currency_convertor",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is Real time Currecny convertor App by Thapa Technical (4/7/25 - 11:50PM)",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "dotenv": "^17.0.1"
+  }
+}
