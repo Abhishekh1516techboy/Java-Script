@@ -1,0 +1,14 @@
+{
+  "name": "tt_v26_cli_todo_app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is nodeJs Backend CLI ToDo App by Thapa technical (4/7/25 - 9:31PM)"
+}
