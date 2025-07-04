@@ -1,0 +1,14 @@
+{
+  "name": "tt_v27_cli_file_creation_app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is CLI File Creation APP by Thapa Technical (4/7/25 - 10:53PM)"
+}
