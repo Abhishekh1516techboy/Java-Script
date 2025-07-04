@@ -1,0 +1,16 @@
+{
+  "name": "tt_v28_random_joke_generator",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@Abhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is Random Joke Generator by Thapa Technical (4/7/25 - 11:20PM)",
+  "dependencies": {
+    "chalk": "^5.4.1"
+  }
+}
