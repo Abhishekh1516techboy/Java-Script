@@ -1,3 +1,31 @@
+const fetchShortedURL = async () => {
+  try {
+    const response = await fetch("/links");
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const links = await response.json();
+
+    const list = document.getElementById("shortenedURLs");
+    list.innerHTML = "";
+
+    for (const [shortUrl, url] of Object.entries(links)) {
+      const li = document.createElement("li");
+      li.className = "links-list";
+      li.innerHTML = `<a href="/${shortUrl}" target="_blank">
+          ${window.location.origin}/${shortUrl}
+        </a> ${url}`;
+      list.appendChild(li);
+    }
+  } catch (error) {
+    console.error("Error fetching or rendering URLs:", error);
+    const list = document.getElementById("shortenedURLs");
+    if (list) {
+      list.innerHTML = "<li>Error loading URLs. Please try again later.</li>";
+    }
+  }
+};
+
 document.getElementById("shortenForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -15,6 +43,7 @@ document.getElementById("shortenForm").addEventListener("submit", async (e) => {
     if (response.ok) {
       alert("Form submitted Successfully!");
       e.target.reset();
+      fetchShortedURL();
     } else {
       const errorMessage = await response.text();
       alert(errorMessage);
@@ -23,3 +52,5 @@ document.getElementById("shortenForm").addEventListener("submit", async (e) => {
     console.error(error);
   }
 });
+
+fetchShortedURL();

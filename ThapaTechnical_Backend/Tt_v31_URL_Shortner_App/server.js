@@ -53,6 +53,11 @@ const server = createServer(async (req, res) => {
     } else if (req.url === "/script.js") {
       filePath = path.join("public", "script.js");
       contentType = "application/javascript";
+      // Handle requests for the /links file
+    } else if (req.url === "/links") {
+      const links = await loadLinks();
+      res.writeHead(200, { "Content-type": "application/json" });
+      return res.end(JSON.stringify(links));
       // Handle any other URLs (not found)
     } else {
       // Return a 404 status with an HTML error message

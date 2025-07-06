@@ -72,3 +72,27 @@ a {
     font-size: 14px;
   }
 }
+
+.links-list {
+  background-color: rgb(29, 27, 27);
+  color: white;
+  margin-top: 10px;
+  font-size: small;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  border-radius: 15px;
+}
+
+.links-list:hover {
+  background-color: rgb(56, 54, 54);
+  transform: scaleX(1.05);
+  transition: cubic-bezier(0.215, 0.610, 0.355, 1);
+  transition-duration: 0.3s;
+}
+
+.links-list > a {
+  font-size: medium;
+}
+
+.links-list > a:hover{
+  color: #08f75c;
+}
