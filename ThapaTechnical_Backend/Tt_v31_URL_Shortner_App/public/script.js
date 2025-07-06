@@ -12,9 +12,12 @@ const fetchShortedURL = async () => {
     for (const [shortUrl, url] of Object.entries(links)) {
       const li = document.createElement("li");
       li.className = "links-list";
+
+      const truncatedURL = `${url.length >= 30}` ? `${url.slice(0, 50)}...` : "";
+
       li.innerHTML = `<a href="/${shortUrl}" target="_blank">
           ${window.location.origin}/${shortUrl}
-        </a> ${url}`;
+        </a> ${truncatedURL}`;
       list.appendChild(li);
     }
   } catch (error) {

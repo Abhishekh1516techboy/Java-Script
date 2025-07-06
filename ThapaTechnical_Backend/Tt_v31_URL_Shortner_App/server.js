@@ -58,12 +58,24 @@ const server = createServer(async (req, res) => {
       const links = await loadLinks();
       res.writeHead(200, { "Content-type": "application/json" });
       return res.end(JSON.stringify(links));
-      // Handle any other URLs (not found)
-    } else {
-      // Return a 404 status with an HTML error message
-      res.writeHead(404, { "Content-Type": "text/html" });
-      res.end("404 Page not found!");
-      return;
+      // Handle shortened URL (redirects)
+    } else if (req.url.startsWith("/")) {
+      const links = await loadLinks();
+      const shortUrl = req.url.slice(1); // Remove leading slash
+
+      if (links[shortUrl]) {
+        res.writeHead(302, {
+          Location: links[shortUrl],
+          "Content-Type": "text/html",
+        });
+        res.end();
+        return;
+        // Handle any other URLs (not found)
+      } else {
+        res.writeHead(404, { "Content-Type": "text/html" });
+        res.end("404 Page not found!");
+        return;
+      }
     }
 
     try {
