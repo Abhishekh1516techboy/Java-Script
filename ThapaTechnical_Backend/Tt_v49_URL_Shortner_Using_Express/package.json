@@ -1,0 +1,18 @@
+{
+  "name": "tt_v49_url_shortner_using_express",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@ABhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is NodeJS URL Shortner App using Express.js by Vinod Thapa sir (7/7/2025 - 04:35PM)",
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0"
+  }
+}
