@@ -1,0 +1,17 @@
+{
+  "name": "tt_v45_route_parameteres_express",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "@ABhishekh1516techboy",
+  "license": "ISC",
+  "description": "This is NodeJS Route Parameteres by Vinod Thapa sir (7/7/2025 - 03:09PM)",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
